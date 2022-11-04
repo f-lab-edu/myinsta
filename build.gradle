@@ -16,11 +16,15 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+	// Lombok Dependency
 	compileOnly 'org.projectlombok:lombok:1.18.24'
 	annotationProcessor 'org.projectlombok:lombok:1.18.24'
 	
 	testCompileOnly 'org.projectlombok:lombok:1.18.24'
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
+
+	//MyBatis Dependency
+	compile 'org.mybatis:mybatis:3.5.11'
 }
 
 tasks.named('test') {
