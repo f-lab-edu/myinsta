@@ -24,7 +24,8 @@ dependencies {
 	testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
 
 	//MyBatis Dependency
-	compile 'org.mybatis:mybatis:3.5.11'
+	//compile 'org.mybatis:mybatis:3.5.11'
+	compile("org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2")
 }
 
 tasks.named('test') {
