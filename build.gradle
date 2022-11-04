@@ -31,6 +31,11 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws'
    	implementation 'org.springframework.cloud:spring-cloud-starter-aws-messaging'
    	implementation 'org.springframework.cloud:spring-cloud-starter-aws-parameter-store-config'
+
+	//JDBC setting
+	//Spring data JPA, MySQL connector
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	runtimeOnly 'mysql:mysql-connector-java'
 }
 
 tasks.named('test') {
