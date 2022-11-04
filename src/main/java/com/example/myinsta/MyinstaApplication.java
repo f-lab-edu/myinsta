@@ -9,6 +9,7 @@ public class MyinstaApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MyinstaApplication.class, args);
 		
+
 		
 	}
 
