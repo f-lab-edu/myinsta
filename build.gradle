@@ -25,12 +25,12 @@ dependencies {
 
 	//MyBatis Dependency
 	// implementation 'org.mybatis:mybatis:3.5.11'
-	compile 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2'
 
 	//Spring Cloud for AWS
-	implementation 'org.springframework.cloud:spring-cloud-starter-aws'
-   	implementation 'org.springframework.cloud:spring-cloud-starter-aws-messaging'
-   	implementation 'org.springframework.cloud:spring-cloud-starter-aws-parameter-store-config'
+	// implementation 'org.springframework.cloud:spring-cloud-starter-aws'
+   	// implementation 'org.springframework.cloud:spring-cloud-starter-aws-messaging'
+   	// implementation 'org.springframework.cloud:spring-cloud-starter-aws-parameter-store-config'
 
 	//JDBC setting
 	//Spring data JPA, MySQL connector
