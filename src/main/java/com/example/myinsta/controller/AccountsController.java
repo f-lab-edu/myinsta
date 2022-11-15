@@ -21,4 +21,9 @@ public class AccountsController {
     public int insertTest( @RequestBody AccountsInsertTestDto accountsInsertTestDto ){
         return accountsService.insertTest( accountsInsertTestDto );
     }
+
+    @RequestMapping("/accounts/test/select")
+    public List<AccountsSelectTestDto> selectTest(){
+        return accountsService.selectTest();
+    }
 }
