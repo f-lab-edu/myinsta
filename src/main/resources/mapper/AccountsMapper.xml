@@ -5,4 +5,9 @@
         INSERT INTO accounts( nick_name, email, passwords )
         VALUES( #{accountsInsertTestDto.nick_name}, #{accountsInsertTestDto.email}, #{accountsInsertTestDto.passwords} )
     </insert>
+
+    <select id="selectTest" resultType="com.example.myinsta.dto.AccountsSelectTestDto" >
+        SELECT *
+        FROM accounts
+    </select>
 </mapper>
