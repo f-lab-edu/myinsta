@@ -22,10 +22,9 @@ public class AccountsController {
     //@Valid : Using Java Bean Validation to validate the user input
     //@RequestBody : To bind user input to SignUpDto
     public String signUp(@RequestBody @Valid SignUpDto signUpDto){
-        //To see what data is being bound to SignUpDto
+        //log.debug() : To see what data is being bound to SignUpDto
         log.debug( "email : {} \n nick_name : {} \n password : {}" ,signUpDto.getEmail() , signUpDto.getNick_name() , signUpDto.getPassword() );
         //redirect to the root page.
         return "redirect:/";
     }
-
 }
