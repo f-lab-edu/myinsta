@@ -4,7 +4,7 @@
 
 <mapper namespace="com.example.myinsta.mapper.AccountsMapper">
     <insert id="insertAccount" parameterType="com.example.myinsta.dto.SignUpDto">
-        INSERT INTO ACCOUNTS(nick_name, email, password)
+        INSERT INTO accounts(nick_name, email, password)
         VALUES (#{nick_name}, #{email}, #{password})
     </insert>
 
