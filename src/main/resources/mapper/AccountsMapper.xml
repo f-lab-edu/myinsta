@@ -3,6 +3,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.myinsta">
-
+    <insert id="insertAccount" parameterType="com.example.myinsta.dto.SignUpDto">
+        INSERT INTO ACCOUNTS(nick_name, email, password)
+        VALUES (#{nick_name}, #{email}, #{password})
+    </insert>
 
 </mapper>

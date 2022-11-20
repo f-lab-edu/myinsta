@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AccountsService {
 
-    public String signUp(SignUpDto signUpDto){
+    public int signUp(SignUpDto signUpDto){
         //insert accounts information into DB.accounts table
-        return "";
+        return 1;
     }
 }
