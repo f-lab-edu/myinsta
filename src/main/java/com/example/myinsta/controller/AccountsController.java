@@ -1,6 +1,7 @@
 package com.example.myinsta.controller;
 
 import com.example.myinsta.dto.SignUpDto;
+import com.example.myinsta.service.AccountsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,8 +17,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @Slf4j
 public class AccountsController {
-
-
+    private final AccountsService accountsService;
     //@RequestMapping : Mapping POST request with "/signUp" url with signUp() endpoint.
     @RequestMapping("/signUp")
     //@Valid : Using Java Bean Validation to validate the user input
@@ -25,7 +25,6 @@ public class AccountsController {
     public int signUp(@RequestBody @Valid SignUpDto signUpDto){
         //log.debug() : To see what data is being bound to SignUpDto
         log.debug( "email : {} \n nick_name : {} \n password : {}" ,signUpDto.getEmail() , signUpDto.getNick_name() , signUpDto.getPassword() );
-        //redirect to the root page.
-        return 1;
+        return accountsService.signUp( signUpDto );
     }
 }
