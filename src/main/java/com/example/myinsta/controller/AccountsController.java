@@ -54,21 +54,4 @@ public class AccountsController {
         accountsService.signUp( signUpDto );
         return HttpResponses.RESPONSE_CREATED;
     }
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Object> handler(MethodArgumentNotValidException e){
-        List<FieldError> errors = e.getFieldErrors();
-        String json = "{";
-        for ( FieldError error : errors) {
-            json += "\"" + error.getField() + "\":";
-            json += "\"" + error.getRejectedValue() + "\"";
-            json += ", \"message\":";
-            json += "\"" + error.getDefaultMessage() + "\"";
-            if(errors.size() >= 2){
-                json += ", ";
-            }
-        }
-        json += "}";
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(json);
-    }
-
 }
