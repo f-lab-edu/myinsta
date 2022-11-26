@@ -4,6 +4,10 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * SHA256
+ * Encryption class that implements java.security SHA256
+ */
 public class SHA256 {
     public static String encrypt(String originalString){
         String hash;
