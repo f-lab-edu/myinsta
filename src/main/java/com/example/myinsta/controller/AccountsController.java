@@ -51,8 +51,6 @@ public class AccountsController {
     private final AccountsService accountsService;
     @PostMapping("/accounts/signup")
     public ResponseEntity<Void> signUp(@Valid @RequestBody SignUpDto signUpDto){
-        //log.debug() : To see what data is being bound to SignUpDto
-        log.debug( "email : {} \n nick_name : {} \n password : {}" ,signUpDto.getEmail() , signUpDto.getNick_name() , signUpDto.getPassword() );
         accountsService.signUp( signUpDto );
         return HttpResponses.RESPONSE_CREATED;
     }
