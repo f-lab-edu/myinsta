@@ -31,8 +31,8 @@ import org.springframework.stereotype.Service;
 public class AccountsService {
     private final AccountsMapper accountsMapper;
     public int signUp(SignUpDto signUpDto){
-        String hashedpswd = SHA256.encrypt( signUpDto.getPassword() );
-        signUpDto.setPassword(hashedpswd);
+        String hashedPswd = SHA256.encrypt( signUpDto.getPassword() );
+        signUpDto.setPassword(hashedPswd);
         return accountsMapper.insertAccount(signUpDto);
     }
 }

@@ -46,7 +46,7 @@ public class SignUpDto {
 
     @NotBlank(message = "nick_name must not null or empty string")
     @Size(message = "the length of nick_name should be in range of 1 to 16", min = 1, max = 16)
-    private String nick_name;
+    private String nickName;
 
     @NotBlank(message = "passwords must not null or empty string")
     @Pattern(regexp = ("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#])[\\da-zA-Z!@#]{8,}$"),message = "Password must have at least 8 characters with maximum 16 characters, one Upper case, one number, one symbol.")
