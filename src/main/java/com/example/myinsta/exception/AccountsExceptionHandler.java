@@ -16,6 +16,7 @@ import java.util.List;
  * Controller based Exception handling which provided by spring with @ControllerAdvice
  *
  * @ControllerAdvice
+ * Make controller can interact with whole application. With @ControllerAdvice Annotation the methods in controller can interact with all the other controllers.
  * @StringBuffer
  * String has a certain condition to use StringBuilder, if the concatenation expression is constant expression, then JVM uses StringBuilder to concatenating.
  * In this case code is not using constant expression so that StringBuilder must involve to reduce a GC performance issue caused by generating new String objects.
