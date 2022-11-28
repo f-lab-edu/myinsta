@@ -29,7 +29,7 @@ public class AccountsServiceTest {
     void accountsServiceTest(){
         SignUpDto signUpDto = SignUpDto.builder()
                         .email("ddd@correct.mail")
-                                .nick_name("nickunamu")
+                                .nickName("nickunamu")
                                         .password("passw@#2")
                                                 .build();
         when(accountsMapper.insertAccount( signUpDto )).thenReturn(1);
