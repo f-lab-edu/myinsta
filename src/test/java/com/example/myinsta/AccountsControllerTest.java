@@ -62,7 +62,7 @@ public class AccountsControllerTest {
         signUpDto = SignUpDto.builder()
                     .email("ddd@WrongMail")
                     .password("Adfe12!2")
-                    .nick_name("newNickName")
+                    .nickName("newNickName")
                     .build();
         mockMvc.perform(
                 post("/accounts/signup")
@@ -76,7 +76,7 @@ public class AccountsControllerTest {
         signUpDto = SignUpDto.builder()
                 .email("ddd@correcto.com")
                 .password("Adfe12!2")
-                .nick_name("newNickName")
+                .nickName("newNickName")
                 .build();
         mockMvc.perform(
                         post("/accounts/signup")
