@@ -1,6 +1,10 @@
 package com.example.myinsta.exception;
 
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +14,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * AccountsExceptionHandler
@@ -25,9 +30,14 @@ import java.util.List;
  *
  */
 @ControllerAdvice
+@Slf4j
 public class AccountsExceptionHandler {
+    @Autowired
+    MessageSource messageSource;
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handler(MethodArgumentNotValidException e){
+        log.debug( messageSource.getMessage("700" , null, Locale.getDefault() ) );
         List<FieldError> errors = e.getFieldErrors();
         StringBuffer json = new StringBuffer("{");
         for ( FieldError error : errors ) {

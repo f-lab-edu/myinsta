@@ -5,7 +5,10 @@ import com.example.myinsta.mapper.AccountsMapper;
 import com.example.myinsta.utill.SHA256;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.support.SQLErrorCodes;
 import org.springframework.stereotype.Service;
+
+import javax.naming.AuthenticationException;
 
 /**
  * AccountsService
@@ -36,3 +39,4 @@ public class AccountsService {
         return accountsMapper.insertAccount(signUpDto);
     }
 }
+

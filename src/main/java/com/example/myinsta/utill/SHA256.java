@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException;
 
 /**
  * SHA256
- * Encryption class that implements java.security SHA256
+ * Encryption class that uses java.security SHA256
  */
 public class SHA256 {
     public static String encrypt(String originalString){
