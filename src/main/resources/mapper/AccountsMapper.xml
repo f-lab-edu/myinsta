@@ -7,5 +7,10 @@
         INSERT INTO accounts(nick_name, email, password)
         VALUES (#{nickName}, #{email}, #{password})
     </insert>
-
+    <select id="isIdExist" parameterType="com.example.myinsta.dao.AccountsDao">
+        SELECT EXIST
+        (SELECT email
+        FROM accounts
+        WHERE email = #{email});
+    </select>
 </mapper>
