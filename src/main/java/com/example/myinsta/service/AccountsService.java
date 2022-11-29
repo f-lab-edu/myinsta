@@ -2,6 +2,7 @@ package com.example.myinsta.service;
 
 import com.example.myinsta.dao.AccountsDao;
 import com.example.myinsta.dto.SignUpDto;
+import com.example.myinsta.exception.IdExistException;
 import com.example.myinsta.mapper.AccountsMapper;
 import com.example.myinsta.utill.SHA256;
 import lombok.RequiredArgsConstructor;
@@ -42,12 +43,11 @@ public class AccountsService {
                 .password( SHA256.encrypt( signUpDto.getPassword()) )
                 .build();
         if( accountsMapper.isIdExist(accountsDao) == true ){
-            log.debug("accounts already exist");
+            throw new IdExistException("Email is already exist please provide another email as Id");
         }
-        else{
-            log.debug("accounts not exist");
+        else {
+            return accountsMapper.insertAccount(accountsDao);
         }
-        return accountsMapper.insertAccount(accountsDao);
     }
 }
 

@@ -52,4 +52,11 @@ public class AccountsExceptionHandler {
         json.append("}");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(json);
     }
+    @ExceptionHandler(IdExistException.class)
+    public ResponseEntity<Object> idExistExceptionHandler(IdExistException e){
+        StringBuffer json = new StringBuffer("{");
+        json.append("\"errorCode:\"\"701\",\"message\":" + messageSource.getMessage("701" , null, Locale.getDefault() ) );
+        json.append("}");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(json);
+    }
 }
