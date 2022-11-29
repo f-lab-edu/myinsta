@@ -40,7 +40,7 @@ public class AccountsExceptionHandler {
         List<FieldError> errors = e.getFieldErrors();
         StringBuffer json = new StringBuffer("{");
         for ( FieldError error : errors ) {
-            json.append("\"errorCode:\"\"700\",\"message\":" + messageSource.getMessage("700" , null, Locale.getDefault() ) +", " );
+            json.append("\"errorCode\":\"700\",\"message\":" + messageSource.getMessage("700" , null, Locale.getDefault() ) +", " );
             json.append("\"" + error.getField() + "\":");
             json.append("\"" + error.getRejectedValue() + "\"");
             json.append(", \"message\":");
@@ -55,7 +55,7 @@ public class AccountsExceptionHandler {
     @ExceptionHandler(IdExistException.class)
     public ResponseEntity<Object> idExistExceptionHandler(IdExistException e){
         StringBuffer json = new StringBuffer("{");
-        json.append("\"errorCode:\"\"701\",\"message\":" + messageSource.getMessage("701" , null, Locale.getDefault() ) );
+        json.append("\"errorCode\":" + e.getErrorCode() + ",\"message\":" + messageSource.getMessage( e.getErrorCode() , null, Locale.getDefault() ) );
         json.append("}");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(json);
     }
