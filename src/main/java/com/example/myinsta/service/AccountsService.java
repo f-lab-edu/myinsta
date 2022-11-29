@@ -44,6 +44,9 @@ public class AccountsService {
         if( accountsMapper.isIdExist(accountsDao) == true ){
             log.debug("accounts already exist");
         }
+        else{
+            log.debug("accounts not exist");
+        }
         return accountsMapper.insertAccount(accountsDao);
     }
 }

@@ -8,7 +8,7 @@
         VALUES (#{nickName}, #{email}, #{password})
     </insert>
     <select id="isIdExist" parameterType="com.example.myinsta.dao.AccountsDao" resultType="boolean">
-        SELECT EXIST
+        SELECT EXISTS
         (SELECT email
         FROM accounts
         WHERE email = #{email});
