@@ -7,6 +7,9 @@ import com.example.myinsta.mapper.AccountsMapper;
 import com.example.myinsta.utill.SHA256;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.message.Message;
+import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
+import org.springframework.context.MessageSource;
 import org.springframework.jdbc.support.SQLErrorCodes;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +46,7 @@ public class AccountsService {
                 .password( SHA256.encrypt( signUpDto.getPassword()) )
                 .build();
         if( accountsMapper.isIdExist(accountsDao) == true ){
-            throw new IdExistException("Email is already exist please provide another email as Id");
+            throw new IdExistException("701");
         }
         else {
             return accountsMapper.insertAccount(accountsDao);

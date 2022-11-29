@@ -33,7 +33,7 @@ import java.util.Locale;
 @Slf4j
 public class AccountsExceptionHandler {
     @Autowired
-    MessageSource messageSource;
+    ResourceBundleMessageSource messageSource;
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handler(MethodArgumentNotValidException e){
