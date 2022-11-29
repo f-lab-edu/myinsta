@@ -3,12 +3,14 @@ package com.example.myinsta.dao;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.sql.Timestamp;
 
 @Getter
 @Setter
 @Builder
+@ToString
 public class AccountsDao {
     private long id;
     private String email;

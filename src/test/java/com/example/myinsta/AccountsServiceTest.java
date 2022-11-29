@@ -1,6 +1,7 @@
 package com.example.myinsta;
 
 
+import com.example.myinsta.dao.AccountsDao;
 import com.example.myinsta.dto.SignUpDto;
 import com.example.myinsta.mapper.AccountsMapper;
 import com.example.myinsta.service.AccountsService;
@@ -23,6 +24,7 @@ import static org.mockito.Mockito.when;
 public class AccountsServiceTest {
     @Mock
     private AccountsMapper accountsMapper;
+
     AccountsService accountsService;
 
     @Test
@@ -32,9 +34,14 @@ public class AccountsServiceTest {
                                 .nickName("nickunamu")
                                         .password("passw@#2")
                                                 .build();
-        when(accountsMapper.insertAccount( signUpDto )).thenReturn(1);
+        AccountsDao accountsDao = AccountsDao.builder()
+                .email(signUpDto.getEmail())
+                .password(signUpDto.getPassword())
+                .nickName(signUpDto.getNickName())
+                .build();
+        when(accountsMapper.insertAccount( accountsDao )).thenReturn(1);
         accountsService = new AccountsService( accountsMapper );
-        assertEquals( accountsService.signUp(signUpDto), 1);
-        verify(accountsMapper).insertAccount(signUpDto);
+        assertEquals( accountsService.signUp( signUpDto ), 1);
+        verify(accountsMapper).insertAccount(accountsDao);
     }
 }

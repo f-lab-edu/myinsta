@@ -39,8 +39,9 @@ public class AccountsService {
         AccountsDao accountsDao = AccountsDao.builder()
                 .email(signUpDto.getEmail())
                 .nickName(signUpDto.getNickName())
-                .password(SHA256.encrypt( signUpDto.getPassword()) )
+                .password( SHA256.encrypt( signUpDto.getPassword()) )
                 .build();
+
         return accountsMapper.insertAccount(accountsDao);
     }
 }
