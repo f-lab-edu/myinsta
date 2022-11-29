@@ -54,9 +54,10 @@ public class AccountsExceptionHandler {
     }
     @ExceptionHandler(IdExistException.class)
     public ResponseEntity<Object> idExistExceptionHandler(IdExistException e){
-        StringBuffer json = new StringBuffer("{");
-        json.append("\"errorCode\":" + e.getErrorCode() + ",\"message\":" + messageSource.getMessage( e.getErrorCode() , null, Locale.getDefault() ) );
-        json.append("}");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(json);
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .errorCode(e.getErrorCode())
+                .errorMessage(messageSource.getMessage( e.getErrorCode() , null, Locale.getDefault() ))
+                .build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
     }
 }
