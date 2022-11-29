@@ -37,10 +37,10 @@ public class AccountsExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handler(MethodArgumentNotValidException e){
-        log.debug( messageSource.getMessage("700" , null, Locale.getDefault() ) );
         List<FieldError> errors = e.getFieldErrors();
         StringBuffer json = new StringBuffer("{");
         for ( FieldError error : errors ) {
+            json.append("\"errorCode:\"\"700\",\"message\":" + messageSource.getMessage("700" , null, Locale.getDefault() ) +", " );
             json.append("\"" + error.getField() + "\":");
             json.append("\"" + error.getRejectedValue() + "\"");
             json.append(", \"message\":");
