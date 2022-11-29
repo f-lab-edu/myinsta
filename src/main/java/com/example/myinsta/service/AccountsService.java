@@ -1,5 +1,6 @@
 package com.example.myinsta.service;
 
+import com.example.myinsta.dao.AccountsDao;
 import com.example.myinsta.dto.SignUpDto;
 import com.example.myinsta.mapper.AccountsMapper;
 import com.example.myinsta.utill.SHA256;
@@ -33,10 +34,14 @@ import javax.naming.AuthenticationException;
 @Slf4j
 public class AccountsService {
     private final AccountsMapper accountsMapper;
+
     public int signUp(SignUpDto signUpDto){
-        String hashedPswd = SHA256.encrypt( signUpDto.getPassword() );
-        signUpDto.setPassword(hashedPswd);
-        return accountsMapper.insertAccount(signUpDto);
+        AccountsDao accountsDao = AccountsDao.builder()
+                .email(signUpDto.getEmail())
+                .nickName(signUpDto.getNickName())
+                .password(SHA256.encrypt( signUpDto.getPassword()) )
+                .build();
+        return accountsMapper.insertAccount(accountsDao);
     }
 }
 
