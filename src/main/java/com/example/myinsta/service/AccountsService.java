@@ -41,7 +41,9 @@ public class AccountsService {
                 .nickName(signUpDto.getNickName())
                 .password( SHA256.encrypt( signUpDto.getPassword()) )
                 .build();
-
+        if( accountsMapper.isIdExist(accountsDao) == true ){
+            log.debug("accounts already exist");
+        }
         return accountsMapper.insertAccount(accountsDao);
     }
 }
