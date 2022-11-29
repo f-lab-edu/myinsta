@@ -3,6 +3,7 @@ package com.example.myinsta.service;
 import com.example.myinsta.dao.AccountsDao;
 import com.example.myinsta.dto.SignUpDto;
 import com.example.myinsta.exception.IdExistException;
+import com.example.myinsta.exception.InsertFailException;
 import com.example.myinsta.mapper.AccountsMapper;
 import com.example.myinsta.utill.SHA256;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +40,7 @@ import javax.naming.AuthenticationException;
 public class AccountsService {
     private final AccountsMapper accountsMapper;
 
-    public int signUp(SignUpDto signUpDto){
+    public void signUp(SignUpDto signUpDto){
         AccountsDao accountsDao = AccountsDao.builder()
                 .email(signUpDto.getEmail())
                 .nickName(signUpDto.getNickName())
@@ -49,7 +50,9 @@ public class AccountsService {
             throw new IdExistException("701");
         }
         else {
-            return accountsMapper.insertAccount(accountsDao);
+            if(accountsMapper.insertAccount(accountsDao) != 1){
+                throw new InsertFailException("702");
+            }
         }
     }
 }

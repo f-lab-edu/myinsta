@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 @Builder
 @ToString
 public class AccountsDao {
-    private long id;
+    private long idAccount;
     private String email;
     private String nickName;
     private String password;

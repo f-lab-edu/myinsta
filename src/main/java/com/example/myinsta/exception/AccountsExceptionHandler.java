@@ -52,8 +52,8 @@ public class AccountsExceptionHandler {
         json.append("}");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(json);
     }
-    @ExceptionHandler(IdExistException.class)
-    public ResponseEntity<Object> idExistExceptionHandler(IdExistException e){
+    @ExceptionHandler({IdExistException.class, InsertFailException.class})
+    public ResponseEntity<Object> generalExceptionHandler(IdExistException e){
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .errorCode(e.getErrorCode())
                 .errorMessage(messageSource.getMessage( e.getErrorCode() , null, Locale.getDefault() ))
