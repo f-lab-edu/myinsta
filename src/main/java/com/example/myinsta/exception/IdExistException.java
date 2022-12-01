@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class IdExistException extends RuntimeException{
+
     private final String errorCode;
+
 }
 

@@ -50,13 +50,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(controllers = AccountsController.class)
 public class AccountsControllerTest {
+
     @Autowired
     private MockMvc mockMvc;
+
     SignUpDto signUpDto;
+
     @Autowired
     ObjectMapper objectMapper;
+
     @MockBean
     AccountsService accountsService;
+
     @Test
     void invalidInputTest() throws Exception {
         signUpDto = SignUpDto.builder()
@@ -67,7 +72,7 @@ public class AccountsControllerTest {
         mockMvc.perform(
                 post("/accounts/signup")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content( objectMapper.writeValueAsString(signUpDto)) )
+                        .content(objectMapper.writeValueAsString(signUpDto)))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -81,7 +86,7 @@ public class AccountsControllerTest {
         mockMvc.perform(
                         post("/accounts/signup")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content( objectMapper.writeValueAsString(signUpDto)) )
+                                .content(objectMapper.writeValueAsString(signUpDto)))
                 .andDo(print())
                 .andExpect(status().isCreated());
     }

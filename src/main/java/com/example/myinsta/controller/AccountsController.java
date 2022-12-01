@@ -19,6 +19,18 @@ import javax.validation.Valid;
  * @RestController : @Controller + @ResponseBody, @RestController makes controller response with defined contents-type in header.
  * @RequiredArgsConstructor : Lombok annotation which makes Constructor with all the member fields as arguments.
  * @Slf4j : To use logger for debugging purpose.
+ * <p>
+ * signUp
+ * Returns ResponseEntity as result based on the result of INSERT query and DTO Validation.
+ * This endpoint maps request URL : "/accounts/signup" to signUp() to provide sign up service.
+ * <p>
+ * Using Annotation and Annotation's purpose
+ * @PostMapping : Mapping POST request with "/accounts/signUp" url with signUp() endpoint.
+ * @Valid : Use Java Bean Validation to validate the user input
+ * @RequestBody : Bind user input to signUpDto as parameter based on contents-type in HTTP RequestBody
+ * @param signUpDto
+ * @return ResponseEntity with status code CREATED when INSERT success
+ * @return Error message when data validation fails or INSERT query fails
  */
 /**
  * signUp
@@ -34,6 +46,7 @@ import javax.validation.Valid;
  * @return ResponseEntity with status code CREATED when INSERT success
  * @return Error message when data validation fails or INSERT query fails
  */
+
 /** handler
  * handling MethodArgumentNotValidException and returns error result in JSon form as response.
  */
@@ -42,9 +55,10 @@ import javax.validation.Valid;
 @Slf4j
 public class AccountsController {
     private final AccountsService accountsService;
+
     @PostMapping("/accounts/signup")
-    public ResponseEntity<Void> signUp(@Valid @RequestBody SignUpDto signUpDto){
-        accountsService.signUp( signUpDto );
+    public ResponseEntity<Void> signUp(@Valid @RequestBody SignUpDto signUpDto) {
+        accountsService.signUp(signUpDto);
         return new ResponseEntity(HttpStatus.CREATED);
     }
 }

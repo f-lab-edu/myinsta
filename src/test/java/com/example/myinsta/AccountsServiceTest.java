@@ -22,6 +22,7 @@ import static org.mockito.Mockito.when;
 @Slf4j
 @ExtendWith(MockitoExtension.class)
 public class AccountsServiceTest {
+
     @Mock
     private AccountsMapper accountsMapper;
 
@@ -39,8 +40,8 @@ public class AccountsServiceTest {
                 .password(signUpDto.getPassword())
                 .nickName(signUpDto.getNickName())
                 .build();
-        when(accountsMapper.insertAccount( accountsDao )).thenReturn(1);
-        accountsService = new AccountsService( accountsMapper );
+        when(accountsMapper.insertAccount(accountsDao)).thenReturn(1);
+        accountsService = new AccountsService(accountsMapper);
 //        assertEquals( accountsService.signUp( signUpDto ), 1);
         verify(accountsMapper).insertAccount(accountsDao);
     }

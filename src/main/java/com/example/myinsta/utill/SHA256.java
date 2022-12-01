@@ -9,21 +9,21 @@ import java.security.NoSuchAlgorithmException;
  * Encryption class that uses java.security SHA256
  */
 public class SHA256 {
-    public static String encrypt(String originalString){
+    public static String encrypt(String originalString) {
         String hash;
-        try{
+        try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             digest.update(originalString.getBytes(StandardCharsets.UTF_8));
 
-            byte [] bytes = digest.digest();
+            byte[] bytes = digest.digest();
             StringBuilder builder = new StringBuilder();
 
-            for(byte b: bytes){
+            for (byte b : bytes) {
                 builder.append(String.format("%02x", b));
             }
             hash = builder.toString();
 
-        }catch(NoSuchAlgorithmException e){
+        } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Encryption error", e);
         }
         return hash;

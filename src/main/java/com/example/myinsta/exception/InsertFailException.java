@@ -8,5 +8,7 @@ import lombok.Setter;
 @Setter
 @RequiredArgsConstructor
 public class InsertFailException extends RuntimeException{
+
     private final String errorCode;
+
 }
