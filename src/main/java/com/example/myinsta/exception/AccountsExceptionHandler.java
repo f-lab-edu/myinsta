@@ -31,15 +31,12 @@ import java.util.Locale;
 @ControllerAdvice
 public class AccountsExceptionHandler {
 
-    @Autowired
-    ResourceBundleMessageSource messageSource;
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handler(MethodArgumentNotValidException e) {
         List<FieldError> errors = e.getFieldErrors();
         List<ErrorResponse> errorResponse = new ArrayList<>();
         for (FieldError error : errors) {
-            errorResponse.add(ErrorResponse.builder().errorCode("700").errorMessage(error.getRejectedValue() + ", " + error.getDefaultMessage()).build());
+            errorResponse.add(ErrorResponse.builder().errorCode(700).errorMessage(error.getRejectedValue() + ", " + error.getDefaultMessage()).build());
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
     }
@@ -48,8 +45,8 @@ public class AccountsExceptionHandler {
     public ResponseEntity<Object> generalExceptionHandler(AccountsException e) {
 
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .errorCode(e.getErrorCode())
-                .errorMessage(messageSource.getMessage(e.getErrorCode(), null, Locale.getDefault()))
+                .errorCode(e.getErrorCode().getStatus())
+                .errorMessage(e.getErrorCode().getMessage())
                 .build();
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).body(errorResponse);

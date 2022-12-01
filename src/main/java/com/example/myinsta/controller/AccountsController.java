@@ -52,7 +52,6 @@ import javax.validation.Valid;
  */
 @RestController
 @RequiredArgsConstructor
-@Slf4j
 public class AccountsController {
     private final AccountsService accountsService;
 

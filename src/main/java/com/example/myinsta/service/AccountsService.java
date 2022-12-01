@@ -19,6 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
  * <p>
  * accountsMapper
  * Injected mapper object that executes CRUD SQL query to DB
+ * <p>
+ * accountsMapper
+ * Injected mapper object that executes CRUD SQL query to DB
  */
 
 /**
@@ -35,8 +38,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
-@Transactional
 public class AccountsService {
 
     private final AccountsMapper accountsMapper;

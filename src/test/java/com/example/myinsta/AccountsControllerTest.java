@@ -15,13 +15,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**@WebMvcTest : Slicing the test configuration narrowing down to web layer
+/**
+ * @WebMvcTest : Slicing the test configuration narrowing down to web layer
  * using AccountsController for this test configuration
  */
 
 //To use Jackson data-binding object to provide JSon input for test
 //When AccountsController is being added as bean AccountsController needs AccountsService object,
 //here @MockBean will provide spring provided mock bean of service to AccountsController object
+
 /**
  * @Test_case
  * User input wrong email address
@@ -65,17 +67,18 @@ public class AccountsControllerTest {
     @Test
     void invalidInputTest() throws Exception {
         signUpDto = SignUpDto.builder()
-                    .email("ddd@WrongMail")
-                    .password("Adfe12!2")
-                    .nickName("newNickName")
-                    .build();
+                .email("ddd@WrongMail")
+                .password("Adfe12!2")
+                .nickName("newNickName")
+                .build();
         mockMvc.perform(
-                post("/accounts/signup")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(signUpDto)))
+                        post("/accounts/signup")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(signUpDto)))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
+
     @Test
     void validInputTest() throws Exception {
         signUpDto = SignUpDto.builder()

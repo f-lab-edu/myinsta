@@ -29,12 +29,12 @@ public class AccountsServiceTest {
     AccountsService accountsService;
 
     @Test
-    void accountsServiceTest(){
+    void accountsServiceTest() {
         SignUpDto signUpDto = SignUpDto.builder()
-                        .email("ddd@correct.mail")
-                                .nickName("nickunamu")
-                                        .password("passw@#2")
-                                                .build();
+                .email("ddd@correct.mail")
+                .nickName("nickunamu")
+                .password("passw@#2")
+                .build();
         AccountsDao accountsDao = AccountsDao.builder()
                 .email(signUpDto.getEmail())
                 .password(signUpDto.getPassword())
