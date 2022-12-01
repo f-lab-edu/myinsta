@@ -14,6 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -37,19 +38,11 @@ public class AccountsExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handler(MethodArgumentNotValidException e) {
         List<FieldError> errors = e.getFieldErrors();
-        StringBuffer json = new StringBuffer("{");
+        List<ErrorResponse> errorResponse = new ArrayList<>();
         for (FieldError error : errors) {
-            json.append("\"errorCode\":\"700\",\"message\":" + messageSource.getMessage("700", null, Locale.getDefault()) + ", ");
-            json.append("\"" + error.getField() + "\":");
-            json.append("\"" + error.getRejectedValue() + "\"");
-            json.append(", \"message\":");
-            json.append("\"" + error.getDefaultMessage() + "\"");
-            if (errors.size() >= 2) {
-                json.append(", ");
-            }
+            errorResponse.add(ErrorResponse.builder().errorCode("700").errorMessage(error.getRejectedValue() +", "+ error.getDefaultMessage()).build());
         }
-        json.append("}");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(json);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
     }
 
     @ExceptionHandler({IdExistException.class, InsertFailException.class})

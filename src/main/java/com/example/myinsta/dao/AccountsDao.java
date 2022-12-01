@@ -2,7 +2,7 @@ package com.example.myinsta.dao;
 
 import lombok.*;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -16,8 +16,8 @@ public class AccountsDao {
 
     private String password;
 
-    private Timestamp createdDate;
+    private LocalDateTime createdDate;
 
-    private Timestamp updatedDate;
+    private LocalDateTime updatedDate;
 
 }
