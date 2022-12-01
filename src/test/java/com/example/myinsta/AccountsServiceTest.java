@@ -6,6 +6,7 @@ import com.example.myinsta.dto.SignUpDto;
 import com.example.myinsta.mapper.AccountsMapper;
 import com.example.myinsta.service.AccountsService;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -29,7 +30,8 @@ public class AccountsServiceTest {
     AccountsService accountsService;
 
     @Test
-    void accountsServiceTest() {
+    @DisplayName("sign_up_method_test")
+    void sign_up_method_test() {
         SignUpDto signUpDto = SignUpDto.builder()
                 .email("ddd@correct.mail")
                 .nickName("nickunamu")

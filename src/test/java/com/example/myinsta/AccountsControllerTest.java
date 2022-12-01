@@ -2,8 +2,11 @@ package com.example.myinsta;
 
 import com.example.myinsta.controller.AccountsController;
 import com.example.myinsta.dto.SignUpDto;
+import com.example.myinsta.exception.ErrorCode;
+import com.example.myinsta.exception.ErrorResponse;
 import com.example.myinsta.service.AccountsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -65,7 +68,8 @@ public class AccountsControllerTest {
     AccountsService accountsService;
 
     @Test
-    void invalidInputTest() throws Exception {
+    @DisplayName("Invalid input test with wrong email")
+    void invalid_email_test() throws Exception {
         signUpDto = SignUpDto.builder()
                 .email("ddd@WrongMail")
                 .password("Adfe12!2")
@@ -76,11 +80,14 @@ public class AccountsControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(signUpDto)))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                ;
+
     }
 
     @Test
-    void validInputTest() throws Exception {
+    @DisplayName("Valid input test with correct information")
+    void valid_input_test() throws Exception {
         signUpDto = SignUpDto.builder()
                 .email("ddd@correcto.com")
                 .password("Adfe12!2")
