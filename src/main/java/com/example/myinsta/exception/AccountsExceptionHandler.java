@@ -29,7 +29,6 @@ import java.util.Locale;
  * And Spring application uses threaded environment so StringBuffer is correct choice for this circumstance.
  */
 @ControllerAdvice
-@Slf4j
 public class AccountsExceptionHandler {
 
     @Autowired
@@ -40,19 +39,19 @@ public class AccountsExceptionHandler {
         List<FieldError> errors = e.getFieldErrors();
         List<ErrorResponse> errorResponse = new ArrayList<>();
         for (FieldError error : errors) {
-            errorResponse.add(ErrorResponse.builder().errorCode("700").errorMessage(error.getRejectedValue() +", "+ error.getDefaultMessage()).build());
+            errorResponse.add(ErrorResponse.builder().errorCode("700").errorMessage(error.getRejectedValue() + ", " + error.getDefaultMessage()).build());
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
     }
 
-    @ExceptionHandler({IdExistException.class, InsertFailException.class})
-    public ResponseEntity<Object> generalExceptionHandler(IdExistException e) {
+    @ExceptionHandler(AccountsException.class)
+    public ResponseEntity<Object> generalExceptionHandler(AccountsException e) {
 
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .errorCode(e.getErrorCode())
                 .errorMessage(messageSource.getMessage(e.getErrorCode(), null, Locale.getDefault()))
                 .build();
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
     }
 }

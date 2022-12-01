@@ -2,20 +2,14 @@ package com.example.myinsta.service;
 
 import com.example.myinsta.dao.AccountsDao;
 import com.example.myinsta.dto.SignUpDto;
-import com.example.myinsta.exception.IdExistException;
-import com.example.myinsta.exception.InsertFailException;
+import com.example.myinsta.exception.AccountsException;
+import com.example.myinsta.exception.ErrorCode;
 import com.example.myinsta.mapper.AccountsMapper;
 import com.example.myinsta.utill.SHA256;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.logging.log4j.message.Message;
-import org.springframework.beans.factory.NoUniqueBeanDefinitionException;
-import org.springframework.context.MessageSource;
-import org.springframework.jdbc.support.SQLErrorCodes;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import javax.naming.AuthenticationException;
 
 /**
  * AccountsService
@@ -54,10 +48,10 @@ public class AccountsService {
                 .password(SHA256.encrypt(signUpDto.getPassword()))
                 .build();
         if (accountsMapper.isIdExist(accountsDao) == true) {
-            throw new IdExistException("701");
+            throw new AccountsException(ErrorCode.ALREADY_EXIST_EMAIL);
         } else {
             if (accountsMapper.insertAccount(accountsDao) != 1) {
-                throw new InsertFailException("702");
+                throw new AccountsException(ErrorCode.FAILED_TO_INSERT);
             }
         }
     }
