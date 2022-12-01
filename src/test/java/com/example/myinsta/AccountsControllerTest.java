@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -81,6 +82,7 @@ public class AccountsControllerTest {
                                 .content(objectMapper.writeValueAsString(signUpDto)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
+                .andExpect(content().string("[{\"errorCode\":700,\"errorMessage\":\"ddd@WrongMail, invalid Email format\"}]"))
                 ;
 
     }
@@ -98,6 +100,7 @@ public class AccountsControllerTest {
                                 .content(objectMapper.writeValueAsString(signUpDto)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
+                .andExpect(content().string("[{\"errorCode\":700,\"errorMessage\":\"Adfedddddd, Password must have at least 8 characters with maximum 16 characters, one Upper case, one number, one symbol.\"}]"))
         ;
 
     }
@@ -115,6 +118,8 @@ public class AccountsControllerTest {
                                 .content(objectMapper.writeValueAsString(signUpDto)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
+                .andExpect(content().string("[{\"errorCode\":700,\"errorMessage\":\", nick_name must not null or empty string\"}," +
+                        "{\"errorCode\":700,\"errorMessage\":\", the length of nick_name should be in range of 1 to 16\"}]"))
         ;
 
     }
@@ -132,6 +137,10 @@ public class AccountsControllerTest {
                                 .content(objectMapper.writeValueAsString(signUpDto)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
+                .andExpect(content().string("[{\"errorCode\":700,\"errorMessage\":\"incorrect@, invalid Email format\"}," +
+                                "{\"errorCode\":700,\"errorMessage\":\", nick_name must not null or empty string\"}," +
+                                "{\"errorCode\":700,\"errorMessage\":\", the length of nick_name should be in range of 1 to 16\"}," +
+                        "{\"errorCode\":700,\"errorMessage\":\"invalid222, Password must have at least 8 characters with maximum 16 characters, one Upper case, one number, one symbol.\"}]"))
         ;
 
     }
