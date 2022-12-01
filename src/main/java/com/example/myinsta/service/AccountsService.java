@@ -2,20 +2,21 @@ package com.example.myinsta.service;
 
 import com.example.myinsta.dao.AccountsDao;
 import com.example.myinsta.dto.SignUpDto;
-import com.example.myinsta.exception.AccountsException;
+import com.example.myinsta.exception.GeneralException;
 import com.example.myinsta.exception.ErrorCode;
 import com.example.myinsta.mapper.AccountsMapper;
 import com.example.myinsta.utill.SHA256;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * AccountsService
  * Service object to deal with Accounts related service
  *
  * @Service : To add as service bean
+ * <p>
+ * accountsMapper
+ * Injected mapper object that executes CRUD SQL query to DB
  * <p>
  * accountsMapper
  * Injected mapper object that executes CRUD SQL query to DB
@@ -48,12 +49,12 @@ public class AccountsService {
                 .nickName(signUpDto.getNickName())
                 .password(SHA256.encrypt(signUpDto.getPassword()))
                 .build();
-        if (accountsMapper.isIdExist(accountsDao) == true) {
-            throw new AccountsException(ErrorCode.ALREADY_EXIST_EMAIL);
-        } else {
-            if (accountsMapper.insertAccount(accountsDao) != 1) {
-                throw new AccountsException(ErrorCode.FAILED_TO_INSERT);
-            }
+        if (accountsMapper.isIdExist(accountsDao)) {
+            throw new GeneralException(ErrorCode.ALREADY_EXIST_EMAIL);
+        }
+        int result = accountsMapper.insertAccount(accountsDao);
+        if (result != 1) {
+            throw new GeneralException(ErrorCode.FAILED_TO_INSERT);
         }
     }
 }

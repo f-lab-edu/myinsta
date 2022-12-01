@@ -3,7 +3,6 @@ package com.example.myinsta.controller;
 import com.example.myinsta.dto.SignUpDto;
 import com.example.myinsta.service.AccountsService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -58,6 +57,6 @@ public class AccountsController {
     @PostMapping("/accounts/signup")
     public ResponseEntity<Void> signUp(@Valid @RequestBody SignUpDto signUpDto) {
         accountsService.signUp(signUpDto);
-        return new ResponseEntity(HttpStatus.CREATED);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }
