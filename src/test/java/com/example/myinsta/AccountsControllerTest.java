@@ -84,6 +84,57 @@ public class AccountsControllerTest {
                 ;
 
     }
+    @Test
+    @DisplayName("Invalid input test with wrong password")
+    void invalid_password_test() throws Exception {
+        signUpDto = SignUpDto.builder()
+                .email("ddd@correct.org")
+                .password("Adfedddddd")
+                .nickName("newNickName")
+                .build();
+        mockMvc.perform(
+                        post("/accounts/signup")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(signUpDto)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+        ;
+
+    }
+    @Test
+    @DisplayName("Invalid input test with wrong nickname")
+    void invalid_nickname_test() throws Exception {
+        signUpDto = SignUpDto.builder()
+                .email("ddd@correct.org")
+                .password("Adfeddd#2")
+                .nickName("")
+                .build();
+        mockMvc.perform(
+                        post("/accounts/signup")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(signUpDto)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+        ;
+
+    }
+    @Test
+    @DisplayName("Invalid input test with wrong email, password, nickname")
+    void invalid_information_test() throws Exception {
+        signUpDto = SignUpDto.builder()
+                .email("incorrect@")
+                .password("invalid222")
+                .nickName("")
+                .build();
+        mockMvc.perform(
+                        post("/accounts/signup")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(signUpDto)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+        ;
+
+    }
 
     @Test
     @DisplayName("Valid input test with correct information")
