@@ -19,16 +19,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 /**
  * @WebMvcTest : Slicing the test configuration
- * Using this annotation will auto-configure the MVC tests
+ * Using this annotation will auto-configurer the MVC tests
  * (i.e. @Controller, @ControllerAdvice, @JsonComponent, Converter,
  * GenericConverter, Filter, WebMvcConfigurer, and HandlerMethodAtgumentResolver)
  * And the @Component, @Service, and @Repository beans will not be registered.
  * using AccountsController for this test configuration
  */
 
-//To use Jackson data-binding object to provide JSon input for test
-//When AccountsController is being added as bean AccountsController needs AccountsService object,
-//here @MockBean will provide spring provided mock bean of service to AccountsController object
+/**
+ * @ObjectMapper
+ * To use Jackson data-binding object to provide JSon input for test
+ * @MockBean
+ * Creating Mockito mock, When AccountsController is being added as bean,
+ * AccountsController needs AccountsService object, here @MockBean will provide
+ * mock bean of AccountsService to AccountsController object
+ */
 
 /**
  * @Test_case
