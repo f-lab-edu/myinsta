@@ -24,18 +24,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * GenericConverter, Filter, WebMvcConfigurer, and HandlerMethodAtgumentResolver)
  * And the @Component, @Service, and @Repository beans will not be registered.
  * using AccountsController for this test configuration
- */
-
-/**
  * @ObjectMapper
  * To use Jackson data-binding object to provide JSon input for test
  * @MockBean
  * Creating Mockito mock, When AccountsController is being added as bean,
  * AccountsController needs AccountsService object, here @MockBean will provide
  * mock bean of AccountsService to AccountsController object
- */
-
-/**
+ *
  * @Test_case
  * User input wrong email address
  *
@@ -77,7 +72,7 @@ public class AccountsControllerTest {
 
     @Test
     @DisplayName("Invalid input test with wrong email")
-    void invalid_email_test() throws Exception {
+    void invalid_email() throws Exception {
         signUpDto = SignUpDto.builder()
                 .email("ddd@WrongMail")
                 .password("Adfe12!2")
@@ -95,7 +90,7 @@ public class AccountsControllerTest {
     }
     @Test
     @DisplayName("Invalid input test with wrong password")
-    void invalid_password_test() throws Exception {
+    void invalid_password() throws Exception {
         signUpDto = SignUpDto.builder()
                 .email("ddd@correct.org")
                 .password("Adfedddddd")
@@ -113,7 +108,7 @@ public class AccountsControllerTest {
     }
     @Test
     @DisplayName("Invalid input test with wrong nickname")
-    void invalid_nickname_test() throws Exception {
+    void invalid_nickname() throws Exception {
         signUpDto = SignUpDto.builder()
                 .email("ddd@correct.org")
                 .password("Adfeddd#2")
@@ -132,7 +127,7 @@ public class AccountsControllerTest {
     }
     @Test
     @DisplayName("Invalid input test with wrong email, password, nickname")
-    void invalid_information_test() throws Exception {
+    void invalid_information() throws Exception {
         signUpDto = SignUpDto.builder()
                 .email("incorrect@")
                 .password("invalid222")
@@ -154,7 +149,7 @@ public class AccountsControllerTest {
 
     @Test
     @DisplayName("Valid input test with correct information")
-    void valid_input_test() throws Exception {
+    void valid_input() throws Exception {
         signUpDto = SignUpDto.builder()
                 .email("ddd@correcto.com")
                 .password("Adfe12!2")
