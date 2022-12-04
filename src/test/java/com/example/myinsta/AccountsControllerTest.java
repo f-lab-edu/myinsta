@@ -2,8 +2,6 @@ package com.example.myinsta;
 
 import com.example.myinsta.controller.AccountsController;
 import com.example.myinsta.dto.SignUpDto;
-import com.example.myinsta.exception.ErrorCode;
-import com.example.myinsta.exception.ErrorResponse;
 import com.example.myinsta.service.AccountsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +18,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * @WebMvcTest : Slicing the test configuration narrowing down to web layer
+ * @WebMvcTest : Slicing the test configuration
+ * Using this annotation will auto-configure the MVC tests
+ * (i.e. @Controller, @ControllerAdvice, @JsonComponent, Converter,
+ * GenericConverter, Filter, WebMvcConfigurer, and HandlerMethodAtgumentResolver)
+ * And the @Component, @Service, and @Repository beans will not be registered.
  * using AccountsController for this test configuration
  */
 
