@@ -30,7 +30,7 @@ public class AccountsExceptionHandler {
         List<FieldError> errors = e.getFieldErrors();
         List<ErrorResponse> errorResponse = new ArrayList<>();
         for (FieldError error : errors) {
-            errorResponse.add(ErrorResponse.builder().errorCode(ErrorCode.INVALID_INPUT.getStatus()).errorMessage(error.getRejectedValue() + ", " + error.getDefaultMessage()).build());
+            errorResponse.add(ErrorResponse.builder().errorCode(ErrorCode.INVALID_INPUT.getStatus()).errorMessage(error.getDefaultMessage()).build());
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
     }

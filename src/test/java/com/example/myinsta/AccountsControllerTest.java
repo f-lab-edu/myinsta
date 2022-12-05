@@ -94,7 +94,7 @@ public class AccountsControllerTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(errorCode).value(700))
-                .andExpect(jsonPath(errorMessage).value("ddd@WrongMail, invalid Email format"))
+                .andExpect(jsonPath(errorMessage).value("Invalid Email format"))
                 ;
     }
     @Test
@@ -118,7 +118,7 @@ public class AccountsControllerTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(errorCode).value(700))
-                .andExpect(jsonPath(errorMessage).value("Adfedddddd, Password must have at least 8 characters with maximum 16 characters, one Upper case, one number, one symbol."))
+                .andExpect(jsonPath(errorMessage).value("Password must have at least 8 characters with maximum 16 characters, one Upper case, one number, one symbol."))
         ;
 
     }
@@ -143,7 +143,7 @@ public class AccountsControllerTest {
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(errorCode).value(700))
-                .andExpect(jsonPath(errorMessage).value("nick_name must not null or empty string"))
+                .andExpect(jsonPath(errorMessage).value("NickName must not null or empty string"))
         ;
 
     }
@@ -171,10 +171,10 @@ public class AccountsControllerTest {
                 .andExpect(jsonPath("$[1].errorCode").value(700))
                 .andExpect(jsonPath("$[2].errorCode").value(700))
                 .andExpect(jsonPath("$[3].errorCode").value(700))
-                .andExpect(jsonPath("$[0].errorMessage").value("incorrect@, invalid Email format"))
-                .andExpect(jsonPath("$[1].errorMessage").value("nick_name must not null or empty string"))
-                .andExpect(jsonPath("$[2].errorMessage").value("the length of nick_name should be in range of 1 to 16"))
-                .andExpect(jsonPath("$[2].errorMessage").value("invalid222, Password must have at least 8 characters with maximum 16 characters, one Upper case, one number, one symbol."))
+                .andExpect(jsonPath("$[0].errorMessage").value("Invalid Email format"))
+                .andExpect(jsonPath("$[1].errorMessage").value("NickName must not null or empty string"))
+                .andExpect(jsonPath("$[2].errorMessage").value("NickName should be in range of 1 to 16"))
+                .andExpect(jsonPath("$[2].errorMessage").value("Password must have at least 8 characters with maximum 16 characters, one Upper case, one number, one symbol."))
         ;
     }
 

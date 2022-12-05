@@ -64,15 +64,15 @@ import javax.validation.constraints.*;
 @Builder
 public class SignUpDto {
 
-    @Email(message = "invalid Email format", regexp = ("^[a-zA-Z0-9+-\\_.]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$"))
+    @Email(message = "Invalid Email format", regexp = ("^[a-zA-Z0-9+-\\_.]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$"))
     @NotNull
     private String email;
 
-    @NotBlank(message = "nick_name must not null or empty string")
-    @Size(message = "the length of nick_name should be in range of 1 to 16", min = 1, max = 16)
+    @NotBlank(message = "NickName must not null or empty string")
+    @Size(message = "NickName should fit in range of 1 to 16", min = 1, max = 16)
     private String nickName;
 
-    @NotBlank(message = "passwords must not null or empty string")
+    @NotBlank(message = "Passwords must not null or empty string")
     @Pattern(regexp = ("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#])[\\da-zA-Z!@#]{8,}$"), message = "Password must have at least 8 characters with maximum 16 characters, one Upper case, one number, one symbol.")
     private String password;
 }
