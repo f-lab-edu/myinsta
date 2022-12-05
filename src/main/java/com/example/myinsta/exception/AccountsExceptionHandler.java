@@ -35,8 +35,8 @@ public class AccountsExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
     }
 
-    @ExceptionHandler(GeneralException.class)
-    public ResponseEntity<Object> generalExceptionHandler(GeneralException e) {
+    @ExceptionHandler(CustomException.class)
+    public ResponseEntity<Object> CustomExceptionHandler(CustomException e) {
 
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .errorCode(e.getErrorCode().getStatus())

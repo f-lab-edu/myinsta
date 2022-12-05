@@ -2,7 +2,7 @@ package com.example.myinsta.service;
 
 import com.example.myinsta.dao.AccountsDao;
 import com.example.myinsta.dto.SignUpDto;
-import com.example.myinsta.exception.GeneralException;
+import com.example.myinsta.exception.CustomException;
 import com.example.myinsta.exception.ErrorCode;
 import com.example.myinsta.mapper.AccountsMapper;
 import com.example.myinsta.utill.SHA256;
@@ -50,11 +50,11 @@ public class AccountsService {
                 .password(SHA256.encrypt(signUpDto.getPassword()))
                 .build();
         if (accountsMapper.isIdExist(accountsDao)) {
-            throw new GeneralException(ErrorCode.ALREADY_EXIST_EMAIL);
+            throw new CustomException(ErrorCode.ALREADY_EXIST_EMAIL);
         }
         int result = accountsMapper.insertAccount(accountsDao);
         if (result != 1) {
-            throw new GeneralException(ErrorCode.FAILED_TO_INSERT);
+            throw new CustomException(ErrorCode.FAILED_TO_INSERT);
         }
     }
 }
