@@ -4,6 +4,7 @@ import com.example.myinsta.controller.AccountsController;
 import com.example.myinsta.dto.SignUpDto;
 import com.example.myinsta.service.AccountsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * @WebMvcTest : Slicing the test configuration
@@ -81,77 +81,101 @@ public class AccountsControllerTest {
                 .password("Adfe12!2")
                 .nickName("newNickName")
                 .build();
+
+        String errorCode = "$..errorCode";
+        String errorMessage = "$..errorMessage";
+
         doNothing().when(accountsService).signUp(any());
+
         mockMvc.perform(
                         post("/accounts/signup")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(signUpDto)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("[{\"errorCode\":700,\"errorMessage\":\"ddd@WrongMail, invalid Email format\"}]"))
+                .andExpect(jsonPath(errorCode).value(700))
+                .andExpect(jsonPath(errorMessage).value("ddd@WrongMail, invalid Email format"))
                 ;
-
     }
     @Test
     @DisplayName("Invalid argument password without symbol and number")
     void invalid_password() throws Exception {
+        String errorCode = "$..errorCode";
+        String errorMessage = "$..errorMessage";
+
         signUpDto = SignUpDto.builder()
                 .email("ddd@correct.org")
                 .password("Adfedddddd")
                 .nickName("newNickName")
                 .build();
+
         doNothing().when(accountsService).signUp(any());
+
         mockMvc.perform(
                         post("/accounts/signup")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(signUpDto)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("[{\"errorCode\":700,\"errorMessage\":\"Adfedddddd, Password must have at least 8 characters with maximum 16 characters, one Upper case, one number, one symbol.\"}]"))
+                .andExpect(jsonPath(errorCode).value(700))
+                .andExpect(jsonPath(errorMessage).value("Adfedddddd, Password must have at least 8 characters with maximum 16 characters, one Upper case, one number, one symbol."))
         ;
 
     }
     @Test
     @DisplayName("Invalid argument empty string nickname")
     void invalid_nickname() throws Exception {
+        String errorCode = "$..errorCode";
+        String errorMessage = "$..errorMessage";
+
         signUpDto = SignUpDto.builder()
                 .email("ddd@correct.org")
                 .password("Adfeddd#2")
                 .nickName("")
                 .build();
+
         doNothing().when(accountsService).signUp(any());
+
         mockMvc.perform(
                         post("/accounts/signup")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(signUpDto)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("[{\"errorCode\":700,\"errorMessage\":\", nick_name must not null or empty string\"}," +
-                        "{\"errorCode\":700,\"errorMessage\":\", the length of nick_name should be in range of 1 to 16\"}]"))
+                .andExpect(jsonPath(errorCode).value(700))
+                .andExpect(jsonPath(errorMessage).value("nick_name must not null or empty string"))
         ;
 
     }
     @Test
     @DisplayName("Invalid argument email without domain password without uppercase letter and symbol empty string nickname")
     void invalid_information() throws Exception {
+        String errorCode = "$..errorCode";
+        String errorMessage = "$..errorMessage";
+
         signUpDto = SignUpDto.builder()
                 .email("incorrect@")
                 .password("invalid222")
                 .nickName("")
                 .build();
+
         doNothing().when(accountsService).signUp(any());
+
         mockMvc.perform(
                         post("/accounts/signup")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(signUpDto)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("[{\"errorCode\":700,\"errorMessage\":\"incorrect@, invalid Email format\"}," +
-                                "{\"errorCode\":700,\"errorMessage\":\", nick_name must not null or empty string\"}," +
-                                "{\"errorCode\":700,\"errorMessage\":\", the length of nick_name should be in range of 1 to 16\"}," +
-                        "{\"errorCode\":700,\"errorMessage\":\"invalid222, Password must have at least 8 characters with maximum 16 characters, one Upper case, one number, one symbol.\"}]"))
+                .andExpect(jsonPath("$[0].errorCode").value(700))
+                .andExpect(jsonPath("$[1].errorCode").value(700))
+                .andExpect(jsonPath("$[2].errorCode").value(700))
+                .andExpect(jsonPath("$[3].errorCode").value(700))
+                .andExpect(jsonPath("$[0].errorMessage").value("incorrect@, invalid Email format"))
+                .andExpect(jsonPath("$[1].errorMessage").value("nick_name must not null or empty string"))
+                .andExpect(jsonPath("$[2].errorMessage").value("the length of nick_name should be in range of 1 to 16"))
+                .andExpect(jsonPath("$[2].errorMessage").value("invalid222, Password must have at least 8 characters with maximum 16 characters, one Upper case, one number, one symbol."))
         ;
-
     }
 
     @Test
@@ -163,6 +187,7 @@ public class AccountsControllerTest {
                 .nickName("newNickName")
                 .build();
         doNothing().when(accountsService).signUp(any());
+
         mockMvc.perform(
                         post("/accounts/signup")
                                 .contentType(MediaType.APPLICATION_JSON)
