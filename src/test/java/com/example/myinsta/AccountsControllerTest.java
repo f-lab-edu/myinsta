@@ -12,6 +12,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -78,6 +81,7 @@ public class AccountsControllerTest {
                 .password("Adfe12!2")
                 .nickName("newNickName")
                 .build();
+        doNothing().when(accountsService).signUp(any());
         mockMvc.perform(
                         post("/accounts/signup")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -96,6 +100,7 @@ public class AccountsControllerTest {
                 .password("Adfedddddd")
                 .nickName("newNickName")
                 .build();
+        doNothing().when(accountsService).signUp(any());
         mockMvc.perform(
                         post("/accounts/signup")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -114,6 +119,7 @@ public class AccountsControllerTest {
                 .password("Adfeddd#2")
                 .nickName("")
                 .build();
+        doNothing().when(accountsService).signUp(any());
         mockMvc.perform(
                         post("/accounts/signup")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -133,6 +139,7 @@ public class AccountsControllerTest {
                 .password("invalid222")
                 .nickName("")
                 .build();
+        doNothing().when(accountsService).signUp(any());
         mockMvc.perform(
                         post("/accounts/signup")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -155,6 +162,7 @@ public class AccountsControllerTest {
                 .password("Adfe12!2")
                 .nickName("newNickName")
                 .build();
+        doNothing().when(accountsService).signUp(any());
         mockMvc.perform(
                         post("/accounts/signup")
                                 .contentType(MediaType.APPLICATION_JSON)
