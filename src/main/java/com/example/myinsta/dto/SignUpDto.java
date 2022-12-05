@@ -68,11 +68,11 @@ public class SignUpDto {
     @NotNull
     private String email;
 
-    @NotBlank(message = "NickName must not null or empty string")
+    @NotNull(message = "NickName must not null")
     @Size(message = "NickName should fit in range of 1 to 16", min = 1, max = 16)
     private String nickName;
 
-    @NotBlank(message = "Passwords must not null or empty string")
+    @NotNull(message = "Passwords must not null")
     @Pattern(regexp = ("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#])[\\da-zA-Z!@#]{8,}$"), message = "Password must have at least 8 characters with maximum 16 characters, one Upper case, one number, one symbol.")
     private String password;
 }
