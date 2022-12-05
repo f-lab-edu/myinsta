@@ -71,7 +71,7 @@ public class AccountsControllerTest {
     AccountsService accountsService;
 
     @Test
-    @DisplayName("Invalid input test with wrong email")
+    @DisplayName("Invalid argument test with email address wrong domain")
     void invalid_email() throws Exception {
         signUpDto = SignUpDto.builder()
                 .email("ddd@WrongMail")
@@ -89,7 +89,7 @@ public class AccountsControllerTest {
 
     }
     @Test
-    @DisplayName("Invalid input test with wrong password")
+    @DisplayName("Invalid input test with password without symbol and number")
     void invalid_password() throws Exception {
         signUpDto = SignUpDto.builder()
                 .email("ddd@correct.org")
@@ -107,7 +107,7 @@ public class AccountsControllerTest {
 
     }
     @Test
-    @DisplayName("Invalid input test with wrong nickname")
+    @DisplayName("Invalid input test with empty string nickname")
     void invalid_nickname() throws Exception {
         signUpDto = SignUpDto.builder()
                 .email("ddd@correct.org")
@@ -126,7 +126,7 @@ public class AccountsControllerTest {
 
     }
     @Test
-    @DisplayName("Invalid input test with wrong email, password, nickname")
+    @DisplayName("Invalid input test with email without domain, password without uppercase letter and symbol, empty string nickname")
     void invalid_information() throws Exception {
         signUpDto = SignUpDto.builder()
                 .email("incorrect@")
@@ -148,7 +148,7 @@ public class AccountsControllerTest {
     }
 
     @Test
-    @DisplayName("Valid input test with correct information")
+    @DisplayName("Valid input test with well-formed email, password, and not empty string")
     void valid_input() throws Exception {
         signUpDto = SignUpDto.builder()
                 .email("ddd@correcto.com")
