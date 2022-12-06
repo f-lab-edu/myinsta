@@ -21,12 +21,10 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 
 /**
- * @Captor
- * Captor verifies passed argument by using equals()
+ * @Captor Captor verifies passed argument by using equals()
  * That is if the instance of ArgumentCaptor<T> declared. it compares passed arguement with with T.
  * In this way Verification can be ensured to get correct type of argument.
  * Mockito recommends not to use ArgumentCaptor for Stubbing since ArgumentMatcher can be used for ensuring passed argument type.
- *
  * @Any( someOnject.class )
  * This method accept all kinds of types in java.
  * However, if we pass some object as argument any() will only accept
@@ -53,13 +51,15 @@ public class AccountsServiceTest {
                 .nickName("nickunamu")
                 .password("passw@#2")
                 .build();
+        given(accountsMapper.isIdExist(any(AccountsDao.class))).willReturn(false);
         given(accountsMapper.insertAccount(any(AccountsDao.class))).willReturn(0);
         //when
-        assertThrows( CustomException.class, () -> accountsService.signUp(signUpDto) );
+        assertThrows(CustomException.class, () -> accountsService.signUp(signUpDto));
         //then
         then(accountsMapper.isIdExist(accountsDaoArgumentCaptor.capture())).should(atLeastOnce());
         then(accountsMapper.insertAccount(accountsDaoArgumentCaptor.capture())).should(atLeastOnce());
     }
+
     @Test
     @DisplayName("Sign-up should not throw exception when insert query success, and isIdExist should be called at least once since isIdExist called before insertion")
     void sign_up_not_throw_exception_when_insertion_fails() {
@@ -69,13 +69,15 @@ public class AccountsServiceTest {
                 .nickName("nickunamu")
                 .password("passw@#2")
                 .build();
+        given(accountsMapper.isIdExist(any(AccountsDao.class))).willReturn(false);
         given(accountsMapper.insertAccount(any(AccountsDao.class))).willReturn(0);
         //when
-        assertDoesNotThrow(() -> accountsService.signUp(signUpDto) );
+        assertDoesNotThrow(() -> accountsService.signUp(signUpDto));
         //then
         then(accountsMapper.isIdExist(accountsDaoArgumentCaptor.capture())).should(atLeastOnce());
         then(accountsMapper.insertAccount(accountsDaoArgumentCaptor.capture())).should(atLeastOnce());
     }
+
     @Test
     @DisplayName("Sign-up should throw exception when isIdExist query found duplicate, and insertAccount never happens since methods throws exception")
     void sign_up_throw_exception_when_id_already_exist() {
@@ -87,10 +89,27 @@ public class AccountsServiceTest {
                 .build();
         given(accountsMapper.isIdExist(any(AccountsDao.class))).willReturn(true);
         //when
-        assertThrows( CustomException.class, () -> accountsService.signUp(signUpDto) );
+        assertThrows(CustomException.class, () -> accountsService.signUp(signUpDto));
         //then
         then(accountsMapper.isIdExist(accountsDaoArgumentCaptor.capture())).should(atLeastOnce());
         then(accountsMapper.insertAccount(accountsDaoArgumentCaptor.capture())).should(times(0));
+    }
+
+    @Test
+    @DisplayName("Sign-up should not throw exception when isIdExist query does not find duplicate, and insertAccount should happens at least once")
+    void sign_up_not_throw_exception_when_id_not_exist() {
+        //given
+        SignUpDto signUpDto = SignUpDto.builder()
+                .email("ddd@correct.mail")
+                .nickName("nickunamu")
+                .password("passw@#2")
+                .build();
+        given(accountsMapper.isIdExist(any(AccountsDao.class))).willReturn(false);
+        //when
+        assertDoesNotThrow(() -> accountsService.signUp(signUpDto));
+        //then
+        then(accountsMapper.isIdExist(accountsDaoArgumentCaptor.capture())).should(atLeastOnce());
+        then(accountsMapper.insertAccount(accountsDaoArgumentCaptor.capture())).should(atLeastOnce());
     }
 
 }
