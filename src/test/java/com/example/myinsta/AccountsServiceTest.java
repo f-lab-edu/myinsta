@@ -7,6 +7,7 @@ import com.example.myinsta.exception.CustomException;
 import com.example.myinsta.mapper.AccountsMapper;
 import com.example.myinsta.service.AccountsService;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,16 +42,20 @@ public class AccountsServiceTest {
     private ArgumentCaptor<AccountsDao> accountsDaoArgumentCaptor;
 
     AccountsService accountsService;
+    SignUpDto signUpDto;
 
-    @Test
-    @DisplayName("Sign-up should throw exception when insert query fails, and isIdExist should be called at least once since isIdExist called before insertion")
-    void sign_up_throw_exception_when_insertion_fails() {
-        //given
-        SignUpDto signUpDto = SignUpDto.builder()
+    @BeforeEach
+    void setUp(){
+        signUpDto = SignUpDto.builder()
                 .email("ddd@correct.mail")
                 .nickName("nickunamu")
                 .password("passw@#2")
                 .build();
+    }
+    @Test
+    @DisplayName("Sign-up should throw exception when insert query fails, and isIdExist should be called at least once since isIdExist called before insertion")
+    void sign_up_throw_exception_when_insertion_fails() {
+        //given
         given(accountsMapper.isIdExist(any(AccountsDao.class))).willReturn(false);
         given(accountsMapper.insertAccount(any(AccountsDao.class))).willReturn(0);
         //when
@@ -64,11 +69,6 @@ public class AccountsServiceTest {
     @DisplayName("Sign-up should not throw exception when insert query success, and isIdExist should be called at least once since isIdExist called before insertion")
     void sign_up_not_throw_exception_when_insertion_fails() {
         //given
-        SignUpDto signUpDto = SignUpDto.builder()
-                .email("ddd@correct.mail")
-                .nickName("nickunamu")
-                .password("passw@#2")
-                .build();
         given(accountsMapper.isIdExist(any(AccountsDao.class))).willReturn(false);
         given(accountsMapper.insertAccount(any(AccountsDao.class))).willReturn(0);
         //when
@@ -82,11 +82,6 @@ public class AccountsServiceTest {
     @DisplayName("Sign-up should throw exception when isIdExist query found duplicate, and insertAccount never happens since methods throws exception")
     void sign_up_throw_exception_when_id_already_exist() {
         //given
-        SignUpDto signUpDto = SignUpDto.builder()
-                .email("ddd@correct.mail")
-                .nickName("nickunamu")
-                .password("passw@#2")
-                .build();
         given(accountsMapper.isIdExist(any(AccountsDao.class))).willReturn(true);
         //when
         assertThrows(CustomException.class, () -> accountsService.signUp(signUpDto));
@@ -96,14 +91,9 @@ public class AccountsServiceTest {
     }
 
     @Test
-    @DisplayName("Sign-up should not throw exception when isIdExist query does not find duplicate, and insertAccount should happens at least once")
+    @DisplayName("Sign-up should not throw exception when isIdExist query does not find duplicate, and insertAccount should happens at least once, this is so called successful sign-up")
     void sign_up_not_throw_exception_when_id_not_exist() {
         //given
-        SignUpDto signUpDto = SignUpDto.builder()
-                .email("ddd@correct.mail")
-                .nickName("nickunamu")
-                .password("passw@#2")
-                .build();
         given(accountsMapper.isIdExist(any(AccountsDao.class))).willReturn(false);
         //when
         assertDoesNotThrow(() -> accountsService.signUp(signUpDto));
