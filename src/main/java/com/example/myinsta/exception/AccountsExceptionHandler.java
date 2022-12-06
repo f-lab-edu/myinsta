@@ -38,28 +38,11 @@ public class AccountsExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handler(MethodArgumentNotValidException e) {
         List<FieldError> errors = e.getFieldErrors();
-        ErrorResponse errorResponse = null;
+        List<ErrorResponse> errorResponse = new ArrayList<>();
         for (FieldError error : errors){
-            if(errors.size() == 3){
-                if(error.getField().equals("email")){
-                    errorResponse = ErrorResponse.builder().errorCode(ErrorCode.INVALID_INPUT.getStatus()).errorMessage(error.getDefaultMessage()).build();
-                    break;
-                }
-            }
-            if(errors.size() == 2){
-                if(error.getField().equals("email")){
-                    errorResponse = ErrorResponse.builder().errorCode(ErrorCode.INVALID_INPUT.getStatus()).errorMessage(error.getDefaultMessage()).build();
-                    break;
-                }
-                if(error.getField().equals("nickName")){
-                    errorResponse = ErrorResponse.builder().errorCode(ErrorCode.INVALID_INPUT.getStatus()).errorMessage(error.getDefaultMessage()).build();
-                }
-            }
-            if(errors.size() == 1){
-                errorResponse = ErrorResponse.builder().errorCode(ErrorCode.INVALID_INPUT.getStatus()).errorMessage(error.getDefaultMessage()).build();
-            }
+            errorResponse.add(ErrorResponse.builder().errorCode(ErrorCode.INVALID_INPUT.getStatus()).errorMessage(error.getDefaultMessage()).build());
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorResponse.toArray()[0]);
     }
 
     @ExceptionHandler(CustomException.class)
