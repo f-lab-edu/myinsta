@@ -13,12 +13,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.*;
 
 /**
@@ -32,17 +34,22 @@ import static org.mockito.Mockito.*;
  * passed object type.
  * @BeforeEach
  * JUnit5 annotation to define method that should excuce before each test method
+ *
+ * @InjectMocks
+ * By default Mock object returns null if there is no stub on methods.
+ * When testing service layer we should explicitly inject objects with @Mock and @InjectMocks since there is no spring application around.
+ * Note. that we are not using spring-autoconfiguration feature here.
  */
-@Slf4j
 @ExtendWith(MockitoExtension.class)
 public class AccountsServiceTest {
 
-    @MockBean
+    @Mock
     private AccountsMapper accountsMapper;
 
     @Captor
     private ArgumentCaptor<AccountsDao> accountsDaoArgumentCaptor;
 
+    @InjectMocks
     AccountsService accountsService;
     SignUpDto signUpDto;
 
@@ -52,7 +59,7 @@ public class AccountsServiceTest {
     }
 
     @Test
-    @DisplayName("Sign-up should throw exception when insert query fails, and isIdExist should be called at least once since isIdExist called before insertion")
+    @DisplayName("insert query fails, assume isIdExist success, service throw exception")
     void sign_up_throw_exception_when_insertion_fails() {
         //given
         given(accountsMapper.isIdExist(any(AccountsDao.class))).willReturn(false);
@@ -60,45 +67,47 @@ public class AccountsServiceTest {
         //when
         assertThrows(CustomException.class, () -> accountsService.signUp(signUpDto));
         //then
-        then(accountsMapper.isIdExist(accountsDaoArgumentCaptor.capture())).should(atLeastOnce());
-        then(accountsMapper.insertAccount(accountsDaoArgumentCaptor.capture())).should(atLeastOnce());
+        then(accountsMapper).should(atLeastOnce()).isIdExist(accountsDaoArgumentCaptor.capture());
+        then(accountsMapper).should(atLeastOnce()).insertAccount(accountsDaoArgumentCaptor.capture());
     }
 
     @Test
-    @DisplayName("Sign-up should not throw exception when insert query success, and isIdExist should be called at least once since isIdExist called before insertion")
+    @DisplayName("insert query success, for this assume isIdExist success")
     void sign_up_not_throw_exception_when_insertion_fails() {
         //given
         given(accountsMapper.isIdExist(any(AccountsDao.class))).willReturn(false);
-        given(accountsMapper.insertAccount(any(AccountsDao.class))).willReturn(0);
+        given(accountsMapper.insertAccount(any(AccountsDao.class))).willReturn(1);
         //when
         assertDoesNotThrow(() -> accountsService.signUp(signUpDto));
         //then
-        then(accountsMapper.isIdExist(accountsDaoArgumentCaptor.capture())).should(atLeastOnce());
-        then(accountsMapper.insertAccount(accountsDaoArgumentCaptor.capture())).should(atLeastOnce());
+        then(accountsMapper).should(atLeastOnce()).isIdExist(accountsDaoArgumentCaptor.capture());
+        then(accountsMapper).should(atLeastOnce()).insertAccount(accountsDaoArgumentCaptor.capture());
     }
 
     @Test
-    @DisplayName("Sign-up should throw exception when isIdExist query found duplicate, and insertAccount never happens since methods throws exception")
+    @DisplayName("isIdExist query found duplicate, service throw exception")
     void sign_up_throw_exception_when_id_already_exist() {
         //given
         given(accountsMapper.isIdExist(any(AccountsDao.class))).willReturn(true);
+        willDoNothing().given(accountsMapper.insertAccount(any(AccountsService.class)));
         //when
         assertThrows(CustomException.class, () -> accountsService.signUp(signUpDto));
         //then
-        then(accountsMapper.isIdExist(accountsDaoArgumentCaptor.capture())).should(atLeastOnce());
-        then(accountsMapper.insertAccount(accountsDaoArgumentCaptor.capture())).should(times(0));
+        then(accountsMapper).should(atLeastOnce()).isIdExist(accountsDaoArgumentCaptor.capture());
+        then(accountsMapper).should(times(0)).insertAccount(accountsDaoArgumentCaptor.capture());
     }
 
     @Test
 
-    @DisplayName("Sign-up should not throw exception when isIdExist query does not find duplicate, and insertAccount should happens at least once, this is so called successful sign-up")
+    @DisplayName("isIdExist query does not find duplicate, insertAccount success")
     void sign_up_not_throw_exception_when_id_not_exist() {
         //given
         given(accountsMapper.isIdExist(any(AccountsDao.class))).willReturn(false);
+        given(accountsMapper.insertAccount(any(AccountsDao.class))).willReturn(1);
         //when
         assertDoesNotThrow(() -> accountsService.signUp(signUpDto));
         //then
-        then(accountsMapper.isIdExist(accountsDaoArgumentCaptor.capture())).should(atLeastOnce());
-        then(accountsMapper.insertAccount(accountsDaoArgumentCaptor.capture())).should(atLeastOnce());
+        then(accountsMapper).should(atLeastOnce()).isIdExist(accountsDaoArgumentCaptor.capture());
+        then(accountsMapper).should(atLeastOnce()).insertAccount(accountsDaoArgumentCaptor.capture());
     }
 }
