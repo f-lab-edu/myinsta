@@ -5,6 +5,7 @@ import com.example.myinsta.dto.SignUpDto;
 import com.example.myinsta.service.AccountsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,14 +74,18 @@ public class AccountsControllerTest {
     @MockBean
     AccountsService accountsService;
 
-    @Test
-    @DisplayName("Invalid argument wrong domain email")
-    void invalid_email() throws Exception {
+    @BeforeEach
+    void setUp(){
         signUpDto = SignUpDto.builder()
                 .email("ddd@WrongMail")
                 .password("Adfe12!2")
                 .nickName("newNickName")
                 .build();
+    }
+
+    @Test
+    @DisplayName("Invalid argument wrong domain email")
+    void invalid_email() throws Exception {
 
         String errorCode = "$..errorCode";
         String errorMessage = "$..errorMessage";
@@ -103,12 +108,6 @@ public class AccountsControllerTest {
         String errorCode = "$..errorCode";
         String errorMessage = "$..errorMessage";
 
-        signUpDto = SignUpDto.builder()
-                .email("ddd@correct.org")
-                .password("Adfedddddd")
-                .nickName("newNickName")
-                .build();
-
         doNothing().when(accountsService).signUp(any());
 
         mockMvc.perform(
@@ -128,12 +127,6 @@ public class AccountsControllerTest {
         String errorCode = "$..errorCode";
         String errorMessage = "$..errorMessage";
 
-        signUpDto = SignUpDto.builder()
-                .email("ddd@correct.org")
-                .password("Adfeddd#2")
-                .nickName("")
-                .build();
-
         doNothing().when(accountsService).signUp(any());
 
         mockMvc.perform(
@@ -152,12 +145,6 @@ public class AccountsControllerTest {
     void invalid_information() throws Exception {
         String errorCode = "$..errorCode";
         String errorMessage = "$..errorMessage";
-
-        signUpDto = SignUpDto.builder()
-                .email("incorrect@")
-                .password("invalid222")
-                .nickName("")
-                .build();
 
         doNothing().when(accountsService).signUp(any());
 
@@ -182,15 +169,6 @@ public class AccountsControllerTest {
     @DisplayName("Valid argument well-formed email and password, and not empty string")
     void valid_input() throws Exception {
 
-
-
-
-
-        signUpDto = SignUpDto.builder()
-                .email("ddd@correcto.com")
-                .password("Adfe12!2")
-                .nickName("newNickName")
-                .build();
         doNothing().when(accountsService).signUp(any());
 
         mockMvc.perform(
