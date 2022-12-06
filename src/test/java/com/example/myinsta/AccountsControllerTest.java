@@ -67,6 +67,8 @@ public class AccountsControllerTest {
     private MockMvc mockMvc;
 
     SignUpDto signUpDto;
+    String errorCode;
+    String errorMessage;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -81,14 +83,15 @@ public class AccountsControllerTest {
                 .password("Adfe12!2")
                 .nickName("newNickName")
                 .build();
+        errorCode = "$..errorCode";
+        errorMessage = "$..errorMessage";
     }
 
     @Test
     @DisplayName("Invalid argument wrong domain email")
     void invalid_email() throws Exception {
 
-        String errorCode = "$..errorCode";
-        String errorMessage = "$..errorMessage";
+
 
         doNothing().when(accountsService).signUp(any());
 
@@ -105,8 +108,6 @@ public class AccountsControllerTest {
     @Test
     @DisplayName("Invalid argument password without symbol and number")
     void invalid_password() throws Exception {
-        String errorCode = "$..errorCode";
-        String errorMessage = "$..errorMessage";
 
         doNothing().when(accountsService).signUp(any());
 
@@ -124,8 +125,6 @@ public class AccountsControllerTest {
     @Test
     @DisplayName("Invalid argument empty string nickname")
     void invalid_nickname() throws Exception {
-        String errorCode = "$..errorCode";
-        String errorMessage = "$..errorMessage";
 
         doNothing().when(accountsService).signUp(any());
 
