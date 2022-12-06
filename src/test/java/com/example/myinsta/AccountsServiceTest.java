@@ -30,6 +30,8 @@ import static org.mockito.Mockito.*;
  * This method accept all kinds of types in java.
  * However, if we pass some object as argument any() will only accept
  * passed object type.
+ * @BeforeEach
+ * JUnit5 annotation to define method that should excuce before each test method
  */
 @Slf4j
 @ExtendWith(MockitoExtension.class)
@@ -45,13 +47,10 @@ public class AccountsServiceTest {
     SignUpDto signUpDto;
 
     @BeforeEach
-    void setUp(){
-        signUpDto = SignUpDto.builder()
-                .email("ddd@correct.mail")
-                .nickName("nickunamu")
-                .password("passw@#2")
-                .build();
+    void setUp() {
+        signUpDto = SignUpDto.builder().email("ddd@correct.mail").nickName("nickunamu").password("passw@#2").build();
     }
+
     @Test
     @DisplayName("Sign-up should throw exception when insert query fails, and isIdExist should be called at least once since isIdExist called before insertion")
     void sign_up_throw_exception_when_insertion_fails() {
@@ -91,6 +90,7 @@ public class AccountsServiceTest {
     }
 
     @Test
+
     @DisplayName("Sign-up should not throw exception when isIdExist query does not find duplicate, and insertAccount should happens at least once, this is so called successful sign-up")
     void sign_up_not_throw_exception_when_id_not_exist() {
         //given
@@ -101,5 +101,4 @@ public class AccountsServiceTest {
         then(accountsMapper.isIdExist(accountsDaoArgumentCaptor.capture())).should(atLeastOnce());
         then(accountsMapper.insertAccount(accountsDaoArgumentCaptor.capture())).should(atLeastOnce());
     }
-
 }
