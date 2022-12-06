@@ -1,6 +1,7 @@
 package com.example.myinsta.exception;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,15 @@ import java.util.List;
  * In this case code is not using constant expression so that StringBuilder must involve to reduce a GC performance issue caused by generating new String objects.
  * Furthermore, StringBuffer is a thread-safe class while StringBuilder is a thread-unsafe class. StringBuffer achieves thread-safe by providing synchronized operations.
  * And Spring application uses threaded environment so StringBuffer is correct choice for this circumstance.
+ *
+ * @handler
+ * Handling MethodArgumentNotValidException
+ * Returns ErrorResponse with error code and error message
+ * If there are multiple invalid input, then return one from errors
+ * The return FieldError has priority as below, the highest priority value will be returned.
+ * 1. Email
+ * 2. Nick Name
+ * 3. Password
  */
 @ControllerAdvice
 public class AccountsExceptionHandler {
@@ -28,9 +38,26 @@ public class AccountsExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handler(MethodArgumentNotValidException e) {
         List<FieldError> errors = e.getFieldErrors();
-        List<ErrorResponse> errorResponse = new ArrayList<>();
-        for (FieldError error : errors) {
-            errorResponse.add(ErrorResponse.builder().errorCode(ErrorCode.INVALID_INPUT.getStatus()).errorMessage(error.getDefaultMessage()).build());
+        ErrorResponse errorResponse = null;
+        for (FieldError error : errors){
+            if(errors.size() == 3){
+                if(error.getField().equals("email")){
+                    errorResponse = ErrorResponse.builder().errorCode(ErrorCode.INVALID_INPUT.getStatus()).errorMessage(error.getDefaultMessage()).build();
+                    break;
+                }
+            }
+            if(errors.size() == 2){
+                if(error.getField().equals("email")){
+                    errorResponse = ErrorResponse.builder().errorCode(ErrorCode.INVALID_INPUT.getStatus()).errorMessage(error.getDefaultMessage()).build();
+                    break;
+                }
+                if(error.getField().equals("nickName")){
+                    errorResponse = ErrorResponse.builder().errorCode(ErrorCode.INVALID_INPUT.getStatus()).errorMessage(error.getDefaultMessage()).build();
+                }
+            }
+            if(errors.size() == 1){
+                errorResponse = ErrorResponse.builder().errorCode(ErrorCode.INVALID_INPUT.getStatus()).errorMessage(error.getDefaultMessage()).build();
+            }
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
     }
