@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(MockitoExtension.class)
 class EcryptionTest {
     @Test
-    @DisplayName("encryption result of same plain text should same")
+    @DisplayName("do encrypt on same value twice")
     void encryption_validation(){
         //given
         String plainText = "plainText";
@@ -22,7 +22,7 @@ class EcryptionTest {
     }
 
     @Test
-    @DisplayName("encryption of different plain text should different")
+    @DisplayName("do encrypt on different two values")
     void encryption_validation2(){
         //given
         String plainText = "plainText";
