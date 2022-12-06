@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class EcryptionTest {
     @Test
     @DisplayName("do encrypt on same value twice")
-    void encryption_validation(){
+    void encryption_validation() {
         //given
         String plainText = "plainText";
         //when
@@ -23,7 +23,7 @@ class EcryptionTest {
 
     @Test
     @DisplayName("do encrypt on different two values")
-    void encryption_validation2(){
+    void encryption_validation2() {
         //given
         String plainText = "plainText";
         String plainText2 = "PlainText";

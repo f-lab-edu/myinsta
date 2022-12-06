@@ -28,24 +28,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * GenericConverter, Filter, WebMvcConfigurer, and HandlerMethodAtgumentResolver)
  * And the @Component, @Service, and @Repository beans will not be registered.
  * using AccountsController for this test configuration
- * @ObjectMapper
- * To use Jackson data-binding object to provide JSon input for test
- * @MockBean
- * Creating Mockito mock, When AccountsController is being added as bean,
+ * @ObjectMapper To use Jackson data-binding object to provide JSon input for test
+ * @MockBean Creating Mockito mock, When AccountsController is being added as bean,
  * AccountsController needs AccountsService object, here @MockBean will provide
  * mock bean of AccountsService to AccountsController object
- *
- * @Test_case
- * User input wrong email address
- *
- * @Correct_data
- * email : not empty, not null, wellformed email address
+ * @Test_case User input wrong email address
+ * @Correct_data email : not empty, not null, wellformed email address
  * nick_name : not empty, not null, any string with length range 1-16
  * password : not empty, not null, any string with length range 8-16
- *
- * @Given_Data
- * Wrong email form with correct password, correct nick_name
- *
+ * @Given_Data Wrong email form with correct password, correct nick_name
+ * <p>
  * signUpDto                : User input to provide sign up information, email, nick_name, password
  * Post()                   : Request POST to controller
  * contentType()            : Set Contents-Type as given type
@@ -54,7 +46,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * print()                  : print the MvcResult(https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/test/web/servlet/MvcResult.html)
  * andExpect()              : Compare with expected given result and actual result
  * status().isBadRequest()  : Expected given result is ResponseBody with isCreated status code
- *
  * @throws Exception
  * @return void
  */
@@ -77,12 +68,7 @@ public class AccountsControllerTest {
     AccountsService accountsService;
 
     @BeforeEach
-    void setUp(){
-        signUpDto = SignUpDto.builder()
-                .email("ddd@WrongMail")
-                .password("Adfe12!2")
-                .nickName("newNickName")
-                .build();
+    void setUp() {
         errorCode = "$..errorCode";
         errorMessage = "$..errorMessage";
     }
@@ -90,6 +76,12 @@ public class AccountsControllerTest {
     @Test
     @DisplayName("Invalid argument wrong domain email")
     void invalid_email() throws Exception {
+        signUpDto = SignUpDto.builder()
+                .email("ddd@WrongMail")
+                .password("Adfe12!2")
+                .nickName("newNickName")
+                .build();
+
         doNothing().when(accountsService).signUp(any());
 
         mockMvc.perform(
@@ -100,11 +92,18 @@ public class AccountsControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(errorCode).value(700))
                 .andExpect(jsonPath(errorMessage).value("Invalid Email format"))
-                ;
+        ;
     }
+
     @Test
     @DisplayName("Invalid argument password without symbol and number")
     void invalid_password() throws Exception {
+        signUpDto = SignUpDto.builder()
+                .email("ddd@Correct.com")
+                .password("Adfeaaaaaa")
+                .nickName("newNickName")
+                .build();
+
         doNothing().when(accountsService).signUp(any());
 
         mockMvc.perform(
@@ -118,9 +117,15 @@ public class AccountsControllerTest {
         ;
 
     }
+
     @Test
     @DisplayName("Invalid argument empty string nickname")
     void invalid_nickname() throws Exception {
+        signUpDto = SignUpDto.builder()
+                .email("ddd@corecto.com")
+                .password("Adfe12!2")
+                .nickName("")
+                .build();
         doNothing().when(accountsService).signUp(any());
 
         mockMvc.perform(
@@ -134,6 +139,7 @@ public class AccountsControllerTest {
         ;
 
     }
+
     @Test
     @DisplayName("Valid argument well-formed email and password, and not empty string")
     void valid_input() throws Exception {

@@ -15,7 +15,6 @@ import javax.validation.constraints.*;
  * @Builder : For testing purpose, to build test object
  * email
  * data field to save email information of user sign up input
- *
  * @Email, string has to be well-formed email address, null is consisdered as valid
  * @NotNull, email shouldn't be null
  * Used Regular expression : https://velog.io/@fall031/%EC%A0%95%EA%B7%9C%ED%91%9C%ED%98%84%EC%8B%9D

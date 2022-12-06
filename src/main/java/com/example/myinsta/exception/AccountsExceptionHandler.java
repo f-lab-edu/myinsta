@@ -22,9 +22,7 @@ import java.util.List;
  * In this case code is not using constant expression so that StringBuilder must involve to reduce a GC performance issue caused by generating new String objects.
  * Furthermore, StringBuffer is a thread-safe class while StringBuilder is a thread-unsafe class. StringBuffer achieves thread-safe by providing synchronized operations.
  * And Spring application uses threaded environment so StringBuffer is correct choice for this circumstance.
- *
- * @handler
- * Handling MethodArgumentNotValidException
+ * @handler Handling MethodArgumentNotValidException
  * Returns ErrorResponse with error code and error message
  * If there are multiple invalid input, then return one from errors
  * The return FieldError has priority as below, the highest priority value will be returned.
@@ -39,7 +37,7 @@ public class AccountsExceptionHandler {
     public ResponseEntity<Object> handler(MethodArgumentNotValidException e) {
         List<FieldError> errors = e.getFieldErrors();
         List<ErrorResponse> errorResponse = new ArrayList<>();
-        for (FieldError error : errors){
+        for (FieldError error : errors) {
             errorResponse.add(ErrorResponse.builder().errorCode(ErrorCode.INVALID_INPUT.getStatus()).errorMessage(error.getDefaultMessage()).build());
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorResponse.toArray()[0]);

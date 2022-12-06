@@ -23,13 +23,12 @@ import org.springframework.stereotype.Service;
  * <p>
  * accountsMapper
  * Injected mapper object that executes CRUD SQL query to DB
-
+ * <p>
  * accountsMapper
  * Injected mapper object that executes CRUD SQL query to DB
-
+ * <p>
  * signUp
  * Service method that insert a user into DB with mapper
- *
  * @return ID # of row if the insertion query success
  */
 
