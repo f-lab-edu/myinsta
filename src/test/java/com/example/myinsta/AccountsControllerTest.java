@@ -141,31 +141,6 @@ public class AccountsControllerTest {
 
     }
     @Test
-    @DisplayName("Invalid argument email without domain password without uppercase letter symbol empty string nickname")
-    void invalid_information() throws Exception {
-        String errorCode = "$..errorCode";
-        String errorMessage = "$..errorMessage";
-
-        doNothing().when(accountsService).signUp(any());
-
-        mockMvc.perform(
-                        post("/accounts/signup")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(signUpDto)))
-                .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath(errorCode).value(700))
-//                .andExpect(jsonPath("$[1].errorCode").value(700))
-//                .andExpect(jsonPath("$[2].errorCode").value(700))
-//                .andExpect(jsonPath("$[3].errorCode").value(700))
-                .andExpect(jsonPath(errorMessage).value("Invalid Email format"))
-//                .andExpect(jsonPath("$[1].errorMessage").value("NickName must not null or empty string"))
-//                .andExpect(jsonPath("$[1].errorMessage").value("NickName should be in range of 1 to 16"))
-//                .andExpect(jsonPath("$[2].errorMessage").value("Password must have at least 8 characters with maximum 16 characters, one Upper case, one number, one symbol."))
-        ;
-    }
-
-    @Test
     @DisplayName("Valid argument well-formed email and password, and not empty string")
     void valid_input() throws Exception {
 
