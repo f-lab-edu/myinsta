@@ -13,45 +13,16 @@ import javax.validation.constraints.*;
  * @Getter : DTO has simple Getter and Setter
  * @Setter : DTO has simple Getter and Setter
  * @Builder : For testing purpose, to build test object
- * <p>
- * email
- * data field to save email information of user sign up input
- * @Email, string has to be well-formed email address, null is consisdered as valid
- * @NotNull, email shouldn't be null
- * Used Regular expression : https://velog.io/@fall031/%EC%A0%95%EA%B7%9C%ED%91%9C%ED%98%84%EC%8B%9D
- * <p>
- * nickName
- * Data field to save nickname information of user sign up input
- * @NotBlank, validate whether element is not null and has at least one character
- * @Size, validate the size of element, nick_name shuold be fit in 1 <= nick_name <= 16
- * <p>
- * email
- * data field to save email information of user sign up input
- * @Email, string has to be well-formed email address, null is consisdered as valid
- * @NotNull, email shouldn't be null
- * Used Regular expression : https://velog.io/@fall031/%EC%A0%95%EA%B7%9C%ED%91%9C%ED%98%84%EC%8B%9D
- * <p>
- * nickName
- * Data field to save nickname information of user sign up input
- * @NotBlank, validate whether element is not null and has at least one character
- * @Size, validate the size of element, nick_name shuold be fit in 1 <= nick_name <= 16
- */
-/**
  * email
  * data field to save email information of user sign up input
  *
  * @Email, string has to be well-formed email address, null is consisdered as valid
  * @NotNull, email shouldn't be null
  * Used Regular expression : https://velog.io/@fall031/%EC%A0%95%EA%B7%9C%ED%91%9C%ED%98%84%EC%8B%9D
- */
-/**
  * nickName
  * Data field to save nickname information of user sign up input
  * @NotBlank, validate whether element is not null and has at least one character
  * @Size, validate the size of element, nick_name shuold be fit in 1 <= nick_name <= 16
- */
-
-/**
  * password
  * Data field to save information of password of user sign up input
  * @NotBlank, validate whether the element is not null and has at least one character
