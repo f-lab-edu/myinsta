@@ -59,7 +59,7 @@ public class AccountsServiceTest {
     }
 
     @Test
-    @DisplayName("insert query fails, assume isIdExist success, service throw exception")
+    @DisplayName("isIdExist does not find duplication but insertAccount fail")
     void sign_up_throw_exception_when_insertion_fails() {
         //given
         given(accountsMapper.isIdExist(any(AccountsDao.class))).willReturn(false);
@@ -72,7 +72,7 @@ public class AccountsServiceTest {
     }
 
     @Test
-    @DisplayName("insert query success, for this assume isIdExist success")
+    @DisplayName("isIdExist does not find duplication and insertAccount success")
     void sign_up_not_throw_exception_when_insertion_fails() {
         //given
         given(accountsMapper.isIdExist(any(AccountsDao.class))).willReturn(false);
@@ -85,29 +85,15 @@ public class AccountsServiceTest {
     }
 
     @Test
-    @DisplayName("isIdExist query found duplicate, service throw exception")
+    @DisplayName("isIdExist query found duplicate and insertAccount will not be executed")
     void sign_up_throw_exception_when_id_already_exist() {
         //given
         given(accountsMapper.isIdExist(any(AccountsDao.class))).willReturn(true);
-        willDoNothing().given(accountsMapper.insertAccount(any(AccountsService.class)));
+        willDoNothing().given(accountsMapper).insertAccount(any(AccountsDao.class));
         //when
         assertThrows(CustomException.class, () -> accountsService.signUp(signUpDto));
         //then
         then(accountsMapper).should(atLeastOnce()).isIdExist(accountsDaoArgumentCaptor.capture());
         then(accountsMapper).should(times(0)).insertAccount(accountsDaoArgumentCaptor.capture());
-    }
-
-    @Test
-
-    @DisplayName("isIdExist query does not find duplicate, insertAccount success")
-    void sign_up_not_throw_exception_when_id_not_exist() {
-        //given
-        given(accountsMapper.isIdExist(any(AccountsDao.class))).willReturn(false);
-        given(accountsMapper.insertAccount(any(AccountsDao.class))).willReturn(1);
-        //when
-        assertDoesNotThrow(() -> accountsService.signUp(signUpDto));
-        //then
-        then(accountsMapper).should(atLeastOnce()).isIdExist(accountsDaoArgumentCaptor.capture());
-        then(accountsMapper).should(atLeastOnce()).insertAccount(accountsDaoArgumentCaptor.capture());
     }
 }

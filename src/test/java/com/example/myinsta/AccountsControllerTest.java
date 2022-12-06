@@ -90,9 +90,6 @@ public class AccountsControllerTest {
     @Test
     @DisplayName("Invalid argument wrong domain email")
     void invalid_email() throws Exception {
-
-
-
         doNothing().when(accountsService).signUp(any());
 
         mockMvc.perform(
@@ -108,7 +105,6 @@ public class AccountsControllerTest {
     @Test
     @DisplayName("Invalid argument password without symbol and number")
     void invalid_password() throws Exception {
-
         doNothing().when(accountsService).signUp(any());
 
         mockMvc.perform(
@@ -125,7 +121,6 @@ public class AccountsControllerTest {
     @Test
     @DisplayName("Invalid argument empty string nickname")
     void invalid_nickname() throws Exception {
-
         doNothing().when(accountsService).signUp(any());
 
         mockMvc.perform(
@@ -142,7 +137,6 @@ public class AccountsControllerTest {
     @Test
     @DisplayName("Valid argument well-formed email and password, and not empty string")
     void valid_input() throws Exception {
-
         doNothing().when(accountsService).signUp(any());
 
         mockMvc.perform(
