@@ -53,6 +53,7 @@ public class AccountsServiceTest {
     AccountsService accountsService;
     SignUpDto signUpDto;
 
+
     @BeforeEach
     void setUp() {
         signUpDto = SignUpDto.builder().email("ddd@correct.mail").nickName("nickunamu").password("passw@#2").build();
@@ -65,8 +66,9 @@ public class AccountsServiceTest {
         given(accountsMapper.isIdExist(any(AccountsDao.class))).willReturn(false);
         given(accountsMapper.insertAccount(any(AccountsDao.class))).willReturn(0);
         //when
-        assertThrows(CustomException.class, () -> accountsService.signUp(signUpDto));
+        CustomException thrown = assertThrows(CustomException.class, () -> accountsService.signUp(signUpDto));
         //then
+        assertEquals("Sign-up failed",thrown.getErrorCode().getMessage());
         then(accountsMapper).should(atLeastOnce()).isIdExist(accountsDaoArgumentCaptor.capture());
         then(accountsMapper).should(atLeastOnce()).insertAccount(accountsDaoArgumentCaptor.capture());
     }
@@ -78,8 +80,9 @@ public class AccountsServiceTest {
         given(accountsMapper.isIdExist(any(AccountsDao.class))).willReturn(false);
         given(accountsMapper.insertAccount(any(AccountsDao.class))).willReturn(1);
         //when
-        assertDoesNotThrow(() -> accountsService.signUp(signUpDto));
+        accountsService.signUp(signUpDto);
         //then
+        assertDoesNotThrow(() -> accountsService.signUp(signUpDto));
         then(accountsMapper).should(atLeastOnce()).isIdExist(accountsDaoArgumentCaptor.capture());
         then(accountsMapper).should(atLeastOnce()).insertAccount(accountsDaoArgumentCaptor.capture());
     }
@@ -89,10 +92,10 @@ public class AccountsServiceTest {
     void sign_up_throw_exception_when_id_already_exist() {
         //given
         given(accountsMapper.isIdExist(any(AccountsDao.class))).willReturn(true);
-        willDoNothing().given(accountsMapper).insertAccount(any(AccountsDao.class));
         //when
-        assertThrows(CustomException.class, () -> accountsService.signUp(signUpDto));
+        CustomException thrown = assertThrows(CustomException.class, () -> accountsService.signUp(signUpDto));
         //then
+        assertEquals("Email is already exist", thrown.getErrorCode().getMessage());
         then(accountsMapper).should(atLeastOnce()).isIdExist(accountsDaoArgumentCaptor.capture());
         then(accountsMapper).should(times(0)).insertAccount(accountsDaoArgumentCaptor.capture());
     }
