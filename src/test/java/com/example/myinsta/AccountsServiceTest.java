@@ -75,7 +75,7 @@ public class AccountsServiceTest {
 
     @Test
     @DisplayName("isIdExist does not find duplication and insertAccount success")
-    void sign_up_not_throw_exception_when_insertion_fails() {
+    void sign_up_not_throw_exception_when_insertion_success() {
         //given
         given(accountsMapper.isIdExist(any(AccountsDao.class))).willReturn(false);
         given(accountsMapper.insertAccount(any(AccountsDao.class))).willReturn(1);
