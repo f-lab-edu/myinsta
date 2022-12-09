@@ -69,8 +69,8 @@ public class AccountsServiceTest {
         CustomException thrown = assertThrows(CustomException.class, () -> accountsService.signUp(signUpDto));
         //then
         assertEquals("Sign-up failed",thrown.getErrorCode().getMessage());
-        then(accountsMapper).should(atLeastOnce()).isIdExist(accountsDaoArgumentCaptor.capture());
-        then(accountsMapper).should(atLeastOnce()).insertAccount(accountsDaoArgumentCaptor.capture());
+        then(accountsMapper).should(atLeastOnce()).isIdExist(any(AccountsDao.class));
+        then(accountsMapper).should(atLeastOnce()).insertAccount(any(AccountsDao.class));
     }
 
     @Test
@@ -82,9 +82,8 @@ public class AccountsServiceTest {
         //when
         accountsService.signUp(signUpDto);
         //then
-        assertDoesNotThrow(() -> accountsService.signUp(signUpDto));
-        then(accountsMapper).should(atLeastOnce()).isIdExist(accountsDaoArgumentCaptor.capture());
-        then(accountsMapper).should(atLeastOnce()).insertAccount(accountsDaoArgumentCaptor.capture());
+        then(accountsMapper).should(atLeastOnce()).isIdExist(any(AccountsDao.class));
+        then(accountsMapper).should(atLeastOnce()).insertAccount(any(AccountsDao.class));
     }
 
     @Test
@@ -96,7 +95,7 @@ public class AccountsServiceTest {
         CustomException thrown = assertThrows(CustomException.class, () -> accountsService.signUp(signUpDto));
         //then
         assertEquals("Email is already exist", thrown.getErrorCode().getMessage());
-        then(accountsMapper).should(atLeastOnce()).isIdExist(accountsDaoArgumentCaptor.capture());
-        then(accountsMapper).should(times(0)).insertAccount(accountsDaoArgumentCaptor.capture());
+        then(accountsMapper).should(atLeastOnce()).isIdExist(any(AccountsDao.class));
+        then(accountsMapper).should(times(0)).insertAccount(any(AccountsDao.class));
     }
 }
