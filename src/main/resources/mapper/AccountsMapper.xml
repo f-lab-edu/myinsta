@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.myinsta.mapper.AccountsMapper">
+    <insert id="insertAccount" parameterType="com.example.myinsta.dao.AccountsDao" >
+        INSERT INTO accounts(nick_name, email, password)
+        VALUES (#{nickName}, #{email}, #{password})
+    </insert>
+    <select id="isIdExist" parameterType="com.example.myinsta.dao.AccountsDao" resultType="boolean">
+        SELECT EXISTS
+        (SELECT email
+        FROM accounts
+        WHERE email = #{email});
+    </select>
+</mapper>
