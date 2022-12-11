@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.myinsta.mapper.PostsMapper" >
+    <insert id="insertPost" parameterType="com.example.myinsta.dao.PostsDao" useGeneratedKeys="true" keyProperty="idPost" >
+        insert into posts( title, id_account )
+        values(#{title}, #{idAccount})
+    </insert>
+    <insert id="insertPostImage" parameterType="com.example.myinsta.dao.PostImageDao" >
+        insert into post_images( id_post, image_path )
+        values(#{idPost}, #{imagePath })
+    </insert>
+</mapper>

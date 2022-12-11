@@ -45,10 +45,6 @@ public class AccountsServiceTest {
 
     @Mock
     private AccountsMapper accountsMapper;
-
-    @Captor
-    private ArgumentCaptor<AccountsDao> accountsDaoArgumentCaptor;
-
     @InjectMocks
     AccountsService accountsService;
     SignUpDto signUpDto;
