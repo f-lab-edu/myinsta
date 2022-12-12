@@ -41,7 +41,7 @@ public class PostsControllerTest {
                 .userId(1)
                 .build();
         willDoNothing().given(postService).postCreation(any());
-        mockMvc.perform(post("/post")
+        mockMvc.perform(post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postCreateDto)))
                 .andDo(print())
@@ -60,7 +60,7 @@ public class PostsControllerTest {
                 .userId(1)
                 .build();
         willDoNothing().given(postService).postCreation(any());
-        mockMvc.perform(post("/post")
+        mockMvc.perform(post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postCreateDto)))
                 .andDo(print())
@@ -79,7 +79,7 @@ public class PostsControllerTest {
                 .userId(1)
                 .build();
         willDoNothing().given(postService).postCreation(any());
-        mockMvc.perform(post("/post")
+        mockMvc.perform(post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postCreateDto)))
                 .andDo(print())
@@ -98,7 +98,7 @@ public class PostsControllerTest {
                 .userId(1)
                 .build();
         willDoNothing().given(postService).postCreation(any());
-        mockMvc.perform(post("/post")
+        mockMvc.perform(post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postCreateDto)))
                 .andDo(print())
@@ -117,7 +117,7 @@ public class PostsControllerTest {
                 .userId(1)
                 .build();
         willDoNothing().given(postService).postCreation(any());
-        mockMvc.perform(post("/post")
+        mockMvc.perform(post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postCreateDto)))
                 .andDo(print())
@@ -135,7 +135,7 @@ public class PostsControllerTest {
                 .userId(0)
                 .build();
         willDoNothing().given(postService).postCreation(any());
-        mockMvc.perform(post("/post")
+        mockMvc.perform(post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postCreateDto)))
                 .andDo(print())
