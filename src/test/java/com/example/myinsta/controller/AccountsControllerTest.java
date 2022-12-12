@@ -1,6 +1,5 @@
 package com.example.myinsta.controller;
 
-import com.example.myinsta.controller.AccountsController;
 import com.example.myinsta.dto.SignUpDto;
 import com.example.myinsta.service.AccountsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -141,6 +140,12 @@ public class AccountsControllerTest {
     @Test
     @DisplayName("Valid argument well-formed email and password, and not empty string")
     void valid_input() throws Exception {
+        signUpDto = SignUpDto.builder()
+                .email("ddd@corecto.com")
+                .password("Adfe12!2")
+                .nickName("correcto")
+                .build();
+
         doNothing().when(accountsService).signUp(any());
 
         mockMvc.perform(

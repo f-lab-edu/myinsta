@@ -1,11 +1,9 @@
 package com.example.myinsta.controller;
 
 
-import com.example.myinsta.controller.PostsController;
 import com.example.myinsta.dto.PostCreateDto;
 import com.example.myinsta.service.PostsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
