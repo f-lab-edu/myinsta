@@ -1,4 +1,4 @@
-package com.example.myinsta;
+package com.example.myinsta.service;
 
 
 import com.example.myinsta.dao.AccountsDao;

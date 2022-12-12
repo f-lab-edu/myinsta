@@ -1,4 +1,4 @@
-package com.example.myinsta;
+package com.example.myinsta.controller;
 
 import com.example.myinsta.controller.AccountsController;
 import com.example.myinsta.dto.SignUpDto;

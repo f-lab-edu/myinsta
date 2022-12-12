@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class PostImageDao {
-    private long idPostImage;
     private long idPost;
     private String imagePath;
     private LocalDateTime createdDate;

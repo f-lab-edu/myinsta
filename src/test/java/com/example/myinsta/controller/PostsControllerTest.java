@@ -1,4 +1,4 @@
-package com.example.myinsta;
+package com.example.myinsta.controller;
 
 
 import com.example.myinsta.controller.PostsController;
@@ -29,14 +29,8 @@ public class PostsControllerTest {
     @MockBean
     PostsService postService;
     private PostCreateDto postCreateDto;
-    private String errorCode;
-    private String errorMessage;
-
-    @BeforeEach
-    void setUp() {
-        errorCode = "$..errorCode";
-        errorMessage = "$..errorMessage";
-    }
+    private String errorCode = "$..errorCode";;
+    private String errorMessage = "$..errorMessage";;
 
     @Test
     @DisplayName("Empty title input")
@@ -44,9 +38,10 @@ public class PostsControllerTest {
         postCreateDto = PostCreateDto.builder()
                 .title("")
                 .imageUrl("/this/is/some/url")
+                .userId(1)
                 .build();
         willDoNothing().given(postService).postCreation(any());
-        mockMvc.perform(post("/post/create")
+        mockMvc.perform(post("/post")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postCreateDto)))
                 .andDo(print())
@@ -62,9 +57,10 @@ public class PostsControllerTest {
         postCreateDto = PostCreateDto.builder()
                 .title(null)
                 .imageUrl("/this/is/some/url")
+                .userId(1)
                 .build();
         willDoNothing().given(postService).postCreation(any());
-        mockMvc.perform(post("/post/create")
+        mockMvc.perform(post("/post")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postCreateDto)))
                 .andDo(print())
@@ -80,9 +76,10 @@ public class PostsControllerTest {
         postCreateDto = PostCreateDto.builder()
                 .title("asdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfgadfg")
                 .imageUrl("/this/is/some/url")
+                .userId(1)
                 .build();
         willDoNothing().given(postService).postCreation(any());
-        mockMvc.perform(post("/post/create")
+        mockMvc.perform(post("/post")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postCreateDto)))
                 .andDo(print())
@@ -98,9 +95,10 @@ public class PostsControllerTest {
         postCreateDto = PostCreateDto.builder()
                 .title("this is title")
                 .imageUrl(null)
+                .userId(1)
                 .build();
         willDoNothing().given(postService).postCreation(any());
-        mockMvc.perform(post("/post/create")
+        mockMvc.perform(post("/post")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postCreateDto)))
                 .andDo(print())
@@ -116,15 +114,34 @@ public class PostsControllerTest {
         postCreateDto = PostCreateDto.builder()
                 .title("this is title")
                 .imageUrl("")
+                .userId(1)
                 .build();
         willDoNothing().given(postService).postCreation(any());
-        mockMvc.perform(post("/post/create")
+        mockMvc.perform(post("/post")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postCreateDto)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(errorCode).value(700))
                 .andExpect(jsonPath(errorMessage).value("Image url cannot be null or empty"))
+        ;
+    }
+    @Test
+    @DisplayName("userId less than 1 input")
+    void invalid_userId_less_than_1() throws Exception {
+        postCreateDto = PostCreateDto.builder()
+                .title("this is title")
+                .imageUrl("/this/is/some/url")
+                .userId(0)
+                .build();
+        willDoNothing().given(postService).postCreation(any());
+        mockMvc.perform(post("/post")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postCreateDto)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath(errorCode).value(700))
+                .andExpect(jsonPath(errorMessage).value("User Id must greater than or equal to 1"))
         ;
     }
 

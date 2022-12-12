@@ -15,7 +15,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class PostsController {
     private final PostsService postService;
-    @PostMapping("/post/create")
+    @PostMapping("/post")
     public ResponseEntity<Void> postCreation(@Valid @RequestBody PostCreateDto postCreateDto){
         postService.postCreation(postCreateDto);
         return new ResponseEntity<> (HttpStatus.CREATED);

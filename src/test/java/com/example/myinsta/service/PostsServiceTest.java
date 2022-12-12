@@ -1,4 +1,4 @@
-package com.example.myinsta;
+package com.example.myinsta.service;
 
 import com.example.myinsta.dao.PostImageDao;
 import com.example.myinsta.dao.PostsDao;
@@ -32,8 +32,8 @@ class PostsServiceTest {
         postCreateDto = PostCreateDto.builder().title("This is post title").imageUrl("/this/is/some/url").build();
     }
     @Test
-    @DisplayName("insertPost success and insertPostImage never happen and throw exception")
-    void postCreation_insertion_fails_yes_exception() {
+    @DisplayName("insertPost() success insertPostImage() never happen then throw exception")
+    void postCreation_fail_with_exception() {
         //given
         given(postsMapper.insertPost(any(PostsDao.class))).willReturn(0);
         //when
@@ -43,8 +43,8 @@ class PostsServiceTest {
         then(postsMapper).should(atLeastOnce()).insertPost(any(PostsDao.class));
     }
     @Test
-    @DisplayName("insertPost success and insertPostIamge fail and yes exception")
-    void postCreation_insertion_fails_yes_exception2() {
+    @DisplayName("insertPost() success insertPostIamge() fail then throw exception")
+    void postCreation_fail_with_exception2() {
         //given
         given(postsMapper.insertPost(any(PostsDao.class))).willReturn(1);
         given(postsMapper.insertPostImage(any(PostImageDao.class))).willReturn(0);
@@ -55,8 +55,8 @@ class PostsServiceTest {
         then(postsMapper).should(atLeastOnce()).insertPostImage(any(PostImageDao.class));
     }
     @Test
-    @DisplayName("insertPost success and insertPostIamge success and no exception")
-    void postCreation_insertion_success_no_exception() {
+    @DisplayName("insertPost() success insertPostIamge() success then no exception")
+    void postCreation_success_without_exception() {
         //given
         given(postsMapper.insertPost(any(PostsDao.class))).willReturn(1);
         given(postsMapper.insertPostImage(any(PostImageDao.class))).willReturn(1);

@@ -22,7 +22,7 @@ public class PostsService {
                 .build();
 
         int result = postsMapper.insertPost(postsDao);
-        if(result != 1){
+        if(result < 1){
             throw new CustomException(ErrorCode.FAILED_TO_INSERT_POST);
         }
 
