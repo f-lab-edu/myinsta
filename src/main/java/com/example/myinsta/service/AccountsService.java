@@ -35,9 +35,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AccountsService {
-
     private final AccountsMapper accountsMapper;
-
     public void signUp(SignUpDto signUpDto) {
         AccountsDao accountsDao = AccountsDao.builder()
                 .email(signUpDto.getEmail())

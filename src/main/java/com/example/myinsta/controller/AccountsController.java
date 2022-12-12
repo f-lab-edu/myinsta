@@ -15,7 +15,6 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class AccountsController {
     private final AccountsService accountsService;
-
     @PostMapping("/accounts/signup")
     public ResponseEntity<Void> signUp(@Valid @RequestBody SignUpDto signUpDto) {
         accountsService.signUp(signUpDto);

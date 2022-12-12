@@ -1,4 +1,4 @@
-package com.example.myinsta;
+package com.example.myinsta.service;
 
 
 import com.example.myinsta.dao.AccountsDao;
@@ -45,10 +45,6 @@ public class AccountsServiceTest {
 
     @Mock
     private AccountsMapper accountsMapper;
-
-    @Captor
-    private ArgumentCaptor<AccountsDao> accountsDaoArgumentCaptor;
-
     @InjectMocks
     AccountsService accountsService;
     SignUpDto signUpDto;
