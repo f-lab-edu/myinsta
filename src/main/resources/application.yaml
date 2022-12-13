@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: "jdbc:mysql://3.35.214.152:3306/myinsta"
-    userName: dev1
-    password: cavnox-8futwI-tawcuc
+    url: "jdbc:mysql://43.201.64.180/myinsta"
+    userName: dev2
+    password: coppys-gUtgoh-6detpi
 
 
 mybatis:
