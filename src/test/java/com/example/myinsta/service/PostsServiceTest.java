@@ -1,8 +1,11 @@
 package com.example.myinsta.service;
 
 import com.example.myinsta.dao.PostImageDao;
+import com.example.myinsta.dao.PostImagesUpdateDao;
 import com.example.myinsta.dao.PostsDao;
+import com.example.myinsta.dao.PostsUpdateDao;
 import com.example.myinsta.dto.PostCreateDto;
+import com.example.myinsta.dto.PostUpdateDto;
 import com.example.myinsta.exception.CustomException;
 import com.example.myinsta.mapper.PostsMapper;
 import com.example.myinsta.service.PostsService;
@@ -27,9 +30,11 @@ class PostsServiceTest {
     @InjectMocks
     PostsService postsService;
     PostCreateDto postCreateDto;
+    PostUpdateDto postUpdateDto;
     @BeforeEach
     void setUp() {
         postCreateDto = PostCreateDto.builder().title("This is post title").imageUrl("/this/is/some/url").build();
+        postUpdateDto = PostUpdateDto.builder().title("this is post update title").imageUrl("/this/is/post/iamge/url/update").build();
     }
     @Test
     @DisplayName("insertPost() success insertPostImage() never happen then throw exception")
@@ -51,7 +56,7 @@ class PostsServiceTest {
         //when
         CustomException thrown = assertThrows(CustomException.class, () -> postsService.postCreation(postCreateDto));
         //then
-        assertEquals("Post creation failed",thrown.getErrorCode().getMessage());
+        assertEquals("Post image creation failed",thrown.getErrorCode().getMessage());
         then(postsMapper).should(atLeastOnce()).insertPostImage(any(PostImageDao.class));
     }
     @Test
@@ -66,5 +71,40 @@ class PostsServiceTest {
         then(postsMapper).should(atLeastOnce()).insertPost(any(PostsDao.class));
         then(postsMapper).should(atLeastOnce()).insertPostImage(any(PostImageDao.class));
     }
-
+    @Test
+    @DisplayName("updatePost() success updatePostIamge() success then no exception")
+    void postUpdate_success_without_exception() {
+        //given
+        given(postsMapper.updatePost(any(PostsUpdateDao.class))).willReturn(1);
+        given(postsMapper.updatePostImage(any(PostImagesUpdateDao.class))).willReturn(1);
+        //when
+        postsService.postUpdate(postUpdateDto, 1L);
+        //then
+        then(postsMapper).should(atLeastOnce()).updatePost(any(PostsUpdateDao.class));
+        then(postsMapper).should(atLeastOnce()).updatePostImage(any(PostImagesUpdateDao.class));
+    }
+    @Test
+    @DisplayName("updatePost() success updatePostIamge() fail then throw exception")
+    void postUpdate_fail_with_exception() {
+        //given
+        given(postsMapper.updatePost(any(PostsUpdateDao.class))).willReturn(1);
+        given(postsMapper.updatePostImage(any(PostImagesUpdateDao.class))).willReturn(0);
+        //when
+        CustomException thrown = assertThrows(CustomException.class,()->postsService.postUpdate(postUpdateDto, 1L));
+        //then
+        assertEquals("Post image update failed",thrown.getErrorCode().getMessage());
+        then(postsMapper).should(atLeastOnce()).updatePost(any(PostsUpdateDao.class));
+        then(postsMapper).should(atLeastOnce()).updatePostImage(any(PostImagesUpdateDao.class));
+    }
+    @Test
+    @DisplayName("updatePost() fail updatePostIamge() not happen then throw exception")
+    void postUpdate_fail_with_exception2() {
+        //given
+        given(postsMapper.updatePost(any(PostsUpdateDao.class))).willReturn(0);
+        //when
+        CustomException thrown = assertThrows(CustomException.class,()->postsService.postUpdate(postUpdateDto, 1L));
+        //then
+        assertEquals("Post update failed",thrown.getErrorCode().getMessage());
+        then(postsMapper).should(atLeastOnce()).updatePost(any(PostsUpdateDao.class));
+    }
 }
