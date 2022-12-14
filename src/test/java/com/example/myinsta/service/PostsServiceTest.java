@@ -8,7 +8,6 @@ import com.example.myinsta.dto.PostCreateDto;
 import com.example.myinsta.dto.PostUpdateDto;
 import com.example.myinsta.exception.CustomException;
 import com.example.myinsta.mapper.PostsMapper;
-import com.example.myinsta.service.PostsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -5,23 +5,16 @@ import com.example.myinsta.dao.AccountsDao;
 import com.example.myinsta.dto.SignUpDto;
 import com.example.myinsta.exception.CustomException;
 import com.example.myinsta.mapper.AccountsMapper;
-import com.example.myinsta.service.AccountsService;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
-import static org.mockito.Mockito.*;
 
 /**
  * @Captor Captor verifies passed argument by using equals()

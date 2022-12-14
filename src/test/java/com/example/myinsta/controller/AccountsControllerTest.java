@@ -1,6 +1,5 @@
 package com.example.myinsta.controller;
 
-import com.example.myinsta.controller.AccountsController;
 import com.example.myinsta.dto.SignUpDto;
 import com.example.myinsta.service.AccountsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
