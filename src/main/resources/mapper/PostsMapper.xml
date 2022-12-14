@@ -11,4 +11,16 @@
         insert into post_images( id_post, image_path )
         values(#{idPost}, #{imagePath })
     </insert>
+    <update id="updatePost" parameterType="com.example.myinsta.dao.PostsUpdateDao">
+        update posts
+        set
+        <if test="title != null">title = #{title}</if>
+        where id_post = #{idPost};
+    </update>
+    <update id="updatePostImage" parameterType="com.example.myinsta.dao.PostsUpdateDao">
+        update post_images
+        set
+        <if test="imagePath != null">image_path = #{imagePath}</if>
+        where id_post = #{idPost};
+    </update>
 </mapper>
