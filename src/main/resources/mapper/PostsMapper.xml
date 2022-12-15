@@ -23,4 +23,16 @@
         <if test="imagePath != null">image_path = #{imagePath}</if>
         where id_post = #{idPost};
     </update>
+    <select id="isPostExist" parameterType="com.example.myinsta.dao.PostsUpdateDao" resultType="boolean">
+        SELECT EXISTS
+        (SELECT id_post
+        FROM posts
+        WHERE id_post = #{idPost});
+    </select>
+    <select id="isOwner" parameterType="com.example.myinsta.dao.PostsUpdateDao" resultType="boolean">
+        SELECT EXISTS
+        (SELECT id_post
+        FROM posts
+        WHERE id_post = #{idPost} AND id_account = #{idAccount})
+    </select>
 </mapper>

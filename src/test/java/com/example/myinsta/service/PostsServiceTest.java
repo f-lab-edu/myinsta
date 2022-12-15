@@ -71,38 +71,74 @@ class PostsServiceTest {
         then(postsMapper).should(atLeastOnce()).insertPostImage(any(PostImageDao.class));
     }
     @Test
-    @DisplayName("updatePost() fail updatePostImage() not happen then throw exception")
-    void postUpdate_fail_with_exception() {
+    @DisplayName("isPostExist() fail isOwner() not happen updatePost() not happen updatePostImage() not happen then throw exception")
+    void postUpdate_fail_with_exception1() {
         //given
+        given(postsMapper.isPostExist(any(PostsUpdateDao.class))).willReturn(false);
+        //when
+        CustomException thrown = assertThrows(CustomException.class, () -> postsService.postUpdate(postUpdateDto, 1L));
+        //then
+        assertEquals("Post cannot be found",thrown.getErrorCode().getMessage());
+        then(postsMapper).should(atLeastOnce()).isPostExist(any(PostsUpdateDao.class));
+    }
+    @Test
+    @DisplayName("isPostExist() success isOwner() fail updatePost() not happen updatePostImage() not happen then throw exception")
+    void postUpdate_fail_with_exception2() {
+        //given
+        given(postsMapper.isPostExist(any(PostsUpdateDao.class))).willReturn(true);
+        given(postsMapper.isOwner(any(PostsUpdateDao.class))).willReturn(false);
+        //when
+        CustomException thrown = assertThrows(CustomException.class, () -> postsService.postUpdate(postUpdateDto, 1L));
+        //then
+        assertEquals("Only post owner can modify post",thrown.getErrorCode().getMessage());
+        then(postsMapper).should(atLeastOnce()).isPostExist(any(PostsUpdateDao.class));
+        then(postsMapper).should(atLeastOnce()).isOwner(any(PostsUpdateDao.class));
+    }
+    @Test
+    @DisplayName("isPostExist() success isOwner() success updatePost() fail updatePostImage() not happen then throw exception")
+    void postUpdate_fail_with_exception3() {
+        //given
+        given(postsMapper.isPostExist(any(PostsUpdateDao.class))).willReturn(true);
+        given(postsMapper.isOwner(any(PostsUpdateDao.class))).willReturn(true);
         given(postsMapper.updatePost(any(PostsUpdateDao.class))).willReturn(0);
         //when
         CustomException thrown = assertThrows(CustomException.class, () -> postsService.postUpdate(postUpdateDto, 1L));
         //then
         assertEquals("Post update failed",thrown.getErrorCode().getMessage());
+        then(postsMapper).should(atLeastOnce()).isPostExist(any(PostsUpdateDao.class));
+        then(postsMapper).should(atLeastOnce()).isOwner(any(PostsUpdateDao.class));
         then(postsMapper).should(atLeastOnce()).updatePost(any(PostsUpdateDao.class));
     }
     @Test
-    @DisplayName("updatePost() success updatePostImage() fail then throw exception")
-    void postUpdate_fail_with_exception2() {
+    @DisplayName("isPostExist() success isOwner() success updatePost() success updatePostImage() fail then throw exception")
+    void postUpdate_fail_with_exception4() {
         //given
+        given(postsMapper.isPostExist(any(PostsUpdateDao.class))).willReturn(true);
+        given(postsMapper.isOwner(any(PostsUpdateDao.class))).willReturn(true);
         given(postsMapper.updatePost(any(PostsUpdateDao.class))).willReturn(1);
         given(postsMapper.updatePostImage(any(PostImagesUpdateDao.class))).willReturn(0);
         //when
         CustomException thrown = assertThrows(CustomException.class, () -> postsService.postUpdate(postUpdateDto, 1L));
         //then
         assertEquals("Post image update failed",thrown.getErrorCode().getMessage());
+        then(postsMapper).should(atLeastOnce()).isPostExist(any(PostsUpdateDao.class));
+        then(postsMapper).should(atLeastOnce()).isPostExist(any(PostsUpdateDao.class));
         then(postsMapper).should(atLeastOnce()).updatePost(any(PostsUpdateDao.class));
         then(postsMapper).should(atLeastOnce()).updatePostImage(any(PostImagesUpdateDao.class));
     }
     @Test
-    @DisplayName("updatePost() success updatePostImage() success without exception")
+    @DisplayName("isPostExist() success isOwner() success updatePost() success updatePostImage() success without exception")
     void postUpdate_success_without_exception() {
         //given
+        given(postsMapper.isPostExist(any(PostsUpdateDao.class))).willReturn(true);
+        given(postsMapper.isOwner(any(PostsUpdateDao.class))).willReturn(true);
         given(postsMapper.updatePost(any(PostsUpdateDao.class))).willReturn(1);
         given(postsMapper.updatePostImage(any(PostImagesUpdateDao.class))).willReturn(1);
         //when
         postsService.postUpdate(postUpdateDto, 1L);
         //then
+        then(postsMapper).should(atLeastOnce()).isPostExist(any(PostsUpdateDao.class));
+        then(postsMapper).should(atLeastOnce()).isOwner(any(PostsUpdateDao.class));
         then(postsMapper).should(atLeastOnce()).updatePost(any(PostsUpdateDao.class));
         then(postsMapper).should(atLeastOnce()).updatePostImage(any(PostImagesUpdateDao.class));
     }

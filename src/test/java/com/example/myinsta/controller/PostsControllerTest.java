@@ -151,6 +151,7 @@ public class PostsControllerTest {
         postUpdateDto = PostUpdateDto.builder()
                 .title(null)
                 .imageUrl("/this/is/some/url")
+                .userId(1L)
                 .build();
         willDoNothing().given(postService).postUpdate(postUpdateDto,1L);
         mockMvc.perform(patch("/posts/1")
@@ -168,6 +169,7 @@ public class PostsControllerTest {
         postUpdateDto = PostUpdateDto.builder()
                 .title("")
                 .imageUrl("/this/is/some/url")
+                .userId(1L)
                 .build();
         willDoNothing().given(postService).postUpdate(postUpdateDto,1L);
         mockMvc.perform(patch("/posts/1")
@@ -185,6 +187,7 @@ public class PostsControllerTest {
         postUpdateDto = PostUpdateDto.builder()
                 .title("asdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfga")
                 .imageUrl("/this/is/some/url")
+                .userId(1L)
                 .build();
         willDoNothing().given(postService).postUpdate(postUpdateDto,1L);
         mockMvc.perform(patch("/posts/1")
@@ -201,6 +204,7 @@ public class PostsControllerTest {
     void postUpdate_invalid_imageUrl_null() throws Exception {
         postUpdateDto = PostUpdateDto.builder()
                 .title("this is some correct title")
+                .userId(1L)
                 .build();
         willDoNothing().given(postService).postUpdate(postUpdateDto,1L);
         mockMvc.perform(patch("/posts/1")
@@ -218,6 +222,7 @@ public class PostsControllerTest {
         postUpdateDto = PostUpdateDto.builder()
                 .title("this is some correct title")
                 .imageUrl("")
+                .userId(1L)
                 .build();
         willDoNothing().given(postService).postUpdate(postUpdateDto,1L);
         mockMvc.perform(patch("/posts/1")
@@ -227,6 +232,24 @@ public class PostsControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(errorCode).value(700))
                 .andExpect(jsonPath(errorMessage).value("Image url cannot be null or empty"))
+        ;
+    }
+    @Test
+    @DisplayName("postUpdate() less than 1 userId input")
+    void postUpdate_invalid_userId_less_than_1() throws Exception {
+        postUpdateDto = PostUpdateDto.builder()
+                .title("this is some correct title")
+                .imageUrl("/this/is/some/url")
+                .userId(0L)
+                .build();
+        willDoNothing().given(postService).postUpdate(postUpdateDto,1L);
+        mockMvc.perform(patch("/posts/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postUpdateDto)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath(errorCode).value(700))
+                .andExpect(jsonPath(errorMessage).value("User Id must greater than or equal to 1"))
         ;
     }
 

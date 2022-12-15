@@ -38,19 +38,26 @@ public class PostsService {
             throw new CustomException(ErrorCode.FAILED_TO_INSERT_POST_IMAGE);
         }
     }
-    public void postUpdate(PostUpdateDto postUpdateDto, Long id){
+    public void postUpdate(PostUpdateDto postUpdateDto, Long postId){
         PostsUpdateDao postsUpdateDao = PostsUpdateDao.builder()
-                .idPost(id)
+                .idPost(postId)
+                .idAccount(postUpdateDto.getUserId())
                 .title(postUpdateDto.getTitle())
                 .build();
 
+        if(!postsMapper.isPostExist(postsUpdateDao)){
+            throw new CustomException(ErrorCode.FAILED_TO_UPDATE_POST_NOT_FOUND);
+        }
+        if(!postsMapper.isOwner(postsUpdateDao)){
+            throw new CustomException(ErrorCode.FAILED_TO_UPDATE_POST_NOT_OWNER);
+        }
         int result = postsMapper.updatePost(postsUpdateDao);
         if(result != 1){
             throw new CustomException(ErrorCode.FAILED_TO_UPDATE_POST);
         }
 
         PostImagesUpdateDao postImagesUpdateDao = PostImagesUpdateDao.builder()
-                .idPost(id)
+                .idPost(postId)
                 .imagePath(postUpdateDto.getImageUrl())
                 .build();
 

@@ -4,6 +4,7 @@ import com.example.myinsta.dto.PostCreateDto;
 import com.example.myinsta.dto.PostUpdateDto;
 import com.example.myinsta.service.PostsService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
+@Slf4j
 @RequiredArgsConstructor
 @RequestMapping(value = "/posts", consumes = "application/json")
 public class PostsController {
@@ -20,9 +22,9 @@ public class PostsController {
         postService.postCreation(postCreateDto);
         return new ResponseEntity<> (HttpStatus.CREATED);
     }
-    @PatchMapping("/{id}")
-    public ResponseEntity<Void> postUpdate(@PathVariable Long id, @Valid @RequestBody PostUpdateDto postUpdateDto){
-        postService.postUpdate(postUpdateDto, id);
+    @PatchMapping("/{postId}")
+    public ResponseEntity<Void> postUpdate(@PathVariable Long postId, @Valid @RequestBody PostUpdateDto postUpdateDto){
+        postService.postUpdate(postUpdateDto, postId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
