@@ -7,11 +7,11 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-public class PostsDao {
-    private long idPost;
+public class PostsUpdateDao {
     private long idAccount;
+    private long idPost;
     private String title;
-    private String imageUrl;
     private LocalDateTime createdDate;
     private LocalDateTime updatedDate;
 }
+

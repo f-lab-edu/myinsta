@@ -11,4 +11,28 @@
         insert into post_images( id_post, image_path )
         values(#{idPost}, #{imagePath })
     </insert>
+    <update id="updatePost" parameterType="com.example.myinsta.dao.PostsUpdateDao">
+        update posts
+        set
+        <if test="title != null">title = #{title}</if>
+        where id_post = #{idPost};
+    </update>
+    <update id="updatePostImage" parameterType="com.example.myinsta.dao.PostsUpdateDao">
+        update post_images
+        set
+        <if test="imagePath != null">image_path = #{imagePath}</if>
+        where id_post = #{idPost};
+    </update>
+    <select id="isPostExist" parameterType="com.example.myinsta.dao.PostsUpdateDao" resultType="boolean">
+        SELECT EXISTS
+        (SELECT id_post
+        FROM posts
+        WHERE id_post = #{idPost});
+    </select>
+    <select id="isOwner" parameterType="com.example.myinsta.dao.PostsUpdateDao" resultType="boolean">
+        SELECT EXISTS
+        (SELECT id_post
+        FROM posts
+        WHERE id_post = #{idPost} AND id_account = #{idAccount})
+    </select>
 </mapper>

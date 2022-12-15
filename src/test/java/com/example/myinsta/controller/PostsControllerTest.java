@@ -1,11 +1,10 @@
 package com.example.myinsta.controller;
 
 
-import com.example.myinsta.controller.PostsController;
 import com.example.myinsta.dto.PostCreateDto;
+import com.example.myinsta.dto.PostUpdateDto;
 import com.example.myinsta.service.PostsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,7 @@ import org.springframework.http.MediaType;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.willDoNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -29,6 +29,7 @@ public class PostsControllerTest {
     @MockBean
     PostsService postService;
     private PostCreateDto postCreateDto;
+    private PostUpdateDto postUpdateDto;
     private String errorCode = "$..errorCode";;
     private String errorMessage = "$..errorMessage";;
 
@@ -138,6 +139,113 @@ public class PostsControllerTest {
         mockMvc.perform(post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postCreateDto)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath(errorCode).value(700))
+                .andExpect(jsonPath(errorMessage).value("User Id must greater than or equal to 1"))
+        ;
+    }
+    @Test
+    @DisplayName("postUpdate() null title input")
+    void postUpdate_invalid_title_null() throws Exception {
+        postUpdateDto = PostUpdateDto.builder()
+                .title(null)
+                .imageUrl("/this/is/some/url")
+                .userId(1L)
+                .build();
+        willDoNothing().given(postService).postUpdate(postUpdateDto,1L);
+        mockMvc.perform(patch("/posts/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postUpdateDto)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath(errorCode).value(700))
+                .andExpect(jsonPath(errorMessage).value("Title should not null or empty"))
+        ;
+    }
+    @Test
+    @DisplayName("postUpdate() empty string title input")
+    void postUpdate_invalid_title_empty() throws Exception {
+        postUpdateDto = PostUpdateDto.builder()
+                .title("")
+                .imageUrl("/this/is/some/url")
+                .userId(1L)
+                .build();
+        willDoNothing().given(postService).postUpdate(postUpdateDto,1L);
+        mockMvc.perform(patch("/posts/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postUpdateDto)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath(errorCode).value(700))
+                .andExpect(jsonPath(errorMessage).value("Title should not null or empty"))
+        ;
+    }
+    @Test
+    @DisplayName("postUpdate() 51 letters title input")
+    void postUpdate_invalid_title_more_than_50() throws Exception {
+        postUpdateDto = PostUpdateDto.builder()
+                .title("asdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfgasdfga")
+                .imageUrl("/this/is/some/url")
+                .userId(1L)
+                .build();
+        willDoNothing().given(postService).postUpdate(postUpdateDto,1L);
+        mockMvc.perform(patch("/posts/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postUpdateDto)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath(errorCode).value(700))
+                .andExpect(jsonPath(errorMessage).value("Title should not over 50 letters"))
+        ;
+    }
+    @Test
+    @DisplayName("postUpdate() null image url input")
+    void postUpdate_invalid_imageUrl_null() throws Exception {
+        postUpdateDto = PostUpdateDto.builder()
+                .title("this is some correct title")
+                .userId(1L)
+                .build();
+        willDoNothing().given(postService).postUpdate(postUpdateDto,1L);
+        mockMvc.perform(patch("/posts/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postUpdateDto)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath(errorCode).value(700))
+                .andExpect(jsonPath(errorMessage).value("Image url cannot be null or empty"))
+        ;
+    }
+    @Test
+    @DisplayName("postUpdate() empty string image url input")
+    void postUpdate_invalid_imageUrl_empty() throws Exception {
+        postUpdateDto = PostUpdateDto.builder()
+                .title("this is some correct title")
+                .imageUrl("")
+                .userId(1L)
+                .build();
+        willDoNothing().given(postService).postUpdate(postUpdateDto,1L);
+        mockMvc.perform(patch("/posts/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postUpdateDto)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath(errorCode).value(700))
+                .andExpect(jsonPath(errorMessage).value("Image url cannot be null or empty"))
+        ;
+    }
+    @Test
+    @DisplayName("postUpdate() less than 1 userId input")
+    void postUpdate_invalid_userId_less_than_1() throws Exception {
+        postUpdateDto = PostUpdateDto.builder()
+                .title("this is some correct title")
+                .imageUrl("/this/is/some/url")
+                .userId(0L)
+                .build();
+        willDoNothing().given(postService).postUpdate(postUpdateDto,1L);
+        mockMvc.perform(patch("/posts/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postUpdateDto)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(errorCode).value(700))
