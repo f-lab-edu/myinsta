@@ -5,6 +5,7 @@ import com.example.myinsta.dao.PostImagesUpdateDao;
 import com.example.myinsta.dao.PostsDao;
 import com.example.myinsta.dao.PostsUpdateDao;
 import com.example.myinsta.dto.PostCreateDto;
+import com.example.myinsta.dto.PostDeleteDto;
 import com.example.myinsta.dto.PostUpdateDto;
 import com.example.myinsta.exception.CustomException;
 import com.example.myinsta.exception.ErrorCode;
@@ -45,10 +46,10 @@ public class PostsService {
                 .title(postUpdateDto.getTitle())
                 .build();
 
-        if(!postsMapper.isPostExist(postsUpdateDao)){
+        if(!postsMapper.isPostExist(postId)){
             throw new CustomException(ErrorCode.FAILED_TO_UPDATE_POST_NOT_FOUND);
         }
-        if(!postsMapper.isOwner(postsUpdateDao)){
+        if(!postsMapper.isOwner(postsUpdateDao.getIdAccount())){
             throw new CustomException(ErrorCode.FAILED_TO_UPDATE_POST_NOT_OWNER);
         }
         int result = postsMapper.updatePost(postsUpdateDao);
@@ -66,5 +67,16 @@ public class PostsService {
             throw new CustomException(ErrorCode.FAILED_TO_UPDATE_POST_IMAGE);
         }
     }
-
+    public void postDelete(Long idPost, PostDeleteDto postDeleteDto) {
+        if(!postsMapper.isPostExist(idPost)){
+            throw new CustomException(ErrorCode.FAILED_TO_DELETE_POST_NOT_FOUND);
+        }
+        if(!postsMapper.isOwner(postDeleteDto.getIdAccount())){
+            throw new CustomException(ErrorCode.FAILED_TO_DELETE_POST_NOT_OWNER);
+        }
+        int result = postsMapper.deletePost(idPost);
+        if(result != 1){
+            throw new CustomException(ErrorCode.FAILED_TO_DELETE_POST);
+        }
+    }
 }

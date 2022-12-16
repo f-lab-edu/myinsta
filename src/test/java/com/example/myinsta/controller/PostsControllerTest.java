@@ -2,6 +2,7 @@ package com.example.myinsta.controller;
 
 
 import com.example.myinsta.dto.PostCreateDto;
+import com.example.myinsta.dto.PostDeleteDto;
 import com.example.myinsta.dto.PostUpdateDto;
 import com.example.myinsta.service.PostsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,8 +16,7 @@ import org.springframework.http.MediaType;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.willDoNothing;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -30,6 +30,7 @@ public class PostsControllerTest {
     PostsService postService;
     private PostCreateDto postCreateDto;
     private PostUpdateDto postUpdateDto;
+    private PostDeleteDto postDeleteDto;
     private String errorCode = "$..errorCode";;
     private String errorMessage = "$..errorMessage";;
 
@@ -252,5 +253,21 @@ public class PostsControllerTest {
                 .andExpect(jsonPath(errorMessage).value("User Id must greater than or equal to 1"))
         ;
     }
+    @Test
+    @DisplayName("postDelete() less than 1 idAccount input")
+    void postDelete_invalid_idAccount_less_than_1() throws Exception {
+        postDeleteDto = PostDeleteDto.builder()
+                .idAccount(0L)
+                .build();
+        willDoNothing().given(postService).postDelete(1L, postDeleteDto);
 
+        mockMvc.perform(delete("/posts/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postDeleteDto)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath(errorCode).value(700))
+                .andExpect(jsonPath(errorMessage).value("Account Id must greater than or equal to 1"))
+        ;
+    }
 }
