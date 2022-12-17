@@ -1,6 +1,7 @@
 package com.example.myinsta.controller;
 
 import com.example.myinsta.dto.PostCreateDto;
+import com.example.myinsta.dto.PostDeleteDto;
 import com.example.myinsta.dto.PostUpdateDto;
 import com.example.myinsta.service.PostsService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,11 @@ public class PostsController {
     @PatchMapping("/{postId}")
     public ResponseEntity<Void> postUpdate(@PathVariable Long postId, @Valid @RequestBody PostUpdateDto postUpdateDto){
         postService.postUpdate(postUpdateDto, postId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @DeleteMapping("/{idPost}")
+    public ResponseEntity<Void> postDelete(@PathVariable Long idPost, @Valid @RequestBody PostDeleteDto postDeleteDto){
+        postService.postDelete(idPost, postDeleteDto);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

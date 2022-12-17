@@ -9,7 +9,7 @@ public interface PostsMapper {
     int insertPostImage(PostImageDao postImageDao);
     int updatePost(PostsUpdateDao postsUpdateDao);
     int updatePostImage(PostImagesUpdateDao postImagesUpdateDao);
-    boolean isPostExist(PostsUpdateDao postsUpdateDao);
-
-    boolean isOwner(PostsUpdateDao postsUpdateDao);
+    boolean isPostExist(Long idPost);
+    boolean isOwner(Long idAccount);
+    int deletePost(Long idPost);
 }

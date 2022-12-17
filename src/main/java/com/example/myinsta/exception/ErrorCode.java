@@ -14,7 +14,10 @@ public enum ErrorCode {
     FAILED_TO_UPDATE_POST(803,"Post update failed"),
     FAILED_TO_UPDATE_POST_IMAGE( 804,"Post image update failed" ),
     FAILED_TO_UPDATE_POST_NOT_FOUND( 804,"Post cannot be found" ),
-    FAILED_TO_UPDATE_POST_NOT_OWNER(805, "Only post owner can modify post" );
+    FAILED_TO_UPDATE_POST_NOT_OWNER(805, "Only post owner can modify post" ),
+    FAILED_TO_DELETE_POST(806,"Post deletion failed" ),
+    FAILED_TO_DELETE_POST_NOT_FOUND(807, "Post deletion failed post cannot be found"),
+    FAILED_TO_DELETE_POST_NOT_OWNER(808,"Only post owner can delete post" );
 
     private final int status;
     private final String message;
