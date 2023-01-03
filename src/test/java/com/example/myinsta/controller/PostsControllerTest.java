@@ -270,4 +270,14 @@ public class PostsControllerTest {
                 .andExpect(jsonPath(errorMessage).value("Account Id must greater than or equal to 1"))
         ;
     }
+    @Test
+    @DisplayName("getSinglePost() invalid userId parameter")
+    void getSinglePostInvalidId() throws Exception {
+        mockMvc.perform(get("/posts/ㅁㅁㅁ")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postUpdateDto)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+        ;
+    }
 }

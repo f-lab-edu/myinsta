@@ -4,6 +4,7 @@ import com.example.myinsta.dao.PostImageDao;
 import com.example.myinsta.dao.PostImagesUpdateDao;
 import com.example.myinsta.dao.PostsDao;
 import com.example.myinsta.dao.PostsUpdateDao;
+import com.example.myinsta.dto.GetSinglePostDto;
 import com.example.myinsta.dto.PostCreateDto;
 import com.example.myinsta.dto.PostDeleteDto;
 import com.example.myinsta.dto.PostUpdateDto;
@@ -201,5 +202,33 @@ class PostsServiceTest {
         then(postsMapper).should(atLeastOnce()).isPostExist(any());
         then(postsMapper).should(atLeastOnce()).isOwner(any());
         then(postsMapper).should(atLeastOnce()).deletePost(any());
+    }
+    @Test
+    @DisplayName("selectSinglePost() success without exception")
+    void getSinglePost_success_without_exception() {
+        //given
+        GetSinglePostDto getSinglePostResponseDto = GetSinglePostDto.builder()
+                .title("title")
+                .imagePath("image/path")
+                .idPost(8L)
+                .build();
+        given(postsMapper.selectSinglePost(any())).willReturn(getSinglePostResponseDto);
+        //when
+        postsService.getSinglePost(8L);
+        //then
+        then(postsMapper).should(atLeastOnce()).selectSinglePost(any());
+    }
+    @Test
+    @DisplayName("selectSinglePost() return null throw exception")
+    void getSinglePost_fail_with_exception() {
+        //given
+        given(postsMapper.selectSinglePost(any())).willReturn(null);
+        //when
+
+        CustomException thrown = assertThrows(CustomException.class, () -> postsService.getSinglePost(8L));
+        //then
+        assertEquals("Cannot find post",thrown.getErrorCode().getMessage());
+        //then
+        then(postsMapper).should(atLeastOnce()).selectSinglePost(any());
     }
 }

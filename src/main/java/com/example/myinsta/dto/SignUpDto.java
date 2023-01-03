@@ -1,8 +1,6 @@
 package com.example.myinsta.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.*;
 
@@ -32,6 +30,8 @@ import javax.validation.constraints.*;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class SignUpDto {
     @Email(message = "Invalid Email format", regexp = ("^[a-zA-Z0-9+-\\_.]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$"))
     @NotNull

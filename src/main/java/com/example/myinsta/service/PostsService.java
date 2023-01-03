@@ -1,9 +1,7 @@
 package com.example.myinsta.service;
 
-import com.example.myinsta.dao.PostImageDao;
-import com.example.myinsta.dao.PostImagesUpdateDao;
-import com.example.myinsta.dao.PostsDao;
-import com.example.myinsta.dao.PostsUpdateDao;
+import com.example.myinsta.dao.*;
+import com.example.myinsta.dto.GetSinglePostDto;
 import com.example.myinsta.dto.PostCreateDto;
 import com.example.myinsta.dto.PostDeleteDto;
 import com.example.myinsta.dto.PostUpdateDto;
@@ -78,5 +76,13 @@ public class PostsService {
         if(result != 1){
             throw new CustomException(ErrorCode.FAILED_TO_DELETE_POST);
         }
+    }
+    public GetSinglePostDto getSinglePost(Long postId){
+        GetSinglePostDao getSinglePostDao = GetSinglePostDao.builder().idPost(postId).build();
+        GetSinglePostDto getSinglePostDto = postsMapper.selectSinglePost( getSinglePostDao );
+        if(getSinglePostDto == null){
+            throw new CustomException(ErrorCode.FAILED_TO_GET_SINGLE_POST);
+        }
+        return getSinglePostDto;
     }
 }
