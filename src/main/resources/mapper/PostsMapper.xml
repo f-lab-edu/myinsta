@@ -35,4 +35,14 @@
         FROM posts
         WHERE id_post = #{idPost} AND id_account = #{idAccount})
     </select>
+    <select id="selectSinglePost" parameterType="com.example.myinsta.dao.GetSinglePostDao" resultMap="postInfo">
+        SELECT A.id_post, A.title, B.image_path
+        FROM posts as A LEFT JOIN post_images AS B ON A.id_post = B.id_post
+        WHERE A.id_post = #{idPost}
+    </select>
+    <resultMap id="postInfo" type="com.example.myinsta.dto.GetSinglePostResponseDto">
+        <id column="id_post" property="idPost"/>
+        <result column="title" property="title"/>
+        <result column="image_path" property="imagePath"/>
+    </resultMap>
 </mapper>

@@ -1,21 +1,22 @@
 package com.example.myinsta.service;
 
-import com.example.myinsta.dao.PostImageDao;
-import com.example.myinsta.dao.PostImagesUpdateDao;
-import com.example.myinsta.dao.PostsDao;
-import com.example.myinsta.dao.PostsUpdateDao;
+import com.example.myinsta.dao.*;
+import com.example.myinsta.dto.GetSinglePostResponseDto;
 import com.example.myinsta.dto.PostCreateDto;
 import com.example.myinsta.dto.PostUpdateDto;
 import com.example.myinsta.exception.CustomException;
 import com.example.myinsta.exception.ErrorCode;
 import com.example.myinsta.mapper.PostsMapper;
 import lombok.RequiredArgsConstructor;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class PostsService {
     private final PostsMapper postsMapper;
     public void postCreation(PostCreateDto postCreateDto) {
@@ -67,4 +68,12 @@ public class PostsService {
         }
     }
 
+    public GetSinglePostResponseDto getSinglePost(Long postId){
+        GetSinglePostDao getSinglePostDao = GetSinglePostDao.builder().idPost(postId).build();
+        GetSinglePostResponseDto getSinglePostResponseDto = postsMapper.selectSinglePost( getSinglePostDao );
+        if(getSinglePostResponseDto == null){
+            throw new CustomException(ErrorCode.FAILED_TO_GET_SINGLE_POST);
+        }
+        return getSinglePostResponseDto;
+    }
 }

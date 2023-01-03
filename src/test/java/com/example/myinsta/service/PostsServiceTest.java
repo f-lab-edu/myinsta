@@ -4,6 +4,7 @@ import com.example.myinsta.dao.PostImageDao;
 import com.example.myinsta.dao.PostImagesUpdateDao;
 import com.example.myinsta.dao.PostsDao;
 import com.example.myinsta.dao.PostsUpdateDao;
+import com.example.myinsta.dto.GetSinglePostResponseDto;
 import com.example.myinsta.dto.PostCreateDto;
 import com.example.myinsta.dto.PostUpdateDto;
 import com.example.myinsta.exception.CustomException;
@@ -47,7 +48,7 @@ class PostsServiceTest {
         then(postsMapper).should(atLeastOnce()).insertPost(any(PostsDao.class));
     }
     @Test
-    @DisplayName("insertPost() success insertPostIamge() fail then throw exception")
+    @DisplayName("insertPost() success insertPostImage() fail then throw exception")
     void postCreation_fail_with_exception2() {
         //given
         given(postsMapper.insertPost(any(PostsDao.class))).willReturn(1);
@@ -59,7 +60,7 @@ class PostsServiceTest {
         then(postsMapper).should(atLeastOnce()).insertPostImage(any(PostImageDao.class));
     }
     @Test
-    @DisplayName("insertPost() success insertPostIamge() success then no exception")
+    @DisplayName("insertPost() success insertPostImage() success then no exception")
     void postCreation_success_without_exception() {
         //given
         given(postsMapper.insertPost(any(PostsDao.class))).willReturn(1);
@@ -141,6 +142,35 @@ class PostsServiceTest {
         then(postsMapper).should(atLeastOnce()).isOwner(any(PostsUpdateDao.class));
         then(postsMapper).should(atLeastOnce()).updatePost(any(PostsUpdateDao.class));
         then(postsMapper).should(atLeastOnce()).updatePostImage(any(PostImagesUpdateDao.class));
+    }
+
+    @Test
+    @DisplayName("selectSinglePost() success without exception")
+    void getSinglePost_success_without_exception() {
+        //given
+        GetSinglePostResponseDto getSinglePostResponseDto = GetSinglePostResponseDto.builder()
+                .title("title")
+                .imagePath("image/path")
+                .idPost(8L)
+                .build();
+        given(postsMapper.selectSinglePost(any())).willReturn(getSinglePostResponseDto);
+        //when
+        postsService.getSinglePost(8L);
+        //then
+        then(postsMapper).should(atLeastOnce()).selectSinglePost(any());
+    }
+    @Test
+    @DisplayName("selectSinglePost() return null throw exception")
+    void getSinglePost_fail_with_exception() {
+        //given
+        given(postsMapper.selectSinglePost(any())).willReturn(null);
+        //when
+
+        CustomException thrown = assertThrows(CustomException.class, () -> postsService.getSinglePost(8L));
+        //then
+        assertEquals("Cannot find post",thrown.getErrorCode().getMessage());
+        //then
+        then(postsMapper).should(atLeastOnce()).selectSinglePost(any());
     }
 
 }
