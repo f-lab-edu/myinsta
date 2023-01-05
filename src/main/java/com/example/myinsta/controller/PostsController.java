@@ -1,5 +1,6 @@
 package com.example.myinsta.controller;
 
+import com.example.myinsta.dto.GetSinglePostDto;
 import com.example.myinsta.dto.PostCreateDto;
 import com.example.myinsta.dto.PostDeleteDto;
 import com.example.myinsta.dto.PostUpdateDto;
@@ -32,5 +33,10 @@ public class PostsController {
     public ResponseEntity<Void> postDelete(@PathVariable Long idPost, @Valid @RequestBody PostDeleteDto postDeleteDto){
         postService.postDelete(idPost, postDeleteDto);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+    @GetMapping("/{postId}")
+    public ResponseEntity<GetSinglePostDto> getSinglePost(@PathVariable Long postId){
+        GetSinglePostDto singlePostResponseDto = postService.getSinglePost(postId);
+        return ResponseEntity.status(HttpStatus.OK).body(singlePostResponseDto);
     }
 }
