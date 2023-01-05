@@ -78,7 +78,7 @@ public class PostsService {
         }
     }
     public GetSinglePostDto getSinglePost(Long postId){
-        GetSinglePostDao getSinglePostDao = GetSinglePostDao.builder().idPost(postId).build();
+        PostDto getSinglePostDao = PostDto.builder().idPost(postId).build();
         GetSinglePostDto getSinglePostDto = postsMapper.selectSinglePost( getSinglePostDao );
         if(getSinglePostDto == null){
             throw new CustomException(ErrorCode.FAILED_TO_GET_SINGLE_POST);

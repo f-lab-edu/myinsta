@@ -13,5 +13,5 @@ public interface PostsMapper {
     boolean isPostExist(Long idPost);
     boolean isOwner(Long idAccount);
     int deletePost(Long idPost);
-    GetSinglePostDto selectSinglePost(GetSinglePostDao getSinglePostDao);
+    GetSinglePostDto selectSinglePost(PostDto getSinglePostDao);
 }

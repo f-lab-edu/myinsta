@@ -280,4 +280,14 @@ public class PostsControllerTest {
                 .andExpect(status().isBadRequest())
         ;
     }
+    @Test
+    @DisplayName("getSinglePost() valid userId parameter")
+    void getSinglePostValidId() throws Exception {
+        mockMvc.perform(get("/posts/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postUpdateDto)))
+                .andDo(print())
+                .andExpect(status().isOk())
+        ;
+    }
 }
