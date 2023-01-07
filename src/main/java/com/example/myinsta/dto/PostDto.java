@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class GetSinglePostDto {
+public class PostDto {
     private Long idPost;
     private String title;
     private String imagePath;

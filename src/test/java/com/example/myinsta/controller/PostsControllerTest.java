@@ -290,4 +290,24 @@ public class PostsControllerTest {
                 .andExpect(status().isOk())
         ;
     }
+    @Test
+    @DisplayName("getPostPages() valid userId parameter")
+    void getPostPagesValid() throws Exception {
+        mockMvc.perform(get("/posts?page=1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postUpdateDto)))
+                .andDo(print())
+                .andExpect(status().isOk())
+        ;
+    }
+    @Test
+    @DisplayName("getPostPages() valid userId parameter")
+    void getPostPagesInvalid() throws Exception {
+        mockMvc.perform(get("/posts?page=wrong")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postUpdateDto)))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+        ;
+    }
 }

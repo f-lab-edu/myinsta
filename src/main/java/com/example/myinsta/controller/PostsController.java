@@ -1,9 +1,6 @@
 package com.example.myinsta.controller;
 
-import com.example.myinsta.dto.GetSinglePostDto;
-import com.example.myinsta.dto.PostCreateDto;
-import com.example.myinsta.dto.PostDeleteDto;
-import com.example.myinsta.dto.PostUpdateDto;
+import com.example.myinsta.dto.*;
 import com.example.myinsta.service.PostsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,8 +32,14 @@ public class PostsController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
     @GetMapping("/{postId}")
-    public ResponseEntity<GetSinglePostDto> getSinglePost(@PathVariable Long postId){
-        GetSinglePostDto singlePostResponseDto = postService.getSinglePost(postId);
-        return ResponseEntity.status(HttpStatus.OK).body(singlePostResponseDto);
+    public ResponseEntity<PostDto> getSinglePost(@PathVariable Long postId){
+        PostDto postDto = postService.getSinglePost(postId);
+        return ResponseEntity.status(HttpStatus.OK).body(postDto);
+    }
+    @GetMapping
+    public ResponseEntity<PostPageDto> getPostPages(@RequestParam(defaultValue = "1") Integer page){
+        log.info("getPostPages");
+        PostPageDto postPageDto = postService.getPostPages(page);
+        return ResponseEntity.status(HttpStatus.OK).body(postPageDto);
     }
 }

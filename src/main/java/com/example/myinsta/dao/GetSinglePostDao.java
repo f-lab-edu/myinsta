@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 @Builder
-public class PostDto {
+public class GetSinglePostDao {
     Long idPost;
 }

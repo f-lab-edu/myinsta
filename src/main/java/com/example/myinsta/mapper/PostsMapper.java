@@ -1,8 +1,11 @@
 package com.example.myinsta.mapper;
 
 import com.example.myinsta.dao.*;
-import com.example.myinsta.dto.GetSinglePostDto;
+import com.example.myinsta.dto.PostDto;
+import com.example.myinsta.dto.PostPageDto;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 @Mapper
 public interface PostsMapper {
@@ -13,5 +16,8 @@ public interface PostsMapper {
     boolean isPostExist(Long idPost);
     boolean isOwner(Long idAccount);
     int deletePost(Long idPost);
-    GetSinglePostDto selectSinglePost(PostDto getSinglePostDao);
+    PostDto selectSinglePost(GetSinglePostDao getSinglePostDao);
+    Integer getTotalNumberOfPosts();
+    List<PostDto> selectPostPage();
+
 }

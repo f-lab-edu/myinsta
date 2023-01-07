@@ -4,7 +4,7 @@ import com.example.myinsta.dao.PostImageDao;
 import com.example.myinsta.dao.PostImagesUpdateDao;
 import com.example.myinsta.dao.PostsDao;
 import com.example.myinsta.dao.PostsUpdateDao;
-import com.example.myinsta.dto.GetSinglePostDto;
+import com.example.myinsta.dto.PostDto;
 import com.example.myinsta.dto.PostCreateDto;
 import com.example.myinsta.dto.PostDeleteDto;
 import com.example.myinsta.dto.PostUpdateDto;
@@ -17,6 +17,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataIntegrityViolationException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -207,7 +211,7 @@ class PostsServiceTest {
     @DisplayName("selectSinglePost() success without exception")
     void getSinglePost_success_without_exception() {
         //given
-        GetSinglePostDto getSinglePostResponseDto = GetSinglePostDto.builder()
+        PostDto getSinglePostResponseDto = PostDto.builder()
                 .title("title")
                 .imagePath("image/path")
                 .idPost(8L)
@@ -230,5 +234,33 @@ class PostsServiceTest {
         assertEquals("Cannot find post",thrown.getErrorCode().getMessage());
         //then
         then(postsMapper).should(atLeastOnce()).selectSinglePost(any());
+    }
+    @Test
+    @DisplayName("selectPostPage() success getTotalNumberOfPosts() success without exception")
+    void getPostPages_success_without_exception() {
+        List<PostDto> page = new ArrayList<>();
+        page.add(PostDto.builder().idPost(1L).title("title").imagePath("/path").build());
+        //given
+        given(postsMapper.getTotalNumberOfPosts()).willReturn(10);
+        given(postsMapper.selectPostPage()).willReturn(page);
+        //when
+        postsService.getPostPages(1);
+        //then
+        then(postsMapper).should(atLeastOnce()).selectPostPage();
+        then(postsMapper).should(atLeastOnce()).getTotalNumberOfPosts();
+    }
+    @Test
+    @DisplayName("selectPostPage() fail getTotalNumberOfPosts() success fail throw exception")
+    void getPostPages_fail_with_exception() {
+        List<PostDto> page = new ArrayList<>();
+        page.add(PostDto.builder().idPost(1L).title("title").imagePath("/path").build());
+        //given
+        given(postsMapper.getTotalNumberOfPosts()).willReturn(10);
+        given(postsMapper.selectPostPage()).willThrow(DataIntegrityViolationException.class);
+        //when
+        DataIntegrityViolationException thrown = assertThrows(DataIntegrityViolationException.class, () -> postsService.getPostPages(1));
+        //then
+        then(postsMapper).should(atLeastOnce()).selectPostPage();
+        then(postsMapper).should(atLeastOnce()).getTotalNumberOfPosts();
     }
 }

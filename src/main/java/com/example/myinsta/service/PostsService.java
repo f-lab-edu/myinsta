@@ -1,16 +1,15 @@
 package com.example.myinsta.service;
 
 import com.example.myinsta.dao.*;
-import com.example.myinsta.dto.GetSinglePostDto;
-import com.example.myinsta.dto.PostCreateDto;
-import com.example.myinsta.dto.PostDeleteDto;
-import com.example.myinsta.dto.PostUpdateDto;
+import com.example.myinsta.dto.*;
 import com.example.myinsta.exception.CustomException;
 import com.example.myinsta.exception.ErrorCode;
 import com.example.myinsta.mapper.PostsMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -77,12 +76,25 @@ public class PostsService {
             throw new CustomException(ErrorCode.FAILED_TO_DELETE_POST);
         }
     }
-    public GetSinglePostDto getSinglePost(Long postId){
-        PostDto getSinglePostDao = PostDto.builder().idPost(postId).build();
-        GetSinglePostDto getSinglePostDto = postsMapper.selectSinglePost( getSinglePostDao );
-        if(getSinglePostDto == null){
+    public PostDto getSinglePost(Long postId){
+        GetSinglePostDao getSinglePostDao = GetSinglePostDao.builder().idPost(postId).build();
+        PostDto postDto = postsMapper.selectSinglePost( getSinglePostDao );
+        if(postDto == null){
             throw new CustomException(ErrorCode.FAILED_TO_GET_SINGLE_POST);
         }
-        return getSinglePostDto;
+        return postDto;
+    }
+    public PostPageDto getPostPages(Integer page){
+        Integer totalNumberOfPosts = postsMapper.getTotalNumberOfPosts();
+        Integer currentPage = page;
+        Integer postsPerPage = 20;
+        Integer totalNumberOfPages = totalNumberOfPosts/postsPerPage;
+        PostPageDto postPageDto = PostPageDto.builder()
+                .currentPage(currentPage)
+                .postPerPage(postsPerPage)
+                .totalNumberOfPages(totalNumberOfPosts/postsPerPage)
+                .build();
+        postPageDto.setPosts(postsMapper.selectPostPage());
+        return postPageDto;
     }
 }
