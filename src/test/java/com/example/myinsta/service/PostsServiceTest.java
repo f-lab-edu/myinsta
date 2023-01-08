@@ -1,9 +1,6 @@
 package com.example.myinsta.service;
 
-import com.example.myinsta.dao.PostImageDao;
-import com.example.myinsta.dao.PostImagesUpdateDao;
-import com.example.myinsta.dao.PostsDao;
-import com.example.myinsta.dao.PostsUpdateDao;
+import com.example.myinsta.dao.*;
 import com.example.myinsta.dto.PostDto;
 import com.example.myinsta.dto.PostCreateDto;
 import com.example.myinsta.dto.PostDeleteDto;
@@ -242,11 +239,11 @@ class PostsServiceTest {
         page.add(PostDto.builder().idPost(1L).title("title").imagePath("/path").build());
         //given
         given(postsMapper.getTotalNumberOfPosts()).willReturn(10);
-        given(postsMapper.selectPostPage()).willReturn(page);
+        given(postsMapper.selectPostPage(any(PostPageSelectDao.class))).willReturn(page);
         //when
-        postsService.getPostPages(1);
+        postsService.getPostPages(1,20);
         //then
-        then(postsMapper).should(atLeastOnce()).selectPostPage();
+        then(postsMapper).should(atLeastOnce()).selectPostPage(any(PostPageSelectDao.class));
         then(postsMapper).should(atLeastOnce()).getTotalNumberOfPosts();
     }
     @Test
@@ -256,11 +253,11 @@ class PostsServiceTest {
         page.add(PostDto.builder().idPost(1L).title("title").imagePath("/path").build());
         //given
         given(postsMapper.getTotalNumberOfPosts()).willReturn(10);
-        given(postsMapper.selectPostPage()).willThrow(DataIntegrityViolationException.class);
+        given(postsMapper.selectPostPage(any(PostPageSelectDao.class))).willThrow(DataIntegrityViolationException.class);
         //when
-        DataIntegrityViolationException thrown = assertThrows(DataIntegrityViolationException.class, () -> postsService.getPostPages(1));
+        DataIntegrityViolationException thrown = assertThrows(DataIntegrityViolationException.class, () -> postsService.getPostPages(1,20));
         //then
-        then(postsMapper).should(atLeastOnce()).selectPostPage();
+        then(postsMapper).should(atLeastOnce()).selectPostPage(any(PostPageSelectDao.class));
         then(postsMapper).should(atLeastOnce()).getTotalNumberOfPosts();
     }
 }

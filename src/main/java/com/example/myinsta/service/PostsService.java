@@ -6,6 +6,7 @@ import com.example.myinsta.exception.CustomException;
 import com.example.myinsta.exception.ErrorCode;
 import com.example.myinsta.mapper.PostsMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +15,7 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class PostsService {
     private final PostsMapper postsMapper;
     public void postCreation(PostCreateDto postCreateDto) {
@@ -76,6 +78,7 @@ public class PostsService {
             throw new CustomException(ErrorCode.FAILED_TO_DELETE_POST);
         }
     }
+    @Transactional(readOnly = true)
     public PostDto getSinglePost(Long postId){
         GetSinglePostDao getSinglePostDao = GetSinglePostDao.builder().idPost(postId).build();
         PostDto postDto = postsMapper.selectSinglePost( getSinglePostDao );
@@ -84,17 +87,21 @@ public class PostsService {
         }
         return postDto;
     }
-    public PostPageDto getPostPages(Integer page){
+    @Transactional(readOnly = true)
+    public PostPageDto getPostPages(Integer page, Integer postsPerPage){
         Integer totalNumberOfPosts = postsMapper.getTotalNumberOfPosts();
-        Integer currentPage = page;
-        Integer postsPerPage = 20;
         Integer totalNumberOfPages = totalNumberOfPosts/postsPerPage;
+        if(totalNumberOfPosts%postsPerPage > 0){
+            totalNumberOfPages += 1;
+        }
         PostPageDto postPageDto = PostPageDto.builder()
-                .currentPage(currentPage)
+                .currentPage(page)
                 .postPerPage(postsPerPage)
-                .totalNumberOfPages(totalNumberOfPosts/postsPerPage)
+                .totalNumberOfPages(totalNumberOfPages)
                 .build();
-        postPageDto.setPosts(postsMapper.selectPostPage());
+        PostPageSelectDao postPageSelectDao = PostPageSelectDao.builder().start((page-1)*postsPerPage).end(page*postsPerPage).build();
+        log.info("{}", postPageSelectDao.getEnd());
+        postPageDto.setPosts(postsMapper.selectPostPage(postPageSelectDao));
         return postPageDto;
     }
 }

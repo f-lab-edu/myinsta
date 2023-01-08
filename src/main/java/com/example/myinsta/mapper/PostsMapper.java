@@ -18,6 +18,6 @@ public interface PostsMapper {
     int deletePost(Long idPost);
     PostDto selectSinglePost(GetSinglePostDao getSinglePostDao);
     Integer getTotalNumberOfPosts();
-    List<PostDto> selectPostPage();
+    List<PostDto> selectPostPage(PostPageSelectDao postPageSelectDao);
 
 }

@@ -1,6 +1,8 @@
 package com.example.myinsta.controller;
 
 import com.example.myinsta.dto.*;
+import com.example.myinsta.exception.CustomException;
+import com.example.myinsta.exception.ErrorCode;
 import com.example.myinsta.service.PostsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,9 +39,14 @@ public class PostsController {
         return ResponseEntity.status(HttpStatus.OK).body(postDto);
     }
     @GetMapping
-    public ResponseEntity<PostPageDto> getPostPages(@RequestParam(defaultValue = "1") Integer page){
-        log.info("getPostPages");
-        PostPageDto postPageDto = postService.getPostPages(page);
+    public ResponseEntity<PostPageDto> getPostPages(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "20") Integer postsPerPage){
+        if( page <= 0 ){
+            throw new CustomException(ErrorCode.INVALID_INPUT);
+        }
+        if( postsPerPage <= 0 ){
+            throw new CustomException(ErrorCode.INVALID_INPUT);
+        }
+        PostPageDto postPageDto = postService.getPostPages(page, postsPerPage);
         return ResponseEntity.status(HttpStatus.OK).body(postPageDto);
     }
 }

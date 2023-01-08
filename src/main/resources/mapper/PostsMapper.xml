@@ -44,9 +44,11 @@
         FROM posts as A LEFT JOIN post_images AS B ON A.id_post = B.id_post
         WHERE A.id_post = #{idPost}
     </select>
-    <select id="selectPostPage" resultMap="postInfo">
+    <select id="selectPostPage" parameterType="com.example.myinsta.dao.PostPageSelectDao" resultMap="postInfo">
         SELECT A.id_post, A.title, B.image_path
         FROM posts as A LEFT JOIN post_images AS B ON A.id_post = B.id_post
+        ORDER BY id_post DESC
+        LIMIT #{start}, #{end}
     </select>
     <select id="getTotalNumberOfPosts" resultType="Integer">
         SELECT COUNT(*)

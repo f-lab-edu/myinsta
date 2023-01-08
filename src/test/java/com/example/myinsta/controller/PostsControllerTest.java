@@ -46,7 +46,6 @@ public class PostsControllerTest {
         mockMvc.perform(post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postCreateDto)))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(errorCode).value(700))
                 .andExpect(jsonPath(errorMessage).value("Title should not null or empty"))
@@ -65,7 +64,6 @@ public class PostsControllerTest {
         mockMvc.perform(post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postCreateDto)))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(errorCode).value(700))
                 .andExpect(jsonPath(errorMessage).value("Title should not null or empty"))
@@ -84,7 +82,6 @@ public class PostsControllerTest {
         mockMvc.perform(post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postCreateDto)))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(errorCode).value(700))
                 .andExpect(jsonPath(errorMessage).value("Title should not over 50 letters"))
@@ -103,7 +100,6 @@ public class PostsControllerTest {
         mockMvc.perform(post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postCreateDto)))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(errorCode).value(700))
                 .andExpect(jsonPath(errorMessage).value("Image url cannot be null or empty"))
@@ -122,7 +118,6 @@ public class PostsControllerTest {
         mockMvc.perform(post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postCreateDto)))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(errorCode).value(700))
                 .andExpect(jsonPath(errorMessage).value("Image url cannot be null or empty"))
@@ -140,7 +135,6 @@ public class PostsControllerTest {
         mockMvc.perform(post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postCreateDto)))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(errorCode).value(700))
                 .andExpect(jsonPath(errorMessage).value("User Id must greater than or equal to 1"))
@@ -158,7 +152,6 @@ public class PostsControllerTest {
         mockMvc.perform(patch("/posts/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postUpdateDto)))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(errorCode).value(700))
                 .andExpect(jsonPath(errorMessage).value("Title should not null or empty"))
@@ -176,7 +169,6 @@ public class PostsControllerTest {
         mockMvc.perform(patch("/posts/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postUpdateDto)))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(errorCode).value(700))
                 .andExpect(jsonPath(errorMessage).value("Title should not null or empty"))
@@ -194,7 +186,6 @@ public class PostsControllerTest {
         mockMvc.perform(patch("/posts/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postUpdateDto)))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(errorCode).value(700))
                 .andExpect(jsonPath(errorMessage).value("Title should not over 50 letters"))
@@ -211,7 +202,6 @@ public class PostsControllerTest {
         mockMvc.perform(patch("/posts/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postUpdateDto)))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(errorCode).value(700))
                 .andExpect(jsonPath(errorMessage).value("Image url cannot be null or empty"))
@@ -229,7 +219,6 @@ public class PostsControllerTest {
         mockMvc.perform(patch("/posts/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postUpdateDto)))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(errorCode).value(700))
                 .andExpect(jsonPath(errorMessage).value("Image url cannot be null or empty"))
@@ -247,7 +236,6 @@ public class PostsControllerTest {
         mockMvc.perform(patch("/posts/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postUpdateDto)))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(errorCode).value(700))
                 .andExpect(jsonPath(errorMessage).value("User Id must greater than or equal to 1"))
@@ -264,7 +252,6 @@ public class PostsControllerTest {
         mockMvc.perform(delete("/posts/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postDeleteDto)))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(errorCode).value(700))
                 .andExpect(jsonPath(errorMessage).value("Account Id must greater than or equal to 1"))
@@ -276,37 +263,68 @@ public class PostsControllerTest {
         mockMvc.perform(get("/posts/ㅁㅁㅁ")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postUpdateDto)))
-                .andDo(print())
                 .andExpect(status().isBadRequest())
         ;
     }
     @Test
-    @DisplayName("getSinglePost() valid userId parameter")
-    void getSinglePostValidId() throws Exception {
-        mockMvc.perform(get("/posts/1")
+    @DisplayName("getPostPages() invalid page parameter")
+    void getPostPagesInvalidNegative() throws Exception {
+        mockMvc.perform(get("/posts?page=-1&postsPerPage=20")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postUpdateDto)))
-                .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().is5xxServerError())
+                .andExpect(jsonPath(errorCode).value(700))
+                .andExpect(jsonPath(errorMessage).value("Information is not valid"))
         ;
     }
     @Test
-    @DisplayName("getPostPages() valid userId parameter")
-    void getPostPagesValid() throws Exception {
-        mockMvc.perform(get("/posts?page=1")
+    @DisplayName("getPostPages() invalid page parameter")
+    void getPostPagesInvalidZero() throws Exception {
+        mockMvc.perform(get("/posts?page=0&postsPerPage=20")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postUpdateDto)))
-                .andDo(print())
-                .andExpect(status().isOk())
+                .andExpect(status().is5xxServerError())
+                .andExpect(jsonPath(errorCode).value(700))
+                .andExpect(jsonPath(errorMessage).value("Information is not valid"))
         ;
     }
     @Test
-    @DisplayName("getPostPages() valid userId parameter")
-    void getPostPagesInvalid() throws Exception {
-        mockMvc.perform(get("/posts?page=wrong")
+    @DisplayName("getPostPages() valid page parameter")
+    void getPostPagesInvalidString() throws Exception {
+        mockMvc.perform(get("/posts?page=wrong&postsPerPage=20")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postUpdateDto)))
-                .andDo(print())
+                .andExpect(status().isBadRequest())
+        ;
+    }
+    @Test
+    @DisplayName("getPostPages() invalid negative postPerPage parameter")
+    void getPostPagesNegativePostPerPage() throws Exception {
+        mockMvc.perform(get("/posts?page=1&postsPerPage=-1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postUpdateDto)))
+                .andExpect(status().is5xxServerError())
+                .andExpect(jsonPath(errorCode).value(700))
+                .andExpect(jsonPath(errorMessage).value("Information is not valid"))
+        ;
+    }
+    @Test
+    @DisplayName("getPostPages() invalid zero postPerPage parameter")
+    void getPostPagesZeroPostPerPage() throws Exception {
+        mockMvc.perform(get("/posts?page=1&postsPerPage=0")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postUpdateDto)))
+                .andExpect(status().is5xxServerError())
+                .andExpect(jsonPath(errorCode).value(700))
+                .andExpect(jsonPath(errorMessage).value("Information is not valid"))
+        ;
+    }
+    @Test
+    @DisplayName("getPostPages() invalid string postPerPage parameter")
+    void getPostPagesStringPostPerPage() throws Exception {
+        mockMvc.perform(get("/posts?page=1&postsPerPage=wrong")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postUpdateDto)))
                 .andExpect(status().isBadRequest())
         ;
     }
