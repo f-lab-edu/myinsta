@@ -3,6 +3,7 @@ package com.example.myinsta.controller;
 
 import com.example.myinsta.dto.PostCreateDto;
 import com.example.myinsta.dto.PostDeleteDto;
+import com.example.myinsta.dto.PostPageDto;
 import com.example.myinsta.dto.PostUpdateDto;
 import com.example.myinsta.service.PostsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,8 +15,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.http.MediaType;
 
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -31,6 +38,7 @@ public class PostsControllerTest {
     private PostCreateDto postCreateDto;
     private PostUpdateDto postUpdateDto;
     private PostDeleteDto postDeleteDto;
+    private PostPageDto postPageDto;
     private String errorCode = "$..errorCode";;
     private String errorMessage = "$..errorMessage";;
 
@@ -51,7 +59,6 @@ public class PostsControllerTest {
                 .andExpect(jsonPath(errorMessage).value("Title should not null or empty"))
         ;
     }
-
     @Test
     @DisplayName("Null title input")
     void invalid_title_null() throws Exception {
@@ -69,7 +76,6 @@ public class PostsControllerTest {
                 .andExpect(jsonPath(errorMessage).value("Title should not null or empty"))
         ;
     }
-
     @Test
     @DisplayName("Over 50 letters of title input")
     void invalid_title_greater_50() throws Exception {
@@ -87,7 +93,6 @@ public class PostsControllerTest {
                 .andExpect(jsonPath(errorMessage).value("Title should not over 50 letters"))
         ;
     }
-
     @Test
     @DisplayName("Null image url input")
     void invalid_imageUrl_null() throws Exception {
@@ -105,7 +110,6 @@ public class PostsControllerTest {
                 .andExpect(jsonPath(errorMessage).value("Image url cannot be null or empty"))
         ;
     }
-
     @Test
     @DisplayName("Empty string image url input")
     void invalid_imageUrl_empty_string() throws Exception {
@@ -260,7 +264,7 @@ public class PostsControllerTest {
     @Test
     @DisplayName("getSinglePost() invalid userId parameter")
     void getSinglePostInvalidId() throws Exception {
-        willDoNothing().given(postService).getSinglePost(any());
+        when(postService.getSinglePost(1L)).thenReturn(null);
 
         mockMvc.perform(get("/posts/ㅁㅁㅁ")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -271,20 +275,22 @@ public class PostsControllerTest {
     @Test
     @DisplayName("getPostPages() valid page parameter")
     void getPostPagesValidParameter() throws Exception {
-        willDoNothing().given(postService).getPostPages(any(), any());
-
+        postPageDto = PostPageDto.builder().postPerPage(1)
+                .currentPage(0)
+                .totalNumberOfPages(0)
+                .posts(null)
+                .build();
+        given(postService.getPostPages(1,20)).willReturn(postPageDto);
         mockMvc.perform(get("/posts?page=1&postsPerPage=20")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postUpdateDto)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath(errorCode).value(700))
-                .andExpect(jsonPath(errorMessage).value("Information is not valid"))
+                .andExpect(status().isOk())
         ;
     }
     @Test
     @DisplayName("getPostPages() invalid page parameter negative number")
     void getPostPagesInvalidNegative() throws Exception {
-        willDoNothing().given(postService).getPostPages(any(), any());
+        when(postService.getPostPages(1,1)).thenReturn(null);
         mockMvc.perform(get("/posts?page=-1&postsPerPage=20")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postUpdateDto)))
@@ -296,7 +302,7 @@ public class PostsControllerTest {
     @Test
     @DisplayName("getPostPages() invalid page parameter zero")
     void getPostPagesInvalidZero() throws Exception {
-        willDoNothing().given(postService).getPostPages(any(), any());
+        when(postService.getPostPages(1,1)).thenReturn(null);
         mockMvc.perform(get("/posts?page=0&postsPerPage=20")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postUpdateDto)))
@@ -308,7 +314,7 @@ public class PostsControllerTest {
     @Test
     @DisplayName("getPostPages() invalid page parameter string")
     void getPostPagesInvalidString() throws Exception {
-        willDoNothing().given(postService).getPostPages(any(), any());
+        when(postService.getPostPages(1,1)).thenReturn(null);
         mockMvc.perform(get("/posts?page=wrong&postsPerPage=20")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postUpdateDto)))
@@ -318,7 +324,8 @@ public class PostsControllerTest {
     @Test
     @DisplayName("getPostPages() invalid negative postPerPage parameter negative number")
     void getPostPagesNegativePostPerPage() throws Exception {
-        willDoNothing().given(postService).getPostPages(any(), any());
+
+        when(postService.getPostPages(1,1)).thenReturn(null);
         mockMvc.perform(get("/posts?page=1&postsPerPage=-1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postUpdateDto)))
@@ -330,7 +337,7 @@ public class PostsControllerTest {
     @Test
     @DisplayName("getPostPages() invalid zero postPerPage parameter zero")
     void getPostPagesZeroPostPerPage() throws Exception {
-        willDoNothing().given(postService).getPostPages(any(), any());
+        when(postService.getPostPages(1,1)).thenReturn(null);
         mockMvc.perform(get("/posts?page=1&postsPerPage=0")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postUpdateDto)))
@@ -342,7 +349,7 @@ public class PostsControllerTest {
     @Test
     @DisplayName("getPostPages() invalid string postPerPage parameter string")
     void getPostPagesStringPostPerPage() throws Exception {
-        willDoNothing().given(postService).getPostPages(any(), any());
+        when(postService.getPostPages(1,1)).thenReturn(null);
         mockMvc.perform(get("/posts?page=1&postsPerPage=wrong")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postUpdateDto)))
