@@ -260,6 +260,8 @@ public class PostsControllerTest {
     @Test
     @DisplayName("getSinglePost() invalid userId parameter")
     void getSinglePostInvalidId() throws Exception {
+        willDoNothing().given(postService).getSinglePost(any());
+
         mockMvc.perform(get("/posts/ㅁㅁㅁ")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postUpdateDto)))
@@ -267,30 +269,46 @@ public class PostsControllerTest {
         ;
     }
     @Test
-    @DisplayName("getPostPages() invalid page parameter")
+    @DisplayName("getPostPages() valid page parameter")
+    void getPostPagesValidParameter() throws Exception {
+        willDoNothing().given(postService).getPostPages(any(), any());
+
+        mockMvc.perform(get("/posts?page=1&postsPerPage=20")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(postUpdateDto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath(errorCode).value(700))
+                .andExpect(jsonPath(errorMessage).value("Information is not valid"))
+        ;
+    }
+    @Test
+    @DisplayName("getPostPages() invalid page parameter negative number")
     void getPostPagesInvalidNegative() throws Exception {
+        willDoNothing().given(postService).getPostPages(any(), any());
         mockMvc.perform(get("/posts?page=-1&postsPerPage=20")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postUpdateDto)))
-                .andExpect(status().is5xxServerError())
+                .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(errorCode).value(700))
                 .andExpect(jsonPath(errorMessage).value("Information is not valid"))
         ;
     }
     @Test
-    @DisplayName("getPostPages() invalid page parameter")
+    @DisplayName("getPostPages() invalid page parameter zero")
     void getPostPagesInvalidZero() throws Exception {
+        willDoNothing().given(postService).getPostPages(any(), any());
         mockMvc.perform(get("/posts?page=0&postsPerPage=20")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postUpdateDto)))
-                .andExpect(status().is5xxServerError())
+                .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(errorCode).value(700))
                 .andExpect(jsonPath(errorMessage).value("Information is not valid"))
         ;
     }
     @Test
-    @DisplayName("getPostPages() valid page parameter")
+    @DisplayName("getPostPages() invalid page parameter string")
     void getPostPagesInvalidString() throws Exception {
+        willDoNothing().given(postService).getPostPages(any(), any());
         mockMvc.perform(get("/posts?page=wrong&postsPerPage=20")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postUpdateDto)))
@@ -298,30 +316,33 @@ public class PostsControllerTest {
         ;
     }
     @Test
-    @DisplayName("getPostPages() invalid negative postPerPage parameter")
+    @DisplayName("getPostPages() invalid negative postPerPage parameter negative number")
     void getPostPagesNegativePostPerPage() throws Exception {
+        willDoNothing().given(postService).getPostPages(any(), any());
         mockMvc.perform(get("/posts?page=1&postsPerPage=-1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postUpdateDto)))
-                .andExpect(status().is5xxServerError())
+                .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(errorCode).value(700))
                 .andExpect(jsonPath(errorMessage).value("Information is not valid"))
         ;
     }
     @Test
-    @DisplayName("getPostPages() invalid zero postPerPage parameter")
+    @DisplayName("getPostPages() invalid zero postPerPage parameter zero")
     void getPostPagesZeroPostPerPage() throws Exception {
+        willDoNothing().given(postService).getPostPages(any(), any());
         mockMvc.perform(get("/posts?page=1&postsPerPage=0")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postUpdateDto)))
-                .andExpect(status().is5xxServerError())
+                .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(errorCode).value(700))
                 .andExpect(jsonPath(errorMessage).value("Information is not valid"))
         ;
     }
     @Test
-    @DisplayName("getPostPages() invalid string postPerPage parameter")
+    @DisplayName("getPostPages() invalid string postPerPage parameter string")
     void getPostPagesStringPostPerPage() throws Exception {
+        willDoNothing().given(postService).getPostPages(any(), any());
         mockMvc.perform(get("/posts?page=1&postsPerPage=wrong")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(postUpdateDto)))

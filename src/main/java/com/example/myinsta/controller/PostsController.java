@@ -3,6 +3,7 @@ package com.example.myinsta.controller;
 import com.example.myinsta.dto.*;
 import com.example.myinsta.exception.CustomException;
 import com.example.myinsta.exception.ErrorCode;
+import com.example.myinsta.exception.ErrorResponse;
 import com.example.myinsta.service.PostsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,12 +40,22 @@ public class PostsController {
         return ResponseEntity.status(HttpStatus.OK).body(postDto);
     }
     @GetMapping
-    public ResponseEntity<PostPageDto> getPostPages(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "20") Integer postsPerPage){
+    public ResponseEntity<Object> getPostPages(@RequestParam(defaultValue = "1") Integer page, @RequestParam(defaultValue = "20") Integer postsPerPage){
         if( page <= 0 ){
-            throw new CustomException(ErrorCode.INVALID_INPUT);
+            CustomException customException = new CustomException(ErrorCode.INVALID_INPUT);
+            ErrorResponse errorResponse = ErrorResponse.builder()
+                    .errorCode(customException.getErrorCode().getStatus())
+                    .errorMessage(customException.getErrorCode().getMessage())
+                    .build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
         if( postsPerPage <= 0 ){
-            throw new CustomException(ErrorCode.INVALID_INPUT);
+            CustomException customException = new CustomException(ErrorCode.INVALID_INPUT);
+            ErrorResponse errorResponse = ErrorResponse.builder()
+                    .errorCode(customException.getErrorCode().getStatus())
+                    .errorMessage(customException.getErrorCode().getMessage())
+                    .build();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
         PostPageDto postPageDto = postService.getPostPages(page, postsPerPage);
         return ResponseEntity.status(HttpStatus.OK).body(postPageDto);

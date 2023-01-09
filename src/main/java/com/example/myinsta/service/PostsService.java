@@ -88,19 +88,15 @@ public class PostsService {
         return postDto;
     }
     @Transactional(readOnly = true)
-    public PostPageDto getPostPages(Integer page, Integer postsPerPage){
-        Integer totalNumberOfPosts = postsMapper.getTotalNumberOfPosts();
-        Integer totalNumberOfPages = totalNumberOfPosts/postsPerPage;
-        if(totalNumberOfPosts%postsPerPage > 0){
-            totalNumberOfPages += 1;
-        }
+    public PostPageDto getPostPages(int page, int postsPerPage){
+        int totalNumberOfPosts = postsMapper.getTotalNumberOfPosts();
+        int totalNumberOfPages = (int)Math.ceil((float)totalNumberOfPosts/postsPerPage);
         PostPageDto postPageDto = PostPageDto.builder()
                 .currentPage(page)
                 .postPerPage(postsPerPage)
                 .totalNumberOfPages(totalNumberOfPages)
                 .build();
         PostPageSelectDao postPageSelectDao = PostPageSelectDao.builder().start((page-1)*postsPerPage).end(page*postsPerPage).build();
-        log.info("{}", postPageSelectDao.getEnd());
         postPageDto.setPosts(postsMapper.selectPostPage(postPageSelectDao));
         return postPageDto;
     }
