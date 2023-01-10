@@ -1,10 +1,10 @@
 package com.example.myinsta.service;
 
 import com.example.myinsta.dao.*;
-import com.example.myinsta.dto.PostDto;
-import com.example.myinsta.dto.PostCreateDto;
-import com.example.myinsta.dto.PostDeleteDto;
-import com.example.myinsta.dto.PostUpdateDto;
+import com.example.myinsta.dto.ResponsePostDto;
+import com.example.myinsta.dto.RequestPostCreateDto;
+import com.example.myinsta.dto.RequestPostDeleteDto;
+import com.example.myinsta.dto.RequestPostUpdateDto;
 import com.example.myinsta.exception.CustomException;
 import com.example.myinsta.mapper.PostsMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,14 +31,14 @@ class PostsServiceTest {
     PostsMapper postsMapper;
     @InjectMocks
     PostsService postsService;
-    PostCreateDto postCreateDto;
-    PostUpdateDto postUpdateDto;
-    PostDeleteDto postDeleteDto;
+    RequestPostCreateDto requestPostCreateDto;
+    RequestPostUpdateDto requestPostUpdateDto;
+    RequestPostDeleteDto requestPostDeleteDto;
     @BeforeEach
     void setUp() {
-        postCreateDto = PostCreateDto.builder().title("This is post title").imageUrl("/this/is/some/url").build();
-        postUpdateDto = PostUpdateDto.builder().title("This is post update title").imageUrl("/THis/Is/Update/Path").build();
-        postDeleteDto = PostDeleteDto.builder().idAccount(1L).build();
+        requestPostCreateDto = RequestPostCreateDto.builder().title("This is post title").imageUrl("/this/is/some/url").build();
+        requestPostUpdateDto = RequestPostUpdateDto.builder().title("This is post update title").imageUrl("/THis/Is/Update/Path").build();
+        requestPostDeleteDto = RequestPostDeleteDto.builder().idAccount(1L).build();
     }
     @Test
     @DisplayName("insertPost() success insertPostImage() never happen then throw exception")
@@ -46,7 +46,7 @@ class PostsServiceTest {
         //given
         given(postsMapper.insertPost(any(PostsDao.class))).willReturn(0);
         //when
-        CustomException thrown = assertThrows(CustomException.class, () -> postsService.postCreation(postCreateDto));
+        CustomException thrown = assertThrows(CustomException.class, () -> postsService.postCreation(requestPostCreateDto));
         //then
         assertEquals("Post creation failed",thrown.getErrorCode().getMessage());
         then(postsMapper).should(atLeastOnce()).insertPost(any(PostsDao.class));
@@ -58,7 +58,7 @@ class PostsServiceTest {
         given(postsMapper.insertPost(any(PostsDao.class))).willReturn(1);
         given(postsMapper.insertPostImage(any(PostImageDao.class))).willReturn(0);
         //when
-        CustomException thrown = assertThrows(CustomException.class, () -> postsService.postCreation(postCreateDto));
+        CustomException thrown = assertThrows(CustomException.class, () -> postsService.postCreation(requestPostCreateDto));
         //then
         assertEquals("Post image creation failed",thrown.getErrorCode().getMessage());
         then(postsMapper).should(atLeastOnce()).insertPostImage(any(PostImageDao.class));
@@ -70,7 +70,7 @@ class PostsServiceTest {
         given(postsMapper.insertPost(any(PostsDao.class))).willReturn(1);
         given(postsMapper.insertPostImage(any(PostImageDao.class))).willReturn(1);
         //when
-        postsService.postCreation(postCreateDto);
+        postsService.postCreation(requestPostCreateDto);
         //then
         then(postsMapper).should(atLeastOnce()).insertPost(any(PostsDao.class));
         then(postsMapper).should(atLeastOnce()).insertPostImage(any(PostImageDao.class));
@@ -81,7 +81,7 @@ class PostsServiceTest {
         //given
         given(postsMapper.isPostExist(any())).willReturn(false);
         //when
-        CustomException thrown = assertThrows(CustomException.class, () -> postsService.postUpdate(postUpdateDto, 1L));
+        CustomException thrown = assertThrows(CustomException.class, () -> postsService.postUpdate(requestPostUpdateDto, 1L));
         //then
         assertEquals("Post cannot be found",thrown.getErrorCode().getMessage());
         then(postsMapper).should(atLeastOnce()).isPostExist(any());
@@ -93,7 +93,7 @@ class PostsServiceTest {
         given(postsMapper.isPostExist(any())).willReturn(true);
         given(postsMapper.isOwner(any())).willReturn(false);
         //when
-        CustomException thrown = assertThrows(CustomException.class, () -> postsService.postUpdate(postUpdateDto, 1L));
+        CustomException thrown = assertThrows(CustomException.class, () -> postsService.postUpdate(requestPostUpdateDto, 1L));
         //then
         assertEquals("Only post owner can modify post",thrown.getErrorCode().getMessage());
         then(postsMapper).should(atLeastOnce()).isPostExist(any());
@@ -107,7 +107,7 @@ class PostsServiceTest {
         given(postsMapper.isOwner(any())).willReturn(true);
         given(postsMapper.updatePost(any(PostsUpdateDao.class))).willReturn(0);
         //when
-        CustomException thrown = assertThrows(CustomException.class, () -> postsService.postUpdate(postUpdateDto, 1L));
+        CustomException thrown = assertThrows(CustomException.class, () -> postsService.postUpdate(requestPostUpdateDto, 1L));
         //then
         assertEquals("Post update failed",thrown.getErrorCode().getMessage());
         then(postsMapper).should(atLeastOnce()).isPostExist(any());
@@ -123,7 +123,7 @@ class PostsServiceTest {
         given(postsMapper.updatePost(any(PostsUpdateDao.class))).willReturn(1);
         given(postsMapper.updatePostImage(any(PostImagesUpdateDao.class))).willReturn(0);
         //when
-        CustomException thrown = assertThrows(CustomException.class, () -> postsService.postUpdate(postUpdateDto, 1L));
+        CustomException thrown = assertThrows(CustomException.class, () -> postsService.postUpdate(requestPostUpdateDto, 1L));
         //then
         assertEquals("Post image update failed",thrown.getErrorCode().getMessage());
         then(postsMapper).should(atLeastOnce()).isPostExist(any());
@@ -140,7 +140,7 @@ class PostsServiceTest {
         given(postsMapper.updatePost(any(PostsUpdateDao.class))).willReturn(1);
         given(postsMapper.updatePostImage(any(PostImagesUpdateDao.class))).willReturn(1);
         //when
-        postsService.postUpdate(postUpdateDto, 1L);
+        postsService.postUpdate(requestPostUpdateDto, 1L);
         //then
         then(postsMapper).should(atLeastOnce()).isPostExist(any());
         then(postsMapper).should(atLeastOnce()).isOwner(any());
@@ -154,7 +154,7 @@ class PostsServiceTest {
         given(postsMapper.isPostExist(any())).willReturn(false);
 
         //when
-        CustomException thrown = assertThrows(CustomException.class, () -> postsService.postDelete(1L, postDeleteDto));
+        CustomException thrown = assertThrows(CustomException.class, () -> postsService.postDelete(1L, requestPostDeleteDto));
         //then
         assertEquals("Post deletion failed post cannot be found",thrown.getErrorCode().getMessage());
         then(postsMapper).should(atLeastOnce()).isPostExist(any());
@@ -167,7 +167,7 @@ class PostsServiceTest {
         given(postsMapper.isOwner(any())).willReturn(false);
 
         //when
-        CustomException thrown = assertThrows(CustomException.class, () -> postsService.postDelete(1L, postDeleteDto));
+        CustomException thrown = assertThrows(CustomException.class, () -> postsService.postDelete(1L, requestPostDeleteDto));
         //then
         assertEquals("Only post owner can delete post",thrown.getErrorCode().getMessage());
         then(postsMapper).should(atLeastOnce()).isPostExist(any());
@@ -182,7 +182,7 @@ class PostsServiceTest {
         given(postsMapper.deletePost(any())).willReturn(0);
 
         //when
-        CustomException thrown = assertThrows(CustomException.class, () -> postsService.postDelete(1L, postDeleteDto));
+        CustomException thrown = assertThrows(CustomException.class, () -> postsService.postDelete(1L, requestPostDeleteDto));
         //then
         assertEquals("Post deletion failed",thrown.getErrorCode().getMessage());
         then(postsMapper).should(atLeastOnce()).isPostExist(any());
@@ -198,7 +198,7 @@ class PostsServiceTest {
         given(postsMapper.deletePost(any())).willReturn(1);
 
         //when
-        postsService.postDelete(1L, postDeleteDto);
+        postsService.postDelete(1L, requestPostDeleteDto);
         //then
         then(postsMapper).should(atLeastOnce()).isPostExist(any());
         then(postsMapper).should(atLeastOnce()).isOwner(any());
@@ -208,12 +208,12 @@ class PostsServiceTest {
     @DisplayName("selectSinglePost() success without exception")
     void getSinglePost_success_without_exception() {
         //given
-        PostDto getSinglePostResponseDto = PostDto.builder()
+        ResponsePostDto getSingleResponsePostDto = ResponsePostDto.builder()
                 .title("title")
                 .imagePath("image/path")
                 .idPost(8L)
                 .build();
-        given(postsMapper.selectSinglePost(any())).willReturn(getSinglePostResponseDto);
+        given(postsMapper.selectSinglePost(any())).willReturn(getSingleResponsePostDto);
         //when
         postsService.getSinglePost(8L);
         //then
@@ -235,8 +235,8 @@ class PostsServiceTest {
     @Test
     @DisplayName("selectPostPage() success getTotalNumberOfPosts() success without exception")
     void getPostPages_success_without_exception() {
-        List<PostDto> page = new ArrayList<>();
-        page.add(PostDto.builder().idPost(1L).title("title").imagePath("/path").build());
+        List<ResponsePostDto> page = new ArrayList<>();
+        page.add(ResponsePostDto.builder().idPost(1L).title("title").imagePath("/path").build());
         //given
         given(postsMapper.getTotalNumberOfPosts()).willReturn(10);
         given(postsMapper.selectPostPage(any(PostPageSelectDao.class))).willReturn(page);
@@ -249,8 +249,8 @@ class PostsServiceTest {
     @Test
     @DisplayName("selectPostPage() fail getTotalNumberOfPosts() success fail throw exception")
     void getPostPages_fail_with_exception() {
-        List<PostDto> page = new ArrayList<>();
-        page.add(PostDto.builder().idPost(1L).title("title").imagePath("/path").build());
+        List<ResponsePostDto> page = new ArrayList<>();
+        page.add(ResponsePostDto.builder().idPost(1L).title("title").imagePath("/path").build());
         //given
         given(postsMapper.getTotalNumberOfPosts()).willReturn(10);
         given(postsMapper.selectPostPage(any(PostPageSelectDao.class))).willThrow(DataIntegrityViolationException.class);

@@ -6,6 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class PostPageSelectDao {
-    private Integer start;
-    private Integer end;
+    private int start;
+    private int end;
 }

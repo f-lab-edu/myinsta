@@ -1,6 +1,7 @@
 package com.example.myinsta.exception;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -8,9 +9,13 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * AccountsExceptionHandler
@@ -30,6 +35,7 @@ import java.util.List;
  * 3. Password
  */
 @ControllerAdvice
+@Slf4j
 public class AccountsExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handler(MethodArgumentNotValidException e) {
@@ -39,6 +45,20 @@ public class AccountsExceptionHandler {
             errorResponse.add(ErrorResponse.builder().errorCode(ErrorCode.INVALID_INPUT.getStatus()).errorMessage(error.getDefaultMessage()).build());
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorResponse.toArray()[0]);
+    }
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Object> handler(ConstraintViolationException e) {
+        Set<ConstraintViolation<?>> errors = e.getConstraintViolations();
+        List<ErrorResponse> errorResponse = new ArrayList<>();
+        for (ConstraintViolation error : errors) {
+            errorResponse.add(ErrorResponse.builder().errorCode(ErrorCode.INVALID_INPUT.getStatus()).errorMessage(error.getMessage()).build());
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorResponse.toArray()[0]);
+    }
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<Object> handler(MethodArgumentTypeMismatchException e) {
+        ErrorResponse errorResponse = ErrorResponse.builder().errorCode(ErrorCode.INVALID_INPUT.getStatus()).errorMessage("Wrong type").build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(errorResponse);
     }
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<Object> CustomExceptionHandler(CustomException e) {

@@ -10,18 +10,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @Transactional
 @RequiredArgsConstructor
 @Slf4j
 public class PostsService {
     private final PostsMapper postsMapper;
-    public void postCreation(PostCreateDto postCreateDto) {
+    public void postCreation(RequestPostCreateDto requestPostCreateDto) {
         PostsDao postsDao = PostsDao.builder()
-                .title(postCreateDto.getTitle())
-                .idAccount(postCreateDto.getUserId())
+                .title(requestPostCreateDto.getTitle())
+                .idAccount(requestPostCreateDto.getUserId())
                 .build();
 
         int result = postsMapper.insertPost(postsDao);
@@ -31,18 +29,18 @@ public class PostsService {
 
         PostImageDao postImageDao = PostImageDao.builder()
                 .idPost(postsDao.getIdPost())
-                .imagePath(postCreateDto.getImageUrl())
+                .imagePath(requestPostCreateDto.getImageUrl())
                 .build();
         result = postsMapper.insertPostImage(postImageDao);
         if(result != 1){
             throw new CustomException(ErrorCode.FAILED_TO_INSERT_POST_IMAGE);
         }
     }
-    public void postUpdate(PostUpdateDto postUpdateDto, Long postId){
+    public void postUpdate(RequestPostUpdateDto requestPostUpdateDto, Long postId){
         PostsUpdateDao postsUpdateDao = PostsUpdateDao.builder()
                 .idPost(postId)
-                .idAccount(postUpdateDto.getUserId())
-                .title(postUpdateDto.getTitle())
+                .idAccount(requestPostUpdateDto.getUserId())
+                .title(requestPostUpdateDto.getTitle())
                 .build();
 
         if(!postsMapper.isPostExist(postId)){
@@ -58,7 +56,7 @@ public class PostsService {
 
         PostImagesUpdateDao postImagesUpdateDao = PostImagesUpdateDao.builder()
                 .idPost(postId)
-                .imagePath(postUpdateDto.getImageUrl())
+                .imagePath(requestPostUpdateDto.getImageUrl())
                 .build();
 
         result = postsMapper.updatePostImage(postImagesUpdateDao);
@@ -66,11 +64,11 @@ public class PostsService {
             throw new CustomException(ErrorCode.FAILED_TO_UPDATE_POST_IMAGE);
         }
     }
-    public void postDelete(Long idPost, PostDeleteDto postDeleteDto) {
+    public void postDelete(Long idPost, RequestPostDeleteDto requestPostDeleteDto) {
         if(!postsMapper.isPostExist(idPost)){
             throw new CustomException(ErrorCode.FAILED_TO_DELETE_POST_NOT_FOUND);
         }
-        if(!postsMapper.isOwner(postDeleteDto.getIdAccount())){
+        if(!postsMapper.isOwner(requestPostDeleteDto.getIdAccount())){
             throw new CustomException(ErrorCode.FAILED_TO_DELETE_POST_NOT_OWNER);
         }
         int result = postsMapper.deletePost(idPost);
@@ -79,25 +77,25 @@ public class PostsService {
         }
     }
     @Transactional(readOnly = true)
-    public PostDto getSinglePost(Long postId){
+    public ResponsePostDto getSinglePost(Long postId){
         GetSinglePostDao getSinglePostDao = GetSinglePostDao.builder().idPost(postId).build();
-        PostDto postDto = postsMapper.selectSinglePost( getSinglePostDao );
-        if(postDto == null){
+        ResponsePostDto responsePostDto = postsMapper.selectSinglePost( getSinglePostDao );
+        if(responsePostDto == null){
             throw new CustomException(ErrorCode.FAILED_TO_GET_SINGLE_POST);
         }
-        return postDto;
+        return responsePostDto;
     }
     @Transactional(readOnly = true)
-    public PostPageDto getPostPages(int page, int postsPerPage){
+    public ResponsePostPageDto getPostPages(int page, int postsPerPage){
         int totalNumberOfPosts = postsMapper.getTotalNumberOfPosts();
         int totalNumberOfPages = (int)Math.ceil((float)totalNumberOfPosts/postsPerPage);
-        PostPageDto postPageDto = PostPageDto.builder()
+        ResponsePostPageDto responsePostPageDto = ResponsePostPageDto.builder()
                 .currentPage(page)
                 .postPerPage(postsPerPage)
                 .totalNumberOfPages(totalNumberOfPages)
                 .build();
         PostPageSelectDao postPageSelectDao = PostPageSelectDao.builder().start((page-1)*postsPerPage).end(page*postsPerPage).build();
-        postPageDto.setPosts(postsMapper.selectPostPage(postPageSelectDao));
-        return postPageDto;
+        responsePostPageDto.setPosts(postsMapper.selectPostPage(postPageSelectDao));
+        return responsePostPageDto;
     }
 }

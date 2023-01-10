@@ -11,7 +11,7 @@ import javax.validation.constraints.Size;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostUpdateDto {
+public class RequestPostCreateDto {
     @NotBlank(message = "Title should not null or empty")
     @Size(max=50, message = "Title should not over 50 letters")
     private String title;
@@ -20,4 +20,3 @@ public class PostUpdateDto {
     @Min(value = 1, message = "User Id must greater than or equal to 1")
     private long userId;
 }
-

@@ -50,12 +50,12 @@
         ORDER BY id_post DESC
         LIMIT #{start}, #{end}
     </select>
-    <select id="getTotalNumberOfPosts" resultType="Integer">
+    <select id="getTotalNumberOfPosts" resultType="int">
         SELECT COUNT(*)
         FROM posts
     </select>
 
-    <resultMap id="postInfo" type="com.example.myinsta.dto.PostDto">
+    <resultMap id="postInfo" type="com.example.myinsta.dto.ResponsePostDto">
         <id column="id_post" property="idPost"/>
         <result column="title" property="title"/>
         <result column="image_path" property="imagePath"/>

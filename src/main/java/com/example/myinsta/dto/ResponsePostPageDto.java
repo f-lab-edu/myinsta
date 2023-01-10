@@ -11,9 +11,9 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PostPageDto {
-    private List<PostDto> posts;
-    private Integer totalNumberOfPages;
-    private Integer postPerPage;
-    private Integer currentPage;
+public class ResponsePostPageDto {
+    private List<ResponsePostDto> posts;
+    private int totalNumberOfPages;
+    private int postPerPage;
+    private int currentPage;
 }

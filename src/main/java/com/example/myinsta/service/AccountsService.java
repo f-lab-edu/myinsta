@@ -1,7 +1,7 @@
 package com.example.myinsta.service;
 
 import com.example.myinsta.dao.AccountsDao;
-import com.example.myinsta.dto.SignUpDto;
+import com.example.myinsta.dto.RequestSignUpDto;
 import com.example.myinsta.exception.CustomException;
 import com.example.myinsta.exception.ErrorCode;
 import com.example.myinsta.mapper.AccountsMapper;
@@ -36,11 +36,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AccountsService {
     private final AccountsMapper accountsMapper;
-    public void signUp(SignUpDto signUpDto) {
+    public void signUp(RequestSignUpDto requestSignUpDto) {
         AccountsDao accountsDao = AccountsDao.builder()
-                .email(signUpDto.getEmail())
-                .nickName(signUpDto.getNickName())
-                .password(SHA256.encrypt(signUpDto.getPassword()))
+                .email(requestSignUpDto.getEmail())
+                .nickName(requestSignUpDto.getNickName())
+                .password(SHA256.encrypt(requestSignUpDto.getPassword()))
                 .build();
         if (accountsMapper.isIdExist(accountsDao)) {
             throw new CustomException(ErrorCode.ALREADY_EXIST_EMAIL);
