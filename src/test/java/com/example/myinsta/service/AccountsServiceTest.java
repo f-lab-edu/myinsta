@@ -2,7 +2,7 @@ package com.example.myinsta.service;
 
 
 import com.example.myinsta.dao.AccountsDao;
-import com.example.myinsta.dto.SignUpDto;
+import com.example.myinsta.dto.RequestSignUpDto;
 import com.example.myinsta.exception.CustomException;
 import com.example.myinsta.mapper.AccountsMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,12 +40,12 @@ public class AccountsServiceTest {
     private AccountsMapper accountsMapper;
     @InjectMocks
     AccountsService accountsService;
-    SignUpDto signUpDto;
+    RequestSignUpDto requestSignUpDto;
 
 
     @BeforeEach
     void setUp() {
-        signUpDto = SignUpDto.builder().email("ddd@correct.mail").nickName("nickunamu").password("passw@#2").build();
+        requestSignUpDto = RequestSignUpDto.builder().email("ddd@correct.mail").nickName("nickunamu").password("passw@#2").build();
     }
 
     @Test
@@ -55,7 +55,7 @@ public class AccountsServiceTest {
         given(accountsMapper.isIdExist(any(AccountsDao.class))).willReturn(false);
         given(accountsMapper.insertAccount(any(AccountsDao.class))).willReturn(0);
         //when
-        CustomException thrown = assertThrows(CustomException.class, () -> accountsService.signUp(signUpDto));
+        CustomException thrown = assertThrows(CustomException.class, () -> accountsService.signUp(requestSignUpDto));
         //then
         assertEquals("Sign-up failed",thrown.getErrorCode().getMessage());
         then(accountsMapper).should(atLeastOnce()).isIdExist(any(AccountsDao.class));
@@ -69,7 +69,7 @@ public class AccountsServiceTest {
         given(accountsMapper.isIdExist(any(AccountsDao.class))).willReturn(false);
         given(accountsMapper.insertAccount(any(AccountsDao.class))).willReturn(1);
         //when
-        accountsService.signUp(signUpDto);
+        accountsService.signUp(requestSignUpDto);
         //then
         then(accountsMapper).should(atLeastOnce()).isIdExist(any(AccountsDao.class));
         then(accountsMapper).should(atLeastOnce()).insertAccount(any(AccountsDao.class));
@@ -81,7 +81,7 @@ public class AccountsServiceTest {
         //given
         given(accountsMapper.isIdExist(any(AccountsDao.class))).willReturn(true);
         //when
-        CustomException thrown = assertThrows(CustomException.class, () -> accountsService.signUp(signUpDto));
+        CustomException thrown = assertThrows(CustomException.class, () -> accountsService.signUp(requestSignUpDto));
         //then
         assertEquals("Email is already exist", thrown.getErrorCode().getMessage());
         then(accountsMapper).should(atLeastOnce()).isIdExist(any(AccountsDao.class));

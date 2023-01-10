@@ -1,6 +1,6 @@
 package com.example.myinsta.controller;
 
-import com.example.myinsta.dto.SignUpDto;
+import com.example.myinsta.dto.RequestSignUpDto;
 import com.example.myinsta.service.AccountsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,7 +54,7 @@ public class AccountsControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    SignUpDto signUpDto;
+    RequestSignUpDto requestSignUpDto;
     String errorCode;
     String errorMessage;
 
@@ -73,7 +73,7 @@ public class AccountsControllerTest {
     @Test
     @DisplayName("Invalid argument wrong domain email")
     void invalid_email() throws Exception {
-        signUpDto = SignUpDto.builder()
+        requestSignUpDto = RequestSignUpDto.builder()
                 .email("ddd@WrongMail")
                 .password("Adfe12!2")
                 .nickName("newNickName")
@@ -84,7 +84,7 @@ public class AccountsControllerTest {
         mockMvc.perform(
                         post("/accounts/signup")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(signUpDto)))
+                                .content(objectMapper.writeValueAsString(requestSignUpDto)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(errorCode).value(700))
@@ -95,7 +95,7 @@ public class AccountsControllerTest {
     @Test
     @DisplayName("Invalid argument password without symbol and number")
     void invalid_password() throws Exception {
-        signUpDto = SignUpDto.builder()
+        requestSignUpDto = RequestSignUpDto.builder()
                 .email("ddd@Correct.com")
                 .password("Adfeaaaaaa")
                 .nickName("newNickName")
@@ -106,7 +106,7 @@ public class AccountsControllerTest {
         mockMvc.perform(
                         post("/accounts/signup")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(signUpDto)))
+                                .content(objectMapper.writeValueAsString(requestSignUpDto)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(errorCode).value(700))
@@ -118,7 +118,7 @@ public class AccountsControllerTest {
     @Test
     @DisplayName("Invalid argument empty string nickname")
     void invalid_nickname() throws Exception {
-        signUpDto = SignUpDto.builder()
+        requestSignUpDto = RequestSignUpDto.builder()
                 .email("ddd@corecto.com")
                 .password("Adfe12!2")
                 .nickName("")
@@ -128,7 +128,7 @@ public class AccountsControllerTest {
         mockMvc.perform(
                         post("/accounts/signup")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(signUpDto)))
+                                .content(objectMapper.writeValueAsString(requestSignUpDto)))
                 .andDo(print())
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath(errorCode).value(700))
@@ -145,7 +145,7 @@ public class AccountsControllerTest {
         mockMvc.perform(
                         post("/accounts/signup")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(signUpDto)))
+                                .content(objectMapper.writeValueAsString(requestSignUpDto)))
                 .andDo(print())
                 .andExpect(status().isCreated());
     }

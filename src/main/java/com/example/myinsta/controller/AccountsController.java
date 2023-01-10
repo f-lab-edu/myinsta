@@ -1,6 +1,6 @@
 package com.example.myinsta.controller;
 
-import com.example.myinsta.dto.SignUpDto;
+import com.example.myinsta.dto.RequestSignUpDto;
 import com.example.myinsta.service.AccountsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,8 +16,8 @@ import javax.validation.Valid;
 public class AccountsController {
     private final AccountsService accountsService;
     @PostMapping("/accounts/signup")
-    public ResponseEntity<Void> signUp(@Valid @RequestBody SignUpDto signUpDto) {
-        accountsService.signUp(signUpDto);
+    public ResponseEntity<Void> signUp(@Valid @RequestBody RequestSignUpDto requestSignUpDto) {
+        accountsService.signUp(requestSignUpDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

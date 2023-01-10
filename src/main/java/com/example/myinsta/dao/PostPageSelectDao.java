@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class PostDto {
-    Long idPost;
+public class PostPageSelectDao {
+    private int start;
+    private int end;
 }
