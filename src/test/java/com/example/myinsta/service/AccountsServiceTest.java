@@ -2,6 +2,7 @@ package com.example.myinsta.service;
 
 
 import com.example.myinsta.dao.AccountsDao;
+import com.example.myinsta.dto.RequestLoginDto;
 import com.example.myinsta.dto.RequestSignUpDto;
 import com.example.myinsta.exception.CustomException;
 import com.example.myinsta.mapper.AccountsMapper;
@@ -41,11 +42,11 @@ public class AccountsServiceTest {
     @InjectMocks
     AccountsService accountsService;
     RequestSignUpDto requestSignUpDto;
-
-
+    RequestLoginDto requestLoginDto;
     @BeforeEach
     void setUp() {
         requestSignUpDto = RequestSignUpDto.builder().email("ddd@correct.mail").nickName("nickunamu").password("passw@#2").build();
+
     }
 
     @Test
@@ -61,7 +62,6 @@ public class AccountsServiceTest {
         then(accountsMapper).should(atLeastOnce()).isIdExist(any(AccountsDao.class));
         then(accountsMapper).should(atLeastOnce()).insertAccount(any(AccountsDao.class));
     }
-
     @Test
     @DisplayName("isIdExist does not find duplication and insertAccount success")
     void sign_up_not_throw_exception_when_insertion_success() {
@@ -74,7 +74,6 @@ public class AccountsServiceTest {
         then(accountsMapper).should(atLeastOnce()).isIdExist(any(AccountsDao.class));
         then(accountsMapper).should(atLeastOnce()).insertAccount(any(AccountsDao.class));
     }
-
     @Test
     @DisplayName("isIdExist query found duplicate and insertAccount will not be executed")
     void sign_up_throw_exception_when_id_already_exist() {
@@ -86,5 +85,36 @@ public class AccountsServiceTest {
         assertEquals("Email is already exist", thrown.getErrorCode().getMessage());
         then(accountsMapper).should(atLeastOnce()).isIdExist(any(AccountsDao.class));
         then(accountsMapper).should(times(0)).insertAccount(any(AccountsDao.class));
+    }
+    @Test
+    @DisplayName("isLoginInfoExist() fail and throw exception")
+    void login_throw_exception_when_login_information_is_not_exist() {
+        //given
+        requestLoginDto = RequestLoginDto.builder()
+                .email("ddd@correct.mail")
+                .password("NotExist#2")
+                .build();
+
+        given(accountsMapper.isLoginInfoExist(any(AccountsDao.class))).willReturn(false);
+        //when
+        CustomException thrown = assertThrows(CustomException.class, () -> accountsService.login(requestLoginDto));
+        //then
+        assertEquals(703, thrown.getErrorCode().getStatus());
+        assertEquals("Login information not exist", thrown.getErrorCode().getMessage());
+        then(accountsMapper).should(atLeastOnce()).isLoginInfoExist(any(AccountsDao.class));
+    }
+    @Test
+    @DisplayName("isLoginInfoExist() success")
+    void login_success_login_information_is_not_exist() {
+        //given
+        requestLoginDto = RequestLoginDto.builder()
+                .email("ddd@correct.mail")
+                .password("ExistPw#2")
+                .build();
+        given(accountsMapper.isLoginInfoExist(any(AccountsDao.class))).willReturn(true);
+        //when
+        accountsService.login(requestLoginDto);
+        //then
+        then(accountsMapper).should(atLeastOnce()).isLoginInfoExist(any(AccountsDao.class));
     }
 }

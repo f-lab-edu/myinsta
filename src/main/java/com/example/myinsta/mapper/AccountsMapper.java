@@ -8,5 +8,5 @@ import org.apache.ibatis.annotations.Mapper;
 public interface AccountsMapper {
     int insertAccount(AccountsDao accountsDao);
     boolean isIdExist(AccountsDao accountsDao);
-
+    boolean isLoginInfoExist(AccountsDao accountsDao);
 }
