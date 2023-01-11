@@ -162,7 +162,7 @@ public class AccountsControllerTest {
         session = new MockHttpSession();
         session.setAttribute("account", requestLoginDto.getEmail());
 
-        doNothing().when(accountsService).login(requestLoginDto.getEmail(), requestLoginDto.getPassword());
+        doNothing().when(accountsService).login(requestLoginDto);
 
         mockMvc.perform(
                         post("/accounts/login")
@@ -185,7 +185,7 @@ public class AccountsControllerTest {
         session = new MockHttpSession();
         session.setAttribute("account", requestLoginDto.getEmail());
 
-        doNothing().when(accountsService).login(requestLoginDto.getEmail(), requestLoginDto.getPassword());
+        doNothing().when(accountsService).login(requestLoginDto);
 
         mockMvc.perform(
                         post("/accounts/login")
@@ -208,7 +208,7 @@ public class AccountsControllerTest {
         session = new MockHttpSession();
         session.setAttribute("account", requestLoginDto.getEmail());
 
-        doNothing().when(accountsService).login(requestLoginDto.getEmail(), requestLoginDto.getPassword());
+        doNothing().when(accountsService).login(requestLoginDto);
 
         mockMvc.perform(
                         post("/accounts/login")
@@ -229,7 +229,7 @@ public class AccountsControllerTest {
         session = new MockHttpSession();
         session.setAttribute("account", requestLoginDto.getEmail());
 
-        doNothing().when(accountsService).login(requestLoginDto.getEmail(), requestLoginDto.getPassword());
+        doNothing().when(accountsService).login(requestLoginDto);
 
         mockMvc.perform(
                          get("/accounts/logout")

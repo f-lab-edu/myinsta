@@ -23,7 +23,7 @@ public class AccountsController {
     }
     @PostMapping("/login")
     public ResponseEntity<Object> login(@RequestBody @Valid RequestLoginDto requestLoginDto, HttpSession session){
-        accountsService.login(requestLoginDto.getEmail(), requestLoginDto.getPassword());
+        accountsService.login(requestLoginDto);
         session.setAttribute("account",requestLoginDto.getEmail());
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -18,7 +18,9 @@ public enum ErrorCode {
     FAILED_TO_DELETE_POST(806,"Post deletion failed" ),
     FAILED_TO_DELETE_POST_NOT_FOUND(807, "Post deletion failed post cannot be found"),
     FAILED_TO_DELETE_POST_NOT_OWNER(808,"Only post owner can delete post" ),
-    FAILED_TO_GET_SINGLE_POST(806,"Cannot find post" );
+    FAILED_TO_GET_SINGLE_POST(806,"Cannot find post" ),
+    INVALID_LOGIN_INFORMATION(703, "Login information not exist");
+
 
     private final int status;
     private final String message;

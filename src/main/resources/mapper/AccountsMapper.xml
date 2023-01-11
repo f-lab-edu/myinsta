@@ -13,4 +13,10 @@
         FROM accounts
         WHERE email = #{email});
     </select>
+    <select id="isLoginInfoExist" parameterType="com.example.myinsta.dao.AccountsDao" resultType="boolean">
+        SELECT EXISTS
+        (SELECT email
+        FROM accounts
+        WHERE email = #{email} AND password = #{password});
+    </select>
 </mapper>
