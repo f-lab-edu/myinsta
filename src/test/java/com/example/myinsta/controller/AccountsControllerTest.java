@@ -1,8 +1,10 @@
 package com.example.myinsta.controller;
 
+import com.example.myinsta.dto.RequestLoginDto;
 import com.example.myinsta.dto.RequestSignUpDto;
 import com.example.myinsta.service.AccountsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,10 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -55,6 +59,8 @@ public class AccountsControllerTest {
     private MockMvc mockMvc;
 
     RequestSignUpDto requestSignUpDto;
+    RequestLoginDto requestLoginDto;
+    MockHttpSession session;
     String errorCode;
     String errorMessage;
 
@@ -91,7 +97,6 @@ public class AccountsControllerTest {
                 .andExpect(jsonPath(errorMessage).value("Invalid Email format"))
         ;
     }
-
     @Test
     @DisplayName("Invalid argument password without symbol and number")
     void invalid_password() throws Exception {
@@ -114,7 +119,6 @@ public class AccountsControllerTest {
         ;
 
     }
-
     @Test
     @DisplayName("Invalid argument empty string nickname")
     void invalid_nickname() throws Exception {
@@ -136,7 +140,6 @@ public class AccountsControllerTest {
         ;
 
     }
-
     @Test
     @DisplayName("Valid argument well-formed email and password, and not empty string")
     void valid_input() throws Exception {
@@ -148,5 +151,92 @@ public class AccountsControllerTest {
                                 .content(objectMapper.writeValueAsString(requestSignUpDto)))
                 .andDo(print())
                 .andExpect(status().isCreated());
+    }
+    @Test
+    @DisplayName("Invalid argument empty string email")
+    void login_invalid_email() throws Exception {
+        requestLoginDto = RequestLoginDto.builder()
+                .email("")
+                .password("Adfe12!2")
+                .build();
+        session = new MockHttpSession();
+        session.setAttribute("account", requestLoginDto.getEmail());
+
+        doNothing().when(accountsService).login(requestLoginDto.getEmail(), requestLoginDto.getPassword());
+
+        mockMvc.perform(
+                        post("/accounts/login")
+                                .session(session)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(requestLoginDto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath(errorCode).value(700))
+                .andExpect(jsonPath(errorMessage).value("Invalid Email format"))
+        ;
+
+    }
+    @Test
+    @DisplayName("Invalid argument empty string password")
+    void login_invalid_password() throws Exception {
+        requestLoginDto = RequestLoginDto.builder()
+                .email("this@is.email")
+                .password("")
+                .build();
+        session = new MockHttpSession();
+        session.setAttribute("account", requestLoginDto.getEmail());
+
+        doNothing().when(accountsService).login(requestLoginDto.getEmail(), requestLoginDto.getPassword());
+
+        mockMvc.perform(
+                        post("/accounts/login")
+                                .session(session)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(requestLoginDto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath(errorCode).value(700))
+                .andExpect(jsonPath(errorMessage).value("Password must have at least 8 characters with maximum 16 characters, one Upper case, one number, one symbol."))
+        ;
+
+    }
+    @Test
+    @DisplayName("Valid argument with correct login information")
+    void login_valid() throws Exception {
+        requestLoginDto = RequestLoginDto.builder()
+                .email("this@is.email")
+                .password("Adefefw!2")
+                .build();
+        session = new MockHttpSession();
+        session.setAttribute("account", requestLoginDto.getEmail());
+
+        doNothing().when(accountsService).login(requestLoginDto.getEmail(), requestLoginDto.getPassword());
+
+        mockMvc.perform(
+                        post("/accounts/login")
+                                .session(session)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(requestLoginDto)))
+                .andExpect(status().isOk())
+                .andExpect(result -> Assertions.assertEquals(session.getAttribute("account"), "this@is.email"))
+        ;
+    }
+    @Test
+    @DisplayName("logout session remove")
+    void logout_success() throws Exception {
+        requestLoginDto = RequestLoginDto.builder()
+                .email("this@is.email")
+                .password("Adefefw!2")
+                .build();
+        session = new MockHttpSession();
+        session.setAttribute("account", requestLoginDto.getEmail());
+
+        doNothing().when(accountsService).login(requestLoginDto.getEmail(), requestLoginDto.getPassword());
+
+        mockMvc.perform(
+                         get("/accounts/logout")
+                                .session(session)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(result -> Assertions.assertNull(session.getAttribute("account")))
+        ;
     }
 }

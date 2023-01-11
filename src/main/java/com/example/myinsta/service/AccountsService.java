@@ -50,5 +50,8 @@ public class AccountsService {
             throw new CustomException(ErrorCode.FAILED_TO_INSERT);
         }
     }
+    public void login(String email, String password){
+
+    }
 }
 
