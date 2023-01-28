@@ -1,5 +1,6 @@
 package com.example.myinsta.security;
 
+import com.example.myinsta.mapper.JwtMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,5 +21,4 @@ public class CustomDetailService implements UserDetailsService {
                 .roles(userDetailsDao.getRole().toString())
                 .build();
     }
-
 }

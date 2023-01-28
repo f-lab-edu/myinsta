@@ -2,6 +2,7 @@ package com.example.myinsta.security;
 
 import com.example.myinsta.exception.CustomException;
 import com.example.myinsta.exception.ErrorCode;
+import com.example.myinsta.mapper.JwtMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,12 +27,12 @@ public class JwtService {
             .password(bCryptPasswordEncoder.encode(requestSignUpDto.getPassword()))
             .nickName(requestSignUpDto.getNickName())
             .build();
-        jwtMapper.signUpAccount(accountDetailsDao);
-//        int signUpCount = jwtMapper.signUpAccount(accountDetailsDao);
-//
-//        if(signUpCount != 1){
-//            throw new RuntimeException("checkout sign up method\n" + accountDetailsDao);
-//        }
+//        jwtMapper.signUpAccount(accountDetailsDao);
+        int signUpCount = jwtMapper.signUpAccount(accountDetailsDao);
+
+        if(signUpCount != 1){
+            throw new RuntimeException("checkout sign up method\n" + accountDetailsDao);
+        }
 
         AccountsDao.RoleDao memberRole = AccountsDao.RoleDao.builder()
                 .idAccount(accountDetailsDao.getIdAccount())

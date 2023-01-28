@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.example.myinsta.security.JwtMapper">
-    <insert id="signUpAccount" parameterType="com.example.myinsta.security.AccountsDao$AccountDetailsDao" >
+<mapper namespace="com.example.myinsta.mapper.JwtMapper">
+    <insert id="signUpAccount" parameterType="com.example.myinsta.security.AccountsDao$AccountDetailsDao" useGeneratedKeys="true" keyProperty="idAccount">
         insert into accounts( email, nick_name, password )
         values( #{email}, #{nickName}, #{password} )
     </insert>
@@ -21,12 +21,12 @@
         <association property="role" resultMap="roleInfo"/>
     </resultMap>
     <resultMap id="roleInfo" type="com.example.myinsta.security.AccountsDao$RoleDao">
-        <id column="id_authority" property="IdAuthority"/>
+        <id column="id_authority" property="idAuthority"/>
         <result column="role" property="role"/>
     </resultMap>
 
     <select id="findByEmailPassword" resultMap="memberInfo">
-        select A.id_account, A.email, A.nic_kname, B.role
+        select A.id_account, A.email, A.nick_name, B.role
         from account as A LEFT JOIN authority as B ON A.id_account = B.id_account
         where email = #{email}
         and password = #{password}

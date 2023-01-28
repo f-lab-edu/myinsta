@@ -1,10 +1,11 @@
-package com.example.myinsta.security;
+package com.example.myinsta.mapper;
 
+import com.example.myinsta.security.AccountsDao;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface JwtMapper {
-    void signUpAccount(AccountsDao.AccountDetailsDao accountDetailsDao);
+    int signUpAccount(AccountsDao.AccountDetailsDao accountDetailsDao);
     void signUpRole(AccountsDao.RoleDao roleDao);
     void addRole(AccountsDao.RoleDao roleDao);
     AccountsDao.AccountDetailsDao findByEmailPassword(String email, String password);
