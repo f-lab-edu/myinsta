@@ -1,4 +1,4 @@
-package com.example.myinsta.security;
+package com.example.myinsta.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

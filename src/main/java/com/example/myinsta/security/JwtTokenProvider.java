@@ -1,5 +1,8 @@
 package com.example.myinsta.security;
 
+import com.example.myinsta.dto.ResponseSignInDto;
+import com.example.myinsta.exception.JwtCustomException;
+import com.example.myinsta.service.CustomDetailService;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +28,7 @@ public class JwtTokenProvider {
         @Value("${jwt.token.expire-length}")
         private long expireTime;
 
-        public SignInResponseDto generateToken(Authentication authentication) {
+        public ResponseSignInDto generateToken(Authentication authentication) {
             String authorities = authentication.getAuthorities().stream()
                     .map(GrantedAuthority::getAuthority)
                     .collect(Collectors.joining(","));
@@ -39,7 +42,7 @@ public class JwtTokenProvider {
                     .signWith(SignatureAlgorithm.HS256, secretKey)
                     .compact();
 
-            return SignInResponseDto.builder()
+            return ResponseSignInDto.builder()
                     .grantType("Bearer")
                     .accessToken(accessToken)
                     .build();

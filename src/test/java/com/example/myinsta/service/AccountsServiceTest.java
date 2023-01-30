@@ -4,7 +4,7 @@ package com.example.myinsta.service;
 import com.example.myinsta.dao.AccountsDao;
 import com.example.myinsta.dto.RequestSignUpDto;
 import com.example.myinsta.exception.CustomException;
-import com.example.myinsta.mapper.AccountsMapper;
+import com.example.myinsta.mapper.JwtMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -37,9 +37,9 @@ import static org.mockito.BDDMockito.*;
 public class AccountsServiceTest {
 
     @Mock
-    private AccountsMapper accountsMapper;
+    private JwtMapper accountsMapper;
     @InjectMocks
-    AccountsService accountsService;
+    JwtService accountsService;
     RequestSignUpDto requestSignUpDto;
 
 
@@ -52,39 +52,39 @@ public class AccountsServiceTest {
     @DisplayName("isIdExist does not find duplication but insertAccount fail")
     void sign_up_throw_exception_when_insertion_fails() {
         //given
-        given(accountsMapper.isIdExist(any(AccountsDao.class))).willReturn(false);
-        given(accountsMapper.insertAccount(any(AccountsDao.class))).willReturn(0);
+        given(accountsMapper.isIdExist(any(AccountsDao.AccountDetailsDao.class))).willReturn(false);
+        given(accountsMapper.signUpAccount(any(AccountsDao.AccountDetailsDao.class))).willReturn(0);
         //when
         CustomException thrown = assertThrows(CustomException.class, () -> accountsService.signUp(requestSignUpDto));
         //then
         assertEquals("Sign-up failed",thrown.getErrorCode().getMessage());
-        then(accountsMapper).should(atLeastOnce()).isIdExist(any(AccountsDao.class));
-        then(accountsMapper).should(atLeastOnce()).insertAccount(any(AccountsDao.class));
+        then(accountsMapper).should(atLeastOnce()).isIdExist(any(AccountsDao.AccountDetailsDao.class));
+        then(accountsMapper).should(atLeastOnce()).signUpAccount(any(AccountsDao.AccountDetailsDao.class));
     }
 
     @Test
     @DisplayName("isIdExist does not find duplication and insertAccount success")
     void sign_up_not_throw_exception_when_insertion_success() {
         //given
-        given(accountsMapper.isIdExist(any(AccountsDao.class))).willReturn(false);
-        given(accountsMapper.insertAccount(any(AccountsDao.class))).willReturn(1);
+        given(accountsMapper.isIdExist(any(AccountsDao.AccountDetailsDao.class))).willReturn(false);
+        given(accountsMapper.signUpAccount(any(AccountsDao.AccountDetailsDao.class))).willReturn(1);
         //when
         accountsService.signUp(requestSignUpDto);
         //then
-        then(accountsMapper).should(atLeastOnce()).isIdExist(any(AccountsDao.class));
-        then(accountsMapper).should(atLeastOnce()).insertAccount(any(AccountsDao.class));
+        then(accountsMapper).should(atLeastOnce()).isIdExist(any(AccountsDao.AccountDetailsDao.class));
+        then(accountsMapper).should(atLeastOnce()).signUpAccount(any(AccountsDao.AccountDetailsDao.class));
     }
 
     @Test
     @DisplayName("isIdExist query found duplicate and insertAccount will not be executed")
     void sign_up_throw_exception_when_id_already_exist() {
         //given
-        given(accountsMapper.isIdExist(any(AccountsDao.class))).willReturn(true);
+        given(accountsMapper.isIdExist(any(AccountsDao.AccountDetailsDao.class))).willReturn(true);
         //when
         CustomException thrown = assertThrows(CustomException.class, () -> accountsService.signUp(requestSignUpDto));
         //then
         assertEquals("Email is already exist", thrown.getErrorCode().getMessage());
-        then(accountsMapper).should(atLeastOnce()).isIdExist(any(AccountsDao.class));
-        then(accountsMapper).should(times(0)).insertAccount(any(AccountsDao.class));
+        then(accountsMapper).should(atLeastOnce()).isIdExist(any(AccountsDao.AccountDetailsDao.class));
+        then(accountsMapper).should(times(0)).signUpAccount(any(AccountsDao.AccountDetailsDao.class));
     }
 }

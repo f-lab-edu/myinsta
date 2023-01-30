@@ -1,8 +1,13 @@
-package com.example.myinsta.security;
+package com.example.myinsta.service;
 
+import com.example.myinsta.dao.AccountsDao;
 import com.example.myinsta.exception.CustomException;
 import com.example.myinsta.exception.ErrorCode;
 import com.example.myinsta.mapper.JwtMapper;
+import com.example.myinsta.security.JwtTokenProvider;
+import com.example.myinsta.dto.LoginDto;
+import com.example.myinsta.dto.RequestSignUpDto;
+import com.example.myinsta.dto.ResponseSignInDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,7 +32,6 @@ public class JwtService {
             .password(bCryptPasswordEncoder.encode(requestSignUpDto.getPassword()))
             .nickName(requestSignUpDto.getNickName())
             .build();
-//        jwtMapper.signUpAccount(accountDetailsDao);
         int signUpCount = jwtMapper.signUpAccount(accountDetailsDao);
 
         if(signUpCount != 1){
@@ -46,7 +50,7 @@ public class JwtService {
         }
         else jwtMapper.signUpRole(memberRole);
     }
-    public SignInResponseDto login(LoginDto loginDto){
+    public ResponseSignInDto login(LoginDto loginDto){
         AccountsDao.AccountDetailsDao memberInfo = jwtMapper.findByEmail(loginDto.getEmail());
 
         if(!bCryptPasswordEncoder.matches(loginDto.getPassword(), memberInfo.getPassword())){

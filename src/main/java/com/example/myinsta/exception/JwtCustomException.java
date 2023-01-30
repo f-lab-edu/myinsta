@@ -1,4 +1,4 @@
-package com.example.myinsta.security;
+package com.example.myinsta.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
